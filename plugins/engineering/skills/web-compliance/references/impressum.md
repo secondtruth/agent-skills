@@ -5,7 +5,7 @@
 ## Who needs one
 
 - **Germany:** every digital service offered geschäftsmäßig, "in der Regel gegen Entgelt" (§ 5 DDG). Geschäftsmäßig is met by a business presentation, ads, affiliate links, a paid offer, a professional portfolio — and by the social-media profiles of that business. A purely private page without any economic purpose is exempt; in doubt, publish one. Journalistic-editorial content adds § 18 Abs. 2 MStV regardless of commerce.
-- **Austria:** § 5 ECG for commercial services, § 14 UGB for registered businesses, § 25 MedienG ("Offenlegung") for every website that is a periodical electronic medium — content updated with some regularity, which in practice covers company sites, shops and blogs; a static one-off page is outside. Private sites are covered too, in the reduced form.
+- **Austria:** § 5 ECG for commercial services, § 14 UGB for registered businesses, § 25 MedienG ("Offenlegung") for every website — a retrievable electronic medium is a periodical medium by definition (§ 1 Abs. 1 Z 5a MedienG), whatever its update frequency; the four-times-a-year test belongs to the separate category of recurring electronic media. Private and static pages are covered too, in the reduced form.
 - **Switzerland:** Art. 3 Abs. 1 lit. s UWG for electronic commerce (offering goods or services online). A purely informational site has no Impressum duty; a Datenschutzerklärung under Art. 19 revDSG is still due when personal data is processed.
 
 ## Germany — § 5 DDG
@@ -37,7 +37,7 @@
 | Kammer/Berufsverband, Berufsbezeichnung, Verleihungsstaat, berufsrechtliche Vorschriften with access | § 5 ECG | regulated professions |
 | UID-Nummer | § 5 ECG | when one exists |
 | Gewerbe: Mitgliedschaft WKO, anwendbare Gewerbevorschriften (GewO, `ris.bka.gv.at`) | § 5 ECG, § 63 GewO | trades |
-| Medieninhaber, Unternehmensgegenstand, Wohnort/Sitz | § 25 MedienG ("Offenlegung") | every periodical electronic medium; the reduced form for a "kleine Website" (presentation only, § 25 Abs. 5) still requires all three: name/Firma, Unternehmensgegenstand, Wohnort/Sitz |
+| Medieninhaber, Unternehmensgegenstand, Wohnort/Sitz | § 25 MedienG ("Offenlegung") | every website (§ 1 Abs. 1 Z 5a MedienG), static ones included; the reduced form for a "kleine Website" (presentation only, § 25 Abs. 5) still requires all three: name/Firma, Unternehmensgegenstand, Wohnort/Sitz |
 | Additionally: grundlegende Richtung ("Blattlinie"), vertretungsbefugte Organe, owners with more than 25 % | § 25 MedienG | "große Website" — content beyond self-presentation, e.g. a blog with editorial content or a news section |
 
 ## Switzerland

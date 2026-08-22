@@ -1,6 +1,6 @@
 # Consent — § 25 TDDDG, Art. 6/7 DSGVO, with orestbida/cookieconsent v3
 
-**Stand: 2026-08.** cookieconsent 3.1.x (npm `vanilla-cookieconsent`, pinned as `@3.1` so a later minor with API changes is a deliberate upgrade); API reference at cookieconsent.orestbida.com.
+**Stand: 2026-08.** cookieconsent 3.1.x (npm `vanilla-cookieconsent`, saved as `~3.1.0` — patches flow in, a later minor with API changes is a deliberate upgrade; a bare `@3.1` would be saved as `^3.1.0` and drift); API reference at cookieconsent.orestbida.com.
 
 ## The two laws that stack
 
@@ -29,7 +29,7 @@ When the answer is "no" throughout, the site ships with a privacy policy and zer
 ## Install self-hosted
 
 ```bash
-npm i vanilla-cookieconsent@3.1
+npm i vanilla-cookieconsent@~3.1.0
 ```
 
 Bundler projects import the package; the CSS and JS then ship with the site's own assets:
@@ -53,6 +53,14 @@ const im = iframemanager();
 im.run({
   services: {
     youtube: { embedUrl: 'https://www.youtube-nocookie.com/embed/{data-id}', /* languages, thumbnail … */ },
+  },
+  onChange: ({ changedServices, eventSource }) => {
+    // A click on a placeholder is consent for that service: record it in CookieConsent too,
+    // so the toggle and the consent record agree and the choice survives a reload.
+    if (eventSource.type === 'click') {
+      const accepted = CookieConsent.getUserPreferences().acceptedServices.marketing || [];
+      CookieConsent.acceptService([...accepted, ...changedServices], 'marketing');
+    }
   },
 });
 
