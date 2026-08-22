@@ -1,7 +1,7 @@
 ---
 name: spec-writing
 license: MIT
-description: Writing, reviewing, and improving protocol specifications, technical standards, and RFC-style documents. Use this skill whenever the user works on a spec, standard, protocol definition, or any formal technical document that uses normative language (MUST, SHOULD, MAY). Also trigger when the user asks to review a spec for quality, requests RFC-style formatting, wants to restructure or improve an existing specification, or discusses spec writing best practices. Covers document structure, normative prose, scope discipline, terminology consistency, example placement, and versioning. This skill should be used even for initial drafts — getting the structure right from the start saves painful refactoring later.
+description: Write, review, and improve protocol specifications, technical standards, and RFC-style documents — structure, normative prose (MUST/SHOULD/MAY), scope, terminology, examples, versioning. Use from the first draft on and when reviewing or restructuring an existing spec; feature specs bound for an issue tracker are the to-spec skill's job when it is available.
 ---
 
 # Spec Writing
@@ -30,7 +30,7 @@ Guide for writing protocol specifications, technical standards, and RFC-style do
 1. Read the full spec first — understand the current structure before changing anything
 2. Identify: duplicate content, missing edge cases, terminology inconsistencies, misplaced examples
 3. Integrate changes organically — additions should read as if they were always there
-4. Never add a section whose sole purpose is to point to another document
+4. A section carries a concept; a bare cross-reference is a sentence, not a section
 5. Verify no concept is defined in two places after changes
 6. Update the Version History with a summary of *what* changed
 
@@ -41,26 +41,16 @@ Guide for writing protocol specifications, technical standards, and RFC-style do
 
 ## Critical Rules
 
-- **A spec knows only what it defines.** Don't reference documents that don't exist yet. Don't name specific alternatives unless the spec defines them.
+- **A spec knows only what it defines.** Cite only documents that exist; name an alternative only if the spec defines it.
 - **Prose over lists.** Normative sections are paragraphs with RFC 2119 keywords, not bullet points. Tables are fine for structured data (status codes, fields, parameters).
 - **One concept, one place.** If something is defined twice, one copy will rot. Define once, reference thereafter.
-- **No retrofitting.** When adding to an existing spec, rewrite the relevant sections so the addition is integrated — don't bolt on a new section that exists only to explain the change.
+- **Integrate additions.** When adding to an existing spec, rewrite the relevant sections so the addition reads as if it had always been there.
 - **A layering section names transports only.** Content format, content model, and application semantics get their own sections.
 - **Examples are not normative.** The spec text is authoritative. Examples illustrate; they don't define.
-- **Be precise, not clever.** Every sentence should have exactly one interpretation. No metaphors, no humor, no ambiguity.
+- **Be precise, not clever.** Every sentence has exactly one interpretation.
 
 ## Language
 
 - Answer in the conversation's language; write the spec in the suite's language, which is usually English.
 - Use active voice, present tense: "The server sends" not "A response is sent."
 - Keep sentences short. Protocol specs are read while writing code.
-
-## Common Mistakes to Catch
-
-- Using MUST when SHOULD is meant (over-constraining)
-- Status codes / error codes defined but never referenced in normative text
-- The Abstract containing motivation or history (belongs in a separate Background section)
-- Inline examples that show the same concept multiple times
-- Sections that duplicate content from another section
-- Terminology shifting mid-document ("transport" → "binding" → "carrier")
-- Changelog entries that describe *why* instead of *what*

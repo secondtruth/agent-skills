@@ -1,7 +1,7 @@
 ---
 name: skill-scouting
 license: MIT
-description: Discover, evaluate, and acquire existing skills before writing a new one from scratch. Use whenever the user wants a new skill or workflow capability and it is plausible someone has built it already, whenever the user asks to "search for existing skills", "find a skill for X", or "is there already a skill that…", and as a mandatory first step inside any skill-creation effort (before drafting with skill-creator). Also trigger when the user wants inspiration for how others structure skills for a given domain.
+description: Discover, evaluate, and acquire existing skills before writing a new one. Use whenever the user wants a new skill or workflow capability, asks whether a skill for X already exists, wants inspiration for how others structure skills in a domain — and as the first step of writing any new skill.
 ---
 
 # Skill Scouting
@@ -51,11 +51,4 @@ Checklist:
 - **Adopt** — install as-is (`npx skills add <owner/repo@skill>` where the skills CLI is available). Rare; requires philosophy, scope, and surface fit.
 - **Adapt** — take the skeleton, rewrite for your conventions. This is a Decomposition-style fork of a skill (the term is the `fork-stewardship` skill's, when it is among your available skills): one-time extraction, aggressive refactoring, attribution retained, no upstream duty.
 - **Reference** — build your own, but cite the found skill inside it as alternative tooling and state when its philosophy wins. Preserves the research for future readers.
-- **Build** — nothing found or everything mismatched. Write it, with the `skill-creator` or `writing-for-agents` skill when one is among your available skills.
-
-## Anti-patterns
-
-- Skipping scouting because "it's faster to just write it" — you lose not just the code but the ecosystem's accumulated edge cases.
-- Adopting on description alone — descriptions oversell; only the SKILL.md body tells the truth.
-- Adapting without attribution or license check.
-- Letting a mediocre find lower the bar — a found skill is a candidate, not a default. If it loses to what you'd build, build.
+- **Build** — nothing found or everything mismatched. Write it, with the `skill-creator` or `writing-for-agents` skill when one is among your available skills. A found skill is a candidate, not a default: if it loses to what you would build, build.

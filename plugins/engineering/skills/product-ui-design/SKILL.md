@@ -1,7 +1,7 @@
 ---
 name: product-ui-design
 license: MIT
-description: Distinguish product UIs from marketing surfaces when building frontends, then get the product side right — which facts a surface shows and where, and which typeface carries them. Use whenever building or restyling a web UI (admin consoles, dashboards, management/settings UIs, internal tools = product UI; landing/marketing pages = marketing surface), and whenever deciding what belongs in a header, status bar or detail view, why a screen feels empty, how to render IDs, states, timers or long values, or when a monospace face is warranted. Complements the frontend-design skill by deciding how much aesthetic staging the surface warrants.
+description: Distinguish product UIs from marketing surfaces when building frontends, then get the product side right — which facts a surface shows and where, and which typeface carries them. Use whenever building or restyling a web UI (admin consoles, dashboards, management/settings UIs, internal tools = product UI; landing/marketing pages = marketing surface), and whenever deciding what belongs in a header, status bar or detail view, why a screen feels empty, how to render IDs, states, timers or long values, or when a monospace face is warranted.
 ---
 
 # Product UI vs. Marketing Surface
@@ -20,11 +20,9 @@ it against the rules below.
 
 ## Product UI rules
 
-- **Professional over artistic.** No decorative backgrounds (grids, noise,
-  gradients-as-atmosphere), no theatrical microcopy ("hailing the device…"),
-  no letterspaced display wordmarks inside the app chrome. Personality lives
-  in small, deliberate touches: the logo mark, one accent color, precise
-  typography.
+- **Professional over artistic.** Chrome stays plain: a flat neutral
+  ground, literal microcopy, the wordmark only at the logo mark.
+  Personality lives in one accent colour and precise type.
 - **Orient on reference products,** not on imagination: the category's
   best-in-class consoles (e.g. Tailscale for network control planes, vendor
   consoles of the devices being managed) and on sibling projects, so a
@@ -99,7 +97,7 @@ scale — and the failure modes are systematic.
   problem.** When a screen looks empty, ask what it never said — which
   image, whose account, what is this attached to — not what could fill the
   space. Ornament on a surface that failed to inform makes it worse.
-- **Never show an adjacent value as if it were the real one.** The number
+- **Show the value that was asked about, or nothing.** The number
   that is easy to measure is rarely the one being asked about: the
   terminal's own size is not the guest's, the cache's age is not the data's,
   the upload's size is not the archive's. If the real one is out of reach,
@@ -115,8 +113,7 @@ scale — and the failure modes are systematic.
   work starts — including the setup nobody sees — and stop it when the work
   stops. A timer that keeps running while the thing is paused is a lie that
   ticks.
-- **When a variant loses a control, find the same job's form; don't
-  invent.** A surface without a screen still needs "save what I am looking
+- **When a variant loses a control, find the same job's form.** A surface without a screen still needs "save what I am looking
   at" (a log instead of a screenshot) and "make it bigger" (type size
   instead of zoom). Symmetric affordances are learnable; inventions have to
   be discovered.

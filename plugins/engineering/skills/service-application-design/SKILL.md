@@ -23,11 +23,9 @@ The command surface itself — flags, help anatomy, exit codes, command trees �
 A service that owns a database schema owes the operator both halves of this, together:
 
 - **A `migrate` command**, plus a `migrate status` reporting what has been applied. This is the controlled lever: CI, a rollout where the schema should move before the new binary serves traffic, or any setup with automatic migration switched off.
-- **Automatic migration on startup**, governed by one environment variable (`<APP>_AUTO_MIGRATE`), defaulting to on. Apply it before opening the main connection pool, and log that the schema is current.
+- **Automatic migration on startup**, governed by one environment variable (`<APP>_AUTO_MIGRATE`), defaulting to on where the deployment is single-instance and the migration tool takes a lock (goose, Alembic and Flyway do) — state both conditions where the default is set, so the next person can tell whether their deployment still qualifies. Apply it before opening the main connection pool, and log that the schema is current.
 
 Ship them as a pair. Either half alone is a trap: the command without the automatic run means a fresh install starts against an empty schema, and the automatic run without the command leaves the operator no way to stage a migration ahead of a deploy.
-
-Default the automatic run to on where the deployment is single-instance and the migration tool serializes concurrent runs — goose, Alembic and Flyway all take a lock. Those two conditions are what make the default safe, so state them where the default is set; the next person can then tell whether their deployment still qualifies.
 
 **Name the automatic behaviour in the command's own help text**, together with the switch and the purpose that survives it. Otherwise the operator cannot tell whether running it is required or redundant. This generalises past migrations: any command whose work also happens automatically elsewhere says so in its help.
 

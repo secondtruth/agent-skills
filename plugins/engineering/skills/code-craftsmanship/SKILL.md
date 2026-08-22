@@ -2,14 +2,10 @@
 name: code-craftsmanship
 license: MIT
 description: >-
-  Structure code and its files like a craftsman — repo layout, file naming,
-  module shape, and symbol craft for TypeScript/React, Python, Go, PHP, and
-  Rust. Use whenever you write, edit, scaffold, or refactor any source code,
-  from a single function to a greenfield project, and whenever the user asks
-  for clean, elegant, idiomatic, or production-quality code or wants a
-  codebase organized, tidied, or restructured. Encodes a Calm Engineering
-  aesthetic — fewer concepts, smaller files, long-lived names, opinionated
-  defaults — applied quietly on every code-touching task.
+  Structure code and its files — repo layout, file naming, module shape,
+  symbol naming — for TypeScript/React, Python, Go, PHP and Rust. Use
+  whenever you write, scaffold or refactor source code, and when the user
+  asks for clean or idiomatic code or wants a codebase restructured.
 ---
 
 # Code Craftsmanship
@@ -69,24 +65,9 @@ Defaults this skill adds on top of the principles:
   - *Repository conventions*: Semantic Versioning, Conventional Commits, EditorConfig, the language's standard formatter and lint defaults, a `LICENSE` and a README that states what the thing is.
   - *Interfaces and data*: UTF-8, RFC 3339 / ISO 8601 timestamps, standard HTTP status codes over bespoke error envelopes (RFC 9457 problem details where a body is needed), and the ecosystem's schema format (OpenAPI, JSON Schema) rather than a hand-written contract.
 
-## Pre-Commit Checklist
+## Completion Check
 
-Before declaring the work done, run through this list. It is the apprentice's last look at the workbench before closing the shop — the moment where small defects are still cheap to fix.
-
-- [ ] Does the folder tree tell the domain story? Could a new contributor guess the product from the top-level folders alone?
-- [ ] Are the files that change together co-located in the same folder?
-- [ ] Does every unit I touched or created hold exactly one concept — every file, and in Go every package?
-- [ ] Do the members of each type stay in one contiguous block, in a stable order, with nothing unrelated interleaved?
-- [ ] Does each file lead with its public surface — exports and types at the top, implementation below, no accidental barrel?
-- [ ] Is the whitespace deliberate — one blank line between ideas, no random doubles, no fifty-line walls of text?
-- [ ] Does every comment explain *why*, not *what*? Could any comment be replaced by an extracted function?
-- [ ] Are all new names intent-revealing read *at the call site*, with nothing the receiver already says? Are filenames casing-consistent and role-suffixed?
-- [ ] Have I avoided speculative abstraction? Is there a *second* concrete use case for every abstraction I introduced?
-- [ ] Have I made the boring choice wherever there was one, and honoured the applicable standards (`NO_COLOR`, XDG paths, stdout/stderr, SemVer, RFC 3339, …)?
-- [ ] Do unit tests sit next to the files they test, with a matching `.test` / `.spec` suffix?
-- [ ] Have I left the campsite cleaner — at least one small drive-by improvement, in a separate commit from the behaviour change?
-
-If any answer is "no", fix it before opening the pull request. The cost is minutes; the benefit is years.
+Before declaring the work done, walk the twelve principles against every file you touched — each file accounted for, each "no" fixed before the pull request opens. The cost is minutes; the alternative is years.
 
 ## Reference Files
 

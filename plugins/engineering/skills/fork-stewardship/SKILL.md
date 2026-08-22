@@ -1,12 +1,10 @@
 ---
 name: fork-stewardship
 license: MIT
-description: Manage forks of third-party projects over their whole lifecycle — choosing a forking strategy (Embrace vs. Decomposition), setting up fork/upstream branch topology, watching upstream for relevant changes, syncing and backporting upstream commits, maintaining a divergence ledger, and deciding what to contribute back. Use whenever the user plans, creates, or maintains a fork of an existing repository, mentions syncing with upstream, backporting, cherry-picking upstream fixes, watching an origin project, or asks whether to fork at all. Also trigger when a project in discussion is known to be a fork (e.g. a "*-fork of X" project) and work touches its relationship to upstream.
+description: Manage forks of third-party projects — choose Embrace vs. Decomposition, set up upstream/origin topology, sync or backport upstream changes, keep a divergence ledger, decide what to contribute back. Use when the user plans, creates or maintains a fork, or asks whether to fork at all.
 ---
 
 # Fork Stewardship
-
-Forking is not a one-time `git fork` click — it is a relationship with an upstream project that must be chosen deliberately and maintained operationally. This skill covers both: the strategy decision and the ongoing stewardship.
 
 ## Two strategies (decide first, once)
 
@@ -33,7 +31,7 @@ The strategy choice belongs to project conception (the `project-conception` skil
 ### Branch topology
 
 - `upstream` remote → the origin project; `origin` → the fork.
-- Keep a pristine mirror branch (`upstream-main`) that only ever fast-forwards from upstream. Never commit to it.
+- Keep a pristine mirror branch (`upstream-main`) that only ever fast-forwards from upstream.
 - The fork's `main` carries upstream plus the fork's changes. Sync = merge `upstream-main` into `main`.
 - Prefer **merge over rebase** for the long-lived fork branch: merges preserve traceable sync points and don't rewrite published history. Rebase is for short-lived feature branches only.
 - Keep the fork's own changes as a *reviewable set*: few, coherent commits or clearly bounded modules — not scattered edits across upstream files. Every upstream file touched directly raises the cost of every future merge.
@@ -55,7 +53,7 @@ Maintain a `FORK.md` at the repo root listing **every deviation from upstream**:
 5. Update the ledger if the merge changed any deviation.
 6. Record the sync (date, upstream ref) — a `Synced-Upstream:` trailer in the merge commit works.
 
-Cadence: match upstream's release rhythm — per release for released projects, monthly for rolling ones. Never let more than one major release accumulate; merge debt compounds faster than code debt.
+Cadence: match upstream's release rhythm — per release for released projects, monthly for rolling ones. Merge before a second major release lands; merge debt compounds faster than code debt.
 
 **Conflict budget as health metric:** track roughly how long each sync takes. A rising trend means the fork is patching where it should be extending — refactor deviations into plugin/adapter form, or accept the drift consciously and downgrade sync ambitions.
 
