@@ -89,6 +89,7 @@ CookieConsent.run({
       services: {
         ga4: {
           label: 'Google Analytics 4',
+          onAccept: () => { window['ga-disable-G-XXXXXXX'] = false; },  // re-consent lifts the kill switch again
           onReject: () => { window['ga-disable-G-XXXXXXX'] = true; },   // GA4's kill switch for this property
         },
       },
