@@ -1,8 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "engineering",
-  "version": "0.1.0",
-  "description": "Craft skills for building software: code structure and naming, CLI and service design, product UI, fork stewardship, spec writing, project conception, skill scouting.",
+  "version": "0.2.0",
+  "description": "Craft skills for building software: code structure and naming, CLI and service design, product UI, fork stewardship, spec writing, project conception.",
   "author": {
     "name": "Christian Neff",
     "url": "https://github.com/secondtruth"

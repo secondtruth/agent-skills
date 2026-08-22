@@ -10,8 +10,8 @@
     {
       "name": "engineering",
       "source": "./plugins/engineering",
-      "description": "Craft skills for building software: code structure and naming, CLI and service design, product UI, fork stewardship, spec writing, project conception, skill scouting.",
-      "version": "0.1.0",
+      "description": "Craft skills for building software: code structure and naming, CLI and service design, product UI, fork stewardship, spec writing, project conception.",
+      "version": "0.2.0",
       "category": "development",
       "keywords": [
         "engineering",
@@ -39,14 +39,15 @@
     {
       "name": "agent-workflows",
       "source": "./plugins/agent-workflows",
-      "description": "Workflows for working with AI agents: handoff debriefs, Project seeding, space consolidation, AI entity design, research source rules, driving chat assistants in the browser.",
-      "version": "0.1.0",
+      "description": "Workflows whose subject is AI agents: handoff debriefs, Project seeding, space consolidation, AI entity design, research source rules, driving chat assistants in the browser, scouting existing skills.",
+      "version": "0.2.0",
       "category": "productivity",
       "keywords": [
         "agents",
         "handoff",
         "research",
-        "cowork"
+        "cowork",
+        "skills"
       ],
       "homepage": "https://github.com/secondtruth/agent-skills"
     }
