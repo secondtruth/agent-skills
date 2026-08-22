@@ -1,7 +1,7 @@
 ---
 name: critical-traditions
 license: MIT
-description: "Apply specific intellectual traditions as analytical lenses on a topic, with each tradition treated as a distinct school with its own concepts, characteristic moves, internal disagreements, and known weaknesses. Use whenever the user names a tradition (e.g. 'ecofeminist take', 'degrowth critique', 'Kantian view'), names a family of traditions ('feminist perspective', 'ecological perspective', 'ethical analysis'), or explicitly asks for ideological / normative / critical-theoretical analysis of a topic. Also use when the user asks 'what would X think about Y' for X being a school or thinker covered here. Do NOT trigger automatically on politically charged topics without explicit invitation – this skill activates by request, not by topic recognition."
+description: "Apply specific intellectual traditions as analytical lenses on a topic, with each tradition treated as a distinct school with its own concepts, characteristic moves, internal disagreements, and known weaknesses. Use whenever the user names a tradition (e.g. 'ecofeminist take', 'degrowth critique', 'Kantian view'), names a family of traditions ('feminist perspective', 'ecological perspective', 'ethical analysis'), or explicitly asks for ideological / normative / critical-theoretical analysis of a topic. Also use when the user asks 'what would X think about Y' for X being a school or thinker covered here. Activates on explicit request only."
 ---
 
 # Critical Traditions
@@ -31,27 +31,27 @@ This is the mode that gives a complete picture from a family, not just one schoo
 
 ### 3. Multi-family / "all critical perspectives"
 
-User wants the full picture. Apply the families most relevant to the topic. Do not apply families where the topic has no purchase (do not run ethics on a question about CSS layout). Synthesize across families at the end.
+User wants the full picture. Apply the families most relevant to the topic. Synthesize across families at the end.
 
 ## Traditions available
 
 Filename in `references/traditions/`:
 
-- `intersectional-feminism.md`
-- `materialist-feminism.md`
-- `liberal-feminism.md`
-- `ecofeminism.md`
-- `deep-ecology.md`
-- `social-ecology.md`
-- `degrowth-economics.md`
-- `ecomodernism.md`
-- `decolonial-critique.md`
-- `post-colonial.md`
-- `critical-theory.md` (Frankfurt School)
-- `marxist-critique.md`
-- `virtue-ethics.md`
-- `deontological-ethics.md`
-- `consequentialism.md`
+- `intersectional-feminism.md` – how overlapping axes of oppression compound
+- `materialist-feminism.md` – gender as produced by economic relations and reproductive labour
+- `liberal-feminism.md` – equal rights, access and representation within existing institutions
+- `ecofeminism.md` – the linked domination of women and nature
+- `deep-ecology.md` – intrinsic value of the non-human world
+- `social-ecology.md` – ecological crisis rooted in social hierarchy (Bookchin)
+- `degrowth-economics.md` – deliberate downscaling within biophysical limits
+- `ecomodernism.md` – decoupling human flourishing from environmental impact through technology
+- `decolonial-critique.md` – coloniality persisting in knowledge, power and being
+- `post-colonial.md` – representation, hybridity and the aftermath of empire
+- `critical-theory.md` (Frankfurt School) – culture industry, instrumental reason, domination
+- `marxist-critique.md` – class, capital and the relations of production
+- `virtue-ethics.md` – character and flourishing over rules and outcomes
+- `deontological-ethics.md` – duties, rights and universalisable maxims
+- `consequentialism.md` – outcomes as the measure of right action
 
 Families are defined in `references/families.md`.
 
@@ -69,19 +69,19 @@ Every tradition is internally contested. When applying, note where the school di
 
 ### Apply the self-criticism
 
-Each tradition file has a *self-criticism / known weaknesses* section. Read it. When applying the tradition, name what the tradition cannot see well or where its concepts systematically distort the topic. This is non-optional – it is the difference between using a lens and being captured by one.
+Each tradition file has a *self-criticism / known weaknesses* section. Read it. When applying the tradition, name what the tradition cannot see well or where its concepts systematically distort the topic. It is the difference between using a lens and being captured by one.
 
-### Refuse forced application
+### Skip a tradition that has no purchase
 
-If the topic does not have substantive purchase for a tradition (you would be straining to apply it), say so plainly: "This topic does not really have a [tradition] angle worth pursuing." Better to skip than to manufacture.
+When you would be straining to apply a tradition, say so in one line — "This topic does not really have a [tradition] angle worth pursuing" — and move on.
 
 ### Concrete over generic
 
 Output should be specific to the topic, not a recitation of what the tradition generally thinks. If the output could be copy-pasted to a different topic, it has not actually engaged with the topic.
 
-### No moralizing tone
+### Neutral register
 
-Apply the tradition's analysis, not its rhetorical register. The user invited a perspective; they did not invite a sermon. Critique is welcome; preaching is not.
+Apply the tradition's analysis in a neutral register, not in its rhetorical one: the user invited a perspective, and critique reads best without a sermon.
 
 ## Output structure
 

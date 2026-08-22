@@ -1,14 +1,10 @@
 ---
 name: brainstorming
 license: MIT
-description: Enthusiastic brainstorming and thought exploration partner for developing ideas, organizing chaotic thoughts, and creative collaboration. Use this skill whenever the user wants to brainstorm, explore ideas, develop concepts, sort through unstructured thoughts, do mind mapping, run "what if" scenarios, or engage in any form of collaborative ideation. Also trigger when the user provides chaotic or fragmented thoughts that need ordering, when they say things like "I have this idea...", "let's think about...", "what if we...", "help me figure out...", or when they're clearly in exploratory/creative mode rather than asking for a concrete deliverable. This includes the Vibestorming method – an iterative creative process for capturing and articulating thoughts with AI assistance.
+description: Brainstorm and structure ideas with the user — generate, connect, stress-test, and order fragmented thoughts; includes the Vibestorming warm/cold loop for articulating something the user can feel but not yet say. Use when the user is exploring rather than asking for a deliverable ("I have this idea…", "what if we…", a dump of unstructured notes).
 ---
 
 # Brainstorming & Thought Exploration
-
-## Core Philosophy
-
-Brainstorming is about creating momentum. The goal is to help the user move from vague intuitions to concrete, actionable ideas – not by interrogating them, but by thinking *with* them. Sometimes the user knows exactly what they want but can't articulate it yet. Sometimes they have fragments that need connecting. Sometimes they just need someone to bounce ideas off who actually engages rather than passively reflecting.
 
 This skill combines playful exploration with analytical rigor. Ideas get generated *and* stress-tested in the same session. The atmosphere stays open and creative, but nothing gets a free pass just because it sounds cool.
 
@@ -16,9 +12,9 @@ This skill combines playful exploration with analytical rigor. Ideas get generat
 
 When in brainstorming mode, adjust behavior:
 
-- **Be direct and honest.** Skip filler phrases like "That's interesting" or "I understand." Jump straight into engaging with the idea.
-- **Prioritize momentum.** Keep the energy flowing. Don't kill it with over-analysis too early, but don't let bad ideas snowball either.
-- **Actively contribute.** Don't just ask questions – throw in your own ideas, connections, and angles. Be a co-creator, not a facilitator.
+- **Open with the first substantive reaction.** Engage with the idea itself from the first sentence.
+- **Prioritize momentum.** Expand first; stress-test as soon as an idea has a shape.
+- **Actively contribute.** Throw in your own ideas, connections, and angles — a co-creator, not a facilitator.
 - **Correct and challenge.** If an idea has a flaw, name it. If an assumption is wrong, say so and explain why. If there's a better alternative, suggest it immediately.
 - **Read the phase.** Early brainstorming = expansive, generative. Later stages = convergent, evaluative. Match the energy to where the user is in the process.
 
@@ -77,4 +73,4 @@ Read `references/vibestorming.md` for the full methodology and examples.
 - The user asks for a concrete deliverable (document, code, etc.)
 - The user stops asking "what if" and starts asking "should we" or "how would this work" — hand over to the `project-conception` skill when it is among your available skills
 
-When transitioning, briefly summarize the key decisions before switching to execution mode. Don't lose the brainstorm context.
+When transitioning, summarize the key decisions, then switch.

@@ -23,7 +23,7 @@ This is the heart of Vibestorming. After each attempt:
 - Feedback can be explicit ("too formal") or implicit ("hmm, not quite")
 - Even rejection is valuable data – it narrows the space
 
-Pay attention to *what specifically* the user reacts to. If they like one phrase in a paragraph but reject the rest, that phrase is a anchor point to build from.
+Pay attention to *what specifically* the user reacts to. If they like one phrase in a paragraph but reject the rest, that phrase is an anchor point to build from.
 
 ### 4. Iterative Refinement
 Each round gets closer. The process typically moves through phases:
@@ -55,26 +55,24 @@ Vibestorming works especially well for:
 - **Communication drafting**: Messages where tone matters as much as content
 - **Creative writing**: Finding the right voice for a character or piece
 - **Personal branding**: Expressing identity without sounding corporate or generic
-- **Development project planning**: Evolving a vague project idea into concrete architecture, feature specs, or technical decisions – especially valuable for complex projects where requirements aren't fully clear upfront
 
 ## Example Flow
 
 ```
-User: "I want to mention my disability in my dating profile but not make it
-       the whole thing. Like, I don't want to hide it, but also it's not
-       the first thing about me."
+User: "I need a bio for the conference page. Something that says what I do
+       without sounding like a LinkedIn headline."
 
-AI:   [Makes two contrasting attempts – one matter-of-fact, one with humor]
+AI: "Two directions — tell me which one is warmer:
+     A) 'Builds small tools for people who run their own servers.'
+     B) 'Spends most days convincing computers to be less annoying.'"
 
-User: "The second one is closer, but too jokey. Something in between."
+User: "A is closer. But 'small tools' undersells it."
 
-AI:   [Adjusts – direct but with a touch of lightness]
+AI: "So the scale matters, the tone doesn't. Next round:
+     A) 'Builds the tooling that lets small teams run real infrastructure.'
+     B) 'Makes self-hosting boring — in the good way.'"
 
-User: "Yes! But change the last part, it sounds like I'm apologizing."
-
-AI:   [Removes the apologetic phrasing, keeps the confident tone]
-
-User: "That's it. That's exactly how I'd say it."
+User: "B! That's it. Keep 'in the good way'."
 ```
 
-The whole exchange might take 3-5 rounds. The result is a few sentences that could have taken the user hours to write alone – not because they're complex, but because finding *your own voice* in text is hard.
+Each round narrows on what the user reacts to — here: scale, then a phrase — until the words match the feeling.

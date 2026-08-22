@@ -1,12 +1,10 @@
 ---
 name: analytical-lenses
 license: MIT
-description: "Apply structured analytical perspectives to illuminate aspects of a topic that single-frame analysis misses. Use whenever the user asks for multi-perspective analysis, wants to evaluate a decision or proposal, asks 'what am I missing', requests a stakeholder analysis, asks for a critique or steelman, or whenever a complex situation involves competing values, multiple parties, externalities, or time-horizon tradeoffs. Also trigger proactively when the user is making a substantial decision (project scoping, architectural choice, policy proposal, organizational change) where single-lens analysis would underrepresent the situation. This skill is framework-neutral and complementary to `critical-traditions` (which handles ideological/normative lenses); apply both together when the user wants the full picture."
+description: Multi-lens analysis of a decision, proposal or situation — stakeholder, power, externalities, time, scale, value conflicts, counterfactuals, steelman. Use when the user asks "what am I missing", wants a decision stress-tested from several angles, or names one of those lenses. Pairs with critical-traditions for normative readings.
 ---
 
 # Analytical Lenses
-
-A toolkit of framework-neutral perspectives. Each lens is a disciplined way of asking questions about a topic that surfaces what a single-perspective view tends to miss. Lenses are method, not ideology – they are compatible with any normative framework.
 
 ## When to use which mode
 
@@ -16,7 +14,7 @@ A toolkit of framework-neutral perspectives. Each lens is a disciplined way of a
 
 ## The lenses
 
-Each lens lives in its own reference file. Read the relevant file(s) when applying a lens – do not apply from memory of the name alone, as the analytical moves and questions matter.
+Each lens lives in its own reference file. Read the lens file first — the questions and moves are the lens.
 
 - `references/lenses/stakeholder-mapping.md` – Who is in the room, who is not, who is affected without participating
 - `references/lenses/power-analysis.md` – Who decides, who benefits, who pays, who is dependent
@@ -33,10 +31,11 @@ For multi-lens analyses, structure the output by lens with brief headings. After
 
 ## Quality standards
 
-- **No padding.** If a lens has little to say about the topic, say so in one line and move on. Forced application produces noise.
-- **Concrete over abstract.** Each lens should produce specific observations about the actual topic, not a recitation of what the lens generally cares about.
+- **One line when a lens has little to say.** Say so and move on; forced application produces noise.
 - **Self-critical.** Each lens has known blind spots. Surface them when the lens is applied – not as ritual disclaimer, but as honest scoping ("this lens systematically underweights X").
-- **No moralizing.** Methodical lenses do not advocate. They surface considerations. Recommendations belong in the synthesis, clearly marked as such.
+- **Lenses surface considerations; the synthesis carries the recommendation,** clearly marked as such.
+
+Done when every applied lens has produced at least one observation specific to this topic and the Synthesis names the tensions between lenses.
 
 ## Composition with `critical-traditions`
 

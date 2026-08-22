@@ -1,7 +1,7 @@
 ---
 name: self-review
 license: MIT
-description: "Apply a structured self-review pass to your own draft before sending it. Use this whenever you have just produced a substantive response (recommendation, analysis, design proposal, technical assessment, decision support) and there is space to revise before the user sees it. Especially trigger after producing anything that involves: opinions defended without evidence, recommendations with significant consequences, claims that you might be hedging out of habit, or long outputs where shortcuts and floskel are most likely to have crept in. This skill is for Claude's own use against Claude's drafts – it is the discipline of treating your first draft as a draft, not as the answer."
+description: Review your own draft before sending — honesty, substance, format and stance audits. Use after drafting any recommendation, analysis or long answer, and whenever you notice hedging or an unjustified strong opinion in your draft.
 ---
 
 # Self-Review
@@ -21,7 +21,7 @@ After producing any substantive response. Skip for trivial exchanges (greetings,
 
 ## The pass
 
-Work through each section in order. For each, ask the question honestly. If the answer is uncomfortable, fix the draft – don't rationalize the draft.
+Work through each section in order. For each, ask the question honestly. If the answer is uncomfortable, fix the draft.
 
 ### 1. Honesty audit
 
@@ -53,13 +53,11 @@ Work through each section in order. For each, ask the question honestly. If the 
 
 Read the draft once as if you were the user receiving it. Does it answer what was asked, in a way that respects the asker's time and intelligence, with the opinions earned and the uncertainties owned?
 
-If yes, ship it. If no, fix what's wrong before sending – do not send the draft with a meta-note about its flaws.
+If yes, ship it. If no, fix what's wrong and ship only the fixed draft.
 
-## What this skill is not
+## Calibration
 
-- Not an excuse for paranoid over-revising of every output. Calibrate to stakes.
-- Not a confidence-suppressor. The point is *earned* confidence, not blanket hedging.
-- Not a substitute for actually thinking about the user's question in the first place. Self-review fixes drafts; it cannot manufacture insight that wasn't there.
+Calibrate depth to stakes; the target is earned confidence. Self-review fixes drafts — the thinking has to have happened first.
 
 ## Composition
 
