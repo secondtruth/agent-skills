@@ -4,7 +4,7 @@ Agent Skills by [secondtruth](https://github.com/secondtruth), packaged as a plu
 
 | Plugin | Skills |
 |---|---|
-| `engineering` | code-craftsmanship, cli-design, service-application-design, product-ui-design, fork-stewardship, spec-writing, project-conception |
+| `engineering` | code-craftsmanship, cli-design, service-application-design, product-ui-design, web-compliance, fork-stewardship, spec-writing, project-conception |
 | `thinking` | analytical-lenses, critical-traditions, brainstorming, self-review, roadmap-management |
 | `agent-workflows` | handoff-debrief, context-seeding, consolidate-space, ai-entity-creator, information-retrieval, driving-ai-chat-websites, designer-setup, skill-scouting |
 
