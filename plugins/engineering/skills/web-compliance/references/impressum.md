@@ -5,7 +5,7 @@
 ## Who needs one
 
 - **Germany:** every digital service offered geschäftsmäßig, "in der Regel gegen Entgelt" (§ 5 DDG). Geschäftsmäßig is met by a business presentation, ads, affiliate links, a paid offer, a professional portfolio — and by the social-media profiles of that business. A purely private page without any economic purpose is exempt; in doubt, publish one. Journalistic-editorial content adds § 18 Abs. 2 MStV regardless of commerce.
-- **Austria:** § 5 ECG for commercial services, § 14 UGB for registered businesses, § 25 MedienG for every website ("Offenlegung") — the last applies to private sites too, in a reduced form.
+- **Austria:** § 5 ECG for commercial services, § 14 UGB for registered businesses, § 25 MedienG ("Offenlegung") for every website — a retrievable electronic medium is a periodical medium by definition (§ 1 Abs. 1 Z 5a MedienG), whatever its update frequency; the four-times-a-year test belongs to the separate category of recurring electronic media. Private and static pages are covered too, in the reduced form.
 - **Switzerland:** Art. 3 Abs. 1 lit. s UWG for electronic commerce (offering goods or services online). A purely informational site has no Impressum duty; a Datenschutzerklärung under Art. 19 revDSG is still due when personal data is processed.
 
 ## Germany — § 5 DDG
@@ -21,7 +21,7 @@
 | USt-IdNr. (§ 27a UStG) or W-IdNr. (§ 139c AO) | when one exists | Omit the line entirely when the operator has none; a Steuernummer is neither required nor advisable. |
 | Liquidation note | AG, KGaA, GmbH in Abwicklung | |
 | Verantwortliche Person (§ 18 Abs. 2 MStV) | journalistic-editorial offers | Name and address of the person responsible for content ("V.i.S.d.P."). Applies to blogs and news sections, also of companies. |
-| Verbraucherstreitbeilegung (§ 36 VSBG) | businesses with more than ten employees that address consumers | State whether willing or obliged to take part in dispute resolution before a Verbraucherschlichtungsstelle, naming the body when obliged. Smaller businesses may state it voluntarily. |
+| Verbraucherstreitbeilegung (§ 36 VSBG) | businesses that address consumers — exempt only if they employed ten or fewer persons on 31 December of the preceding year | State whether willing or obliged to take part in dispute resolution before a Verbraucherschlichtungsstelle; name the competent body (address, website) whenever the answer is obliged *or* willing. Exempt businesses may still state it voluntarily. |
 
 **Removed duty:** the link to the EU ODR platform (`ec.europa.eu/consumers/odr`) was mandatory under Regulation (EU) 524/2013; the platform closed on 2025-07-20 and the regulation was repealed. A remaining link is stale and should go.
 
@@ -37,7 +37,7 @@
 | Kammer/Berufsverband, Berufsbezeichnung, Verleihungsstaat, berufsrechtliche Vorschriften with access | § 5 ECG | regulated professions |
 | UID-Nummer | § 5 ECG | when one exists |
 | Gewerbe: Mitgliedschaft WKO, anwendbare Gewerbevorschriften (GewO, `ris.bka.gv.at`) | § 5 ECG, § 63 GewO | trades |
-| Medieninhaber, Unternehmensgegenstand, Sitz | § 25 MedienG ("Offenlegung") | every website; name and address suffice for small, presentation-only sites ("kleine Website") |
+| Medieninhaber, Unternehmensgegenstand, Wohnort/Sitz | § 25 MedienG ("Offenlegung") | every website (§ 1 Abs. 1 Z 5a MedienG), static ones included; the reduced form for a "kleine Website" (presentation only, § 25 Abs. 5) still requires all three: name/Firma, Unternehmensgegenstand, Wohnort/Sitz |
 | Additionally: grundlegende Richtung ("Blattlinie"), vertretungsbefugte Organe, owners with more than 25 % | § 25 MedienG | "große Website" — content beyond self-presentation, e.g. a blog with editorial content or a news section |
 
 ## Switzerland
@@ -82,8 +82,9 @@ Eintragung im {Handelsregister / Vereinsregister}
 Registergericht: Amtsgericht {…}
 Registernummer: {HRB …}
 
-Umsatzsteuer-ID
+Umsatzsteuer-ID                                             ← nur wenn vorhanden
 Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG: {DE…}
+Wirtschafts-Identifikationsnummer gemäß § 139c AO: {DE…}   ← alternativ, wenn keine USt-IdNr. vorliegt
 
 Berufsbezeichnung und berufsrechtliche Regelungen          ← reglementierte Berufe
 Berufsbezeichnung: {…} (verliehen in {Staat})
@@ -98,8 +99,9 @@ Redaktionell verantwortlich (§ 18 Abs. 2 MStV)             ← journalistisch-r
 {Anschrift}
 
 Verbraucherstreitbeilegung (§ 36 VSBG)
-Wir sind {nicht bereit und nicht verpflichtet / verpflichtet}, an Streitbeilegungsverfahren
-vor einer Verbraucherschlichtungsstelle teilzunehmen.{ Zuständige Stelle: …}
+Wir sind {nicht bereit und nicht verpflichtet / bereit / verpflichtet}, an Streitbeilegungsverfahren
+vor einer Verbraucherschlichtungsstelle teilzunehmen.
+Zuständige Verbraucherschlichtungsstelle: {Name, Anschrift, Website}   ← bei „bereit" und bei „verpflichtet"
 ```
 
 ## Errors that trigger Abmahnungen

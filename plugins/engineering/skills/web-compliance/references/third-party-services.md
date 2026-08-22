@@ -20,8 +20,8 @@ Legend — *Before consent:* what happens if the tag is loaded unconditionally. 
 | HubSpot | `js.hs-scripts.com`, `js.hsforms.net`, `hbspt.` | tracking + forms | marketing | native form + CRM API server-side |
 | reCAPTCHA | `google.com/recaptcha`, `grecaptcha`, `react-google-recaptcha` | IP, cookies, fingerprint to Google on every page that loads it | marketing (consent needed before it can protect the form — awkward) | Cloudflare Turnstile, hCaptcha, honeypot + rate limit |
 | hCaptcha / Turnstile | `hcaptcha.com`, `challenges.cloudflare.com/turnstile` | IP to the provider, minimal storage | functionality (lit. f often accepted; disclose) | honeypot |
-| Cloudflare Web Analytics / Insights | `static.cloudflareinsights.com`, `beacon.min.js` | cookieless beacon | analytics-lite (lit. f; disclose) | keep or Plausible |
-| Vercel Analytics / Speed Insights | `@vercel/analytics`, `vitals.vercel-insights.com` | cookieless, hashed | lit. f; disclose | keep |
+| Cloudflare Web Analytics / Insights | `static.cloudflareinsights.com`, `beacon.min.js` | cookieless beacon | — (lit. f; disclose) | keep or Plausible |
+| Vercel Analytics / Speed Insights | `@vercel/analytics`, `vitals.vercel-insights.com` | cookieless, hashed | — (lit. f; disclose) | keep |
 | jsDelivr, unpkg, cdnjs, Font Awesome Kit | `cdn.jsdelivr.net`, `unpkg.com`, `cdnjs.cloudflare.com`, `kit.fontawesome.com`, `use.fontawesome.com` | IP to the CDN on every page view | — (replace) | bundle; npm packages |
 | Intercom, Crisp, Tawk, Zendesk chat | `widget.intercom.io`, `client.crisp.chat`, `embed.tawk.to`, `zdassets.com` | IP, cookies, fingerprinting | functionality with consent, or load-on-click | load on click of a "Chat starten" button |
 | Calendly, Cal.com embeds | `assets.calendly.com`, `cal.com/embed` | IP, cookies | functionality | link out instead of embedding |
@@ -46,11 +46,11 @@ Legend — *Before consent:* what happens if the tag is loaded unconditionally. 
 
 ## Inventory grep
 
-Run from the repository root; widen the include list to the project's languages. Search for the hostnames as well as the SDKs — a bare `<script src>` in a layout hides from import-based greps.
+Run from the repository root; widen the include list to the project's languages. The pattern mirrors the *Signals* column above — extend both together when a service is added; a clean grep is a starting point, not proof of absence. Search for the hostnames as well as the SDKs — a bare `<script src>` in a layout hides from import-based greps.
 
 ```bash
 grep -rnEi \
-  'googletagmanager|google-analytics|gtag\(|G-[A-Z0-9]{6,}|GTM-[A-Z0-9]{4,}|fonts\.googleapis|fonts\.gstatic|maps\.googleapis|youtube\.com/(embed|iframe_api)|player\.vimeo|connect\.facebook\.net|fbq\(|snap\.licdn|analytics\.tiktok|hotjar|clarity\.ms|hs-scripts|hsforms|recaptcha|hcaptcha|turnstile|cloudflareinsights|vercel-insights|@vercel/analytics|cdn\.jsdelivr|unpkg\.com|cdnjs\.cloudflare|fontawesome|intercom|crisp\.chat|tawk\.to|zdassets|calendly|cal\.com/embed|disqus|platform\.twitter|js\.stripe|paypal\.com/sdk|@sentry/|sentry\.io|typekit' \
+  'googletagmanager|google-analytics|gtag\(|G-[A-Z0-9]{6,}|GTM-[A-Z0-9]{4,}|react-ga4|@next/third-parties|vue-gtag|plausible|umami|fathom|matomo|_paq|fonts\.googleapis|fonts\.gstatic|@fontsource|maps\.googleapis|google\.maps\.|@googlemaps|youtube\.com/(embed|iframe_api)|youtube-nocookie|react-youtube|lite-youtube|player\.vimeo|open\.spotify\.com/embed|connect\.facebook\.net|fbq\(|snap\.licdn|analytics\.tiktok|hotjar|clarity\.ms|hs-scripts|hsforms|hbspt|recaptcha|hcaptcha|turnstile|cloudflareinsights|vercel-insights|@vercel/analytics|cdn\.jsdelivr|unpkg\.com|cdnjs\.cloudflare|fontawesome|intercom|crisp\.chat|tawk\.to|zdassets|calendly|cal\.com/embed|disqus|platform\.twitter|js\.stripe|@stripe/stripe-js|paypal\.com/sdk|@sentry/|sentry\.io|typekit' \
   --include='*.html' --include='*.htm' --include='*.js' --include='*.jsx' --include='*.ts' --include='*.tsx' \
   --include='*.vue' --include='*.svelte' --include='*.astro' --include='*.php' --include='*.twig' --include='*.blade.php' \
   --include='*.liquid' --include='*.njk' --include='*.hbs' --include='*.md' --include='*.mdx' --include='*.css' --include='*.scss' \
@@ -67,9 +67,12 @@ grep -rnE 'type="(email|tel)"|name="(email|phone|telefon|name|vorname|nachname|i
   --include='*.html' --include='*.jsx' --include='*.tsx' --include='*.vue' --include='*.svelte' --include='*.astro' --include='*.php' --include='*.twig' \
   --exclude-dir=node_modules --exclude-dir=vendor --exclude-dir=dist .
 
-# Server-side recipients
-grep -rnEi 'resend|sendgrid|postmark|mailgun|brevo|sendinblue|mailchimp|klaviyo|nodemailer|supabase|firebase|auth0|clerk|stripe|paypal|mollie|anthropic|openai|mistral|algolia|cloudinary|imgix|datadog|axiom|logtail' \
-  package.json composer.json requirements.txt pyproject.toml go.mod Gemfile 2>/dev/null
+# Server-side recipients — manifests first, then the source tree (wrappers and lazily
+# imported SDKs only show up there)
+grep -rnEi 'resend|sendgrid|postmark|mailgun|brevo|sendinblue|mailchimp|klaviyo|listmonk|nodemailer|smtp|supabase|firebase|planetscale|neon|auth0|clerk|stripe|paypal|mollie|klarna|anthropic|openai|mistral|algolia|cloudinary|imgix|uploadthing|s3\.|datadog|axiom|logtail|sentry' \
+  --include='package.json' --include='composer.json' --include='requirements.txt' --include='pyproject.toml' --include='go.mod' --include='Gemfile' --include='Cargo.toml' --include='.env.example' \
+  --include='*.js' --include='*.mjs' --include='*.ts' --include='*.tsx' --include='*.php' --include='*.py' --include='*.go' --include='*.rb' --include='*.rs' \
+  --exclude-dir=node_modules --exclude-dir=vendor --exclude-dir=dist --exclude-dir=.next --exclude-dir=build --exclude-dir=target .
 ```
 
 Read the layout/head templates by hand after grepping: CMS themes, tag managers and marketing plugins add tags outside the source tree (WordPress plugins, Shopify apps, Webflow integrations). For those, the inventory comes from the rendered page — `curl -sL <url> | grep -oE 'https?://[^"'"'"' ]+' | sort -u` lists every host the HTML references, and a `--deep` run of website-recht-check lists the hosts the browser actually contacts.
