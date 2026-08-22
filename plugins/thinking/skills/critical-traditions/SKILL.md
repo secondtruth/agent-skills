@@ -90,4 +90,4 @@ Apply the tradition's analysis, not its rhetorical register. The user invited a 
 
 ## Composition with `analytical-lenses`
 
-For topics with both structural and normative dimensions, run the methodical lenses in `analytical-lenses` first (stakeholder map, power analysis, externalities) to establish the structural picture, then apply the relevant traditions to interpret it. Applying traditions to an unmapped situation tends to reach for familiar pattern-matches rather than engaging with the situation as it actually is.
+For topics with a structural dimension, run the `analytical-lenses` skill first when it is among your available skills (its Composition section says how); otherwise sketch stakeholders and power before interpreting. Applying traditions to an unmapped situation tends to reach for familiar pattern-matches rather than engaging with the situation as it actually is.

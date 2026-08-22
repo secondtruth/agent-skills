@@ -7,6 +7,8 @@ description: "Compose and deliver a structured debrief at the end of any handoff
 
 ## Why this exists
 
+This is the return leg of a handoff: the `handoff` skill, when it is among your available skills, writes the document that opens a session; this one closes it. As there, reference artifacts by path or URL instead of restating them, and redact secrets.
+
 When you complete a task via handoff, you often notice things that were out of scope — stale references, inconsistencies, decisions made implicitly. Without a debrief, those observations die at the end of the session. The originating agent starts its next session blind.
 
 Write the debrief even when everything went smoothly and there's nothing to flag — a clean debrief is still a useful signal.

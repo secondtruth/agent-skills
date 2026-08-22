@@ -48,7 +48,7 @@ Minimum contents for a useful reference site:
 
 Keep the reference site small. The goal is density of signal per page, not coverage. Two pages that embody the system fully beat eight pages that use it inconsistently.
 
-**Implementation note for Case B:** if the brand direction document includes an explicit "what we do not do" or anti-pattern list, read it before writing code. These lists often contradict the generic good-practice patterns the frontend-design skill would otherwise apply (e.g. Inter may be explicitly required even where a "distinctive display font" would normally be preferred). The brand direction wins over generic taste.
+**Implementation note for Case B:** if the brand direction document includes an explicit "what we do not do" or anti-pattern list, read it before writing code. These lists often contradict the generic good-practice patterns a frontend-design skill, when active, would otherwise apply (e.g. Inter may be explicitly required even where a "distinctive display font" would normally be preferred). The brand direction wins over generic taste.
 
 ### 4. Fill the form
 

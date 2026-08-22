@@ -5,7 +5,7 @@ description: Plan and prioritize product roadmaps using frameworks like RICE, Mo
 
 # Roadmap Management Skill
 
-You are an expert at product roadmap planning, prioritization, and communication. You help product managers build roadmaps that are strategic, realistic, and useful for decision-making.
+Input: a concept package from the `project-conception` skill (problem, scope, MVP cut, risks, dependencies) when one exists; otherwise elicit the initiative list first. Record the result where the user tracks work — their issue tracker or knowledge base, through the `lodestar` or `knowledge-management` skill when one is among your available skills; otherwise deliver the roadmap inline.
 
 ## Roadmap Frameworks
 

@@ -4,7 +4,7 @@ The concrete Go shapes for the rules in `SKILL.md`. Written for Cobra, the borin
 
 Go-specific vocabulary up front:
 
-- **Call the application context `App`, not `Deps`.** `Deps` is accurate but implementation-shaped; `App` names the running application (principle 8 of `code-craftsmanship`). In reusable console infrastructure it stays thin and generic: `app := console.NewApp()`.
+- **Call the application context `App`, not `Deps`.** `Deps` is accurate but implementation-shaped; `App` names the running application (names outlive their writers). In reusable console infrastructure it stays thin and generic: `app := console.NewApp()`.
 - **Use `RunE`, never `Run`** — handlers return errors; `Execute()` renders and exits.
 - **Silence Cobra's automatic output** on the root: `SilenceErrors: true, SilenceUsage: true`, then render centrally.
 - **`text/tabwriter`** for tables and key/value blocks.
@@ -28,7 +28,7 @@ func NewFileCommand(app *App) *cobra.Command {
 }
 ```
 
-Whether `NewFileListCommand` lives in `file.go` or `file_list.go` is a readability call, not a rule — the split/keep criteria are in principle 3 of `code-craftsmanship`.
+Whether `NewFileListCommand` lives in `file.go` or `file_list.go` is a readability call, not a rule — split when a file resists scanning, keep members together when splitting would only produce boilerplate.
 
 ## 2. Leaf Command With Local Options
 

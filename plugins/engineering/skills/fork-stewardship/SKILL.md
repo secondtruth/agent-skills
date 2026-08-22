@@ -9,7 +9,7 @@ Forking is not a one-time `git fork` click — it is a relationship with an upst
 
 ## Two strategies (decide first, once)
 
-Every fork follows one of two strategies. Naming it explicitly — in the README and in the divergence ledger — is the single highest-leverage act of fork management, because every later decision (branch topology, sync cadence, refactoring license) follows from it.
+Every fork follows one of two strategies. Naming it explicitly — in the README, in the divergence ledger, and as an ADR under `docs/adr/` where the repo keeps them — is the single highest-leverage act of fork management, because every later decision (branch topology, sync cadence, refactoring license) follows from it.
 
 ### Embrace
 
@@ -25,7 +25,7 @@ The fork extracts a subcomponent from a larger project and develops it as a stan
 - **Use when:** a monolithic project contains a useful component burdened with baggage; isolate, refactor, release independently.
 - **Consequences:** one-time extraction, aggressive refactoring allowed, reduction to core functionality, no upstream compatibility.
 
-The strategy choice belongs to project conception (see the project-conception skill); everything below is operations.
+The strategy choice belongs to project conception (the `project-conception` skill, when it is among your available skills); everything below is operations.
 
 ## Embrace operations
 
@@ -49,7 +49,7 @@ Maintain a `FORK.md` at the repo root listing **every deviation from upstream**:
 
 1. Fetch upstream; fast-forward `upstream-main`.
 2. Read what came in *before* merging: release notes, `git log --oneline upstream-main..`, security advisories first.
-3. Merge into `main`; resolve conflicts using the ledger as the map.
+3. Merge into `main`. When the `resolving-merge-conflicts` skill is among your available skills, run it with the ledger as the intent source for the fork's side; without it, resolve hunk by hunk by intent with the ledger as the map, never by taking one side wholesale.
 4. Run the smoke tests / build.
 5. Update the ledger if the merge changed any deviation.
 6. Record the sync (date, upstream ref) — a `Synced-Upstream:` trailer in the merge commit works.

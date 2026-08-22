@@ -21,7 +21,7 @@ Where the situation appears to be a question of fact or efficiency but is actual
 
 ## Known blind spots
 
-This lens can encourage endless value-clarification at the expense of action. Sometimes values are in tension and the answer is to choose anyway. Also: it does not tell you *which* values should win. That requires a normative framework (`critical-traditions` provides several; pick deliberately rather than by default).
+This lens can encourage endless value-clarification at the expense of action. Sometimes values are in tension and the answer is to choose anyway. Also: it does not tell you *which* values should win. That requires a normative framework (the `critical-traditions` skill, when it is among your available skills, provides several; pick deliberately rather than by default).
 
 ## Output format
 

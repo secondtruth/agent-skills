@@ -33,7 +33,7 @@ Work through each section in order. For each, ask the question honestly. If the 
 
 - **Did I answer the actual question?** The question the user asked, not a nearby question you found easier or more interesting. If you drifted, name the drift and decide whether to bring it back or note explicitly that you reframed.
 - **What am I assuming?** List the unexamined premises in your draft. For each: would the user share this premise? If not, name it as a premise rather than treating it as given.
-- **What am I missing?** What's the strongest objection to my draft? Run a quick steelman (use the `analytical-lenses` `steelman-objection` lens if it merits). If the steelman is hard to answer, update the draft.
+- **What am I missing?** What's the strongest objection to my draft? Run a quick steelman (the `analytical-lenses` skill's `steelman-objection` lens when that skill is among your available skills; otherwise write the strongest objection yourself in two sentences). If the steelman is hard to answer, update the draft.
 - **Did I do the work, or did I skip a hard part?** Identify any place where you handed off difficulty to the user (asked them to decide between options you should have evaluated, offered a list when you should have given a verdict, deferred to "depends on your priorities" when you could have laid those priorities out).
 
 ### 3. Format audit
@@ -62,4 +62,4 @@ If yes, ship it. If no, fix what's wrong before sending – do not send the draf
 
 ## Composition
 
-This skill pairs naturally with `analytical-lenses`, especially `steelman-objection` and `value-conflicts`. If self-review surfaces that the draft has a serious blind spot, use those lenses on the draft itself, not just on the topic.
+This skill pairs naturally with the `analytical-lenses` skill when it is among your available skills, especially `steelman-objection` and `value-conflicts`. If self-review surfaces that the draft has a serious blind spot, use those lenses on the draft itself, not just on the topic.

@@ -1,6 +1,6 @@
 # Go Migration Playbooks
 
-Ordered steps for moving an existing Go CLI onto the style in `SKILL.md` and `references/go.md`. Each step is a separate commit — behaviour changes never ride along with structural ones (principle 12 of `code-craftsmanship`).
+Ordered steps for moving an existing Go CLI onto the style in `SKILL.md` and `references/go.md`. Each step is a separate commit — behaviour changes never ride along with structural ones (leave the campsite cleaner, in its own commit).
 
 ## A. From legacy Cobra: `Run`, package-global commands, `init()` registration, global `Core`, `h.Fatal`
 
@@ -19,7 +19,7 @@ Once step 6 lands, delete the `init()` registrations and the package-level comma
 
 1. **Keep the existing domain file.** Do not start by splitting — splitting before extracting produces boilerplate files that then need merging back.
 2. **Extract each visible subcommand** into `New<Domain><Action>Command(app)` inside that same file. The parent constructor becomes a table of contents.
-3. **Leave execution helpers near the domain** until they earn their own package. A helper with one caller belongs next to that caller (principle 9).
+3. **Leave execution helpers near the domain** until they earn their own package. A helper with one caller belongs next to that caller (fewer concepts, deeper concepts).
 4. **Move config lifecycle** into `internal/config` (or equivalent): `LoadAnd`, `Update`, path handling, defaults, permissions.
 5. **Move structured resource rendering** into `internal/output` (or equivalent). Short inline confirmations may stay in the handlers.
 6. **Split files only afterwards** — and only if the extracted constructors still leave the domain file hard to scan.

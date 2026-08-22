@@ -19,7 +19,7 @@ description: >-
 
 A CLI has two layers, and this skill covers both. The **interface layer** is what the user experiences: flags, help, output, errors, prompts. The **program layer** is how the code is shaped: command trees, the application context, error flow, boundaries. Everything in this file is language-agnostic; concrete code shapes live in per-language reference files.
 
-This skill assumes `code-craftsmanship`; its principles apply unchanged and are cited by number below.
+Structure and naming rules come from the `code-craftsmanship` skill when it is among your available skills; the parenthetical names below (one concept per unit, members stay together, …) are what they mean when it is not.
 
 ## Interface Design
 
@@ -66,9 +66,9 @@ The full conventions — standard env vars, responsiveness targets, robustness, 
 ### Commands
 
 - **Construct, do not declare.** Every visible command comes from a constructor (`NewProjectCreateCommand(app)`, `ProjectCreateCommand::create($app)`). Local command values are easier to test and reason about than package- or file-level command definitions; reach for the latter only with a strong reason.
-- **Assemble the tree explicitly** from the root command or a small assembly file. No hidden or side-effect registration (`init()`, autodiscovery magic) for normal command trees — see Explicit Assembly in `code-craftsmanship/references/patterns.md`.
-- **Keep option structs local to the constructor** where practical, so a command's flags and its handler are read together (principle 4).
-- **One command per file when it improves readability, not as doctrine.** For compact groups, one domain file with several explicit subcommand constructors beats a pile of tiny leaf files. What matters is that the parent stays scan-friendly and every visible subcommand has a named construction boundary; the split/keep criteria are in principle 3 of `code-craftsmanship`.
+- **Assemble the tree explicitly** from the root command or a small assembly file. No hidden or side-effect registration (`init()`, autodiscovery magic) for normal command trees — the tree is visible in one place and constructible twice (Explicit Assembly).
+- **Keep option structs local to the constructor** where practical, so a command's flags and its handler are read together (members stay with their group).
+- **One command per file when it improves readability, not as doctrine.** For compact groups, one domain file with several explicit subcommand constructors beats a pile of tiny leaf files. What matters is that the parent stays scan-friendly and every visible subcommand has a named construction boundary; split when a file resists scanning, keep members together when splitting would only produce boilerplate (one concept per unit).
 - **Top-level shortcuts only for high-frequency actions**, with clear ownership of the shortcut.
 
 ### The application context
@@ -83,7 +83,7 @@ The app object is the small value passed into command constructors so commands r
 
 ### Errors and exit
 
-- **Handlers return errors; the process exits at one boundary.** Never terminate the process from a handler or helper — exit belongs to the top-level runner so tests, shell mode, and command composition stay possible (Exit at the Boundary in `code-craftsmanship/references/patterns.md`).
+- **Handlers return errors; the process exits at one boundary.** Never terminate the process from a handler or helper — exit belongs to the top-level runner so tests, shell mode, and command composition stay possible (Exit at the Boundary).
 - **Distinguish incorrect invocation from runtime failure** with a typed usage error: usage/help output for the former, concise error output without usage spam for the latter, exit codes decided in that one place.
 - **Suppress the framework's automatic usage-on-error output** for runtime errors and render centrally instead.
 

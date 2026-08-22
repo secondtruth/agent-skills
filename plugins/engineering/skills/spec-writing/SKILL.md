@@ -12,6 +12,7 @@ Guide for writing protocol specifications, technical standards, and RFC-style do
 1. **Read `references/guide.md`** — Full best practices guide. Read it before starting any new spec or major revision.
 2. **Check the repo's agent instructions** — `CLAUDE.md`, `AGENTS.md`, or `CONTRIBUTING.md` may define a canonical document structure for the suite. Follow it as the baseline, with `references/guide.md` providing the detailed how-to.
 3. **Check existing specs in the project** — Match the conventions already established (terminology, formatting, section ordering) for consistency across the spec suite.
+4. **Reuse the repo's glossary** — if it keeps a `CONTEXT.md`, Conventions and Definitions reuses its terms verbatim and feeds new ones back; hard-to-reverse design trade-offs go to `docs/adr/` (the `domain-modeling` skill's layout, when it is among your available skills). Feature specs bound for an issue tracker are the `to-spec` skill's job when it is available; this skill writes protocol and standards documents.
 
 ## Core Workflow
 

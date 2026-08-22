@@ -39,4 +39,4 @@ For multi-lens analyses, structure the output by lens with brief headings. After
 
 ## Composition with `critical-traditions`
 
-For topics with substantive normative dimensions, the methodical lenses here surface the *structure* of the situation while `critical-traditions` provides *normative interpretations* of it. They compose naturally: run stakeholder-mapping + power-analysis first to map the terrain, then apply one or more ideological traditions for value-laden interpretation. Avoid running ideological traditions without first establishing the structural picture – it short-circuits into ideological pattern-matching.
+For topics with substantive normative dimensions, the methodical lenses here surface the *structure* of the situation; the `critical-traditions` skill, when it is among your available skills, provides *normative interpretations* of it. Map the structure first — stakeholder-mapping + power-analysis — then apply one or more traditions for value-laden interpretation; without that skill, name the normative frame you apply in the synthesis.

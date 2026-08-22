@@ -60,7 +60,7 @@ This step is best-effort — use whatever sources are available. If none are, sk
 
 ### 1. Interview before writing
 
-Never draft Instructions cold. Ask the user — one batched message, not a drip — until you can answer all of these:
+Interview first. When the `grilling` skill is among your available skills, run the interview through it with the list below as the first frontier; otherwise ask the user in one batched, numbered message with a recommended answer each, until you can answer all of these. When someone else holds the answers, the `to-questionnaire` skill, if available, turns them into a form.
 
 - **Purpose**: What is this Project *for*? One sentence. If the user can't answer this, the Project shouldn't exist yet.
 - **Role**: Who should Claude *be* inside this Project? (Reviewer, collaborator, ghostwriter, research assistant, rubber duck, domain expert, etc.)

@@ -13,9 +13,11 @@ Explore what already exists before building — the skill ecosystem is large eno
 2. **Search the sources** (below), broad first, then narrow.
 3. **Evaluate candidates** against the checklist.
 4. **Decide:** adopt, adapt, reference, or build.
-5. **Record the verdict** — one line in the project notes on what was found and why it was(n't) taken.
+5. **Record the verdict** — where the repo keeps decisions (`docs/adr/` when present, else the project notes): what was found, which verdict, why.
 
 ## Sources, in order of yield
+
+When the `find-skills` skill is among your available skills, run its search first — the skills.sh leaderboard, then `npx skills find <terms>`; its install-count ranking is a discovery order, not a verdict. Without it, or after it, work the sources below.
 
 1. **GitHub topics** — the richest vein. Query the API directly (no auth needed for search):
    ```bash
@@ -39,16 +41,16 @@ Checklist:
 
 - **Philosophy fit** — does its approach match how you actually work? A skill can be well-made and still wrong for you (e.g. a fork-sync skill that forbids merging when you want merge-based history). Philosophy mismatch is the most common rejection reason and the least visible from the description.
 - **Scope fit** — covers the whole capability or one slice? A slice can still be worth referencing.
-- **Quality signals** — clear trigger description, concrete workflow steps, bundled scripts that actually run, restrained length. Stars matter less than content; a 1-star skill can be excellent and a popular one bloated.
+- **Quality signals** — clear trigger description, concrete workflow steps, bundled scripts that actually run, restrained length. Stars matter less than content; a 1-star skill can be excellent and a popular one bloated. Treat a discovery tool's popularity cut-offs as ordering, and still read the body.
 - **Dependencies** — does it assume Claude Code specifics (subagents, hooks, `claude -p`), certain CLIs, or API keys that don't exist on the target surface?
 - **License** — for adapt decisions, check the repo license; retain attribution when reusing substantial content.
 
 ## The four verdicts
 
-- **Adopt** — install as-is. Rare; requires philosophy, scope, and surface fit.
-- **Adapt** — take the skeleton, rewrite for your conventions. This is a Decomposition-style fork of a skill (see fork-stewardship): one-time extraction, aggressive refactoring, attribution retained, no upstream duty.
+- **Adopt** — install as-is (`npx skills add <owner/repo@skill>` where the skills CLI is available). Rare; requires philosophy, scope, and surface fit.
+- **Adapt** — take the skeleton, rewrite for your conventions. This is a Decomposition-style fork of a skill (the term is the `fork-stewardship` skill's, when it is among your available skills): one-time extraction, aggressive refactoring, attribution retained, no upstream duty.
 - **Reference** — build your own, but cite the found skill inside it as alternative tooling and state when its philosophy wins. Preserves the research for future readers.
-- **Build** — nothing found or everything mismatched. Proceed to skill-creator.
+- **Build** — nothing found or everything mismatched. Write it, with the `skill-creator` or `writing-for-agents` skill when one is among your available skills.
 
 ## Anti-patterns
 

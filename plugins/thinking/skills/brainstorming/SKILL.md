@@ -39,6 +39,8 @@ Use whatever combination works for the situation:
 - Synthesis – combine partial ideas into stronger wholes
 - Priority ranking – help the user decide what to pursue first
 
+To stress-test a chosen direction, run the `grilling` skill when it is among your available skills; otherwise ask the frontier of open decisions in one numbered round with a recommended answer each.
+
 **Structural (organizing)**
 - Mind mapping – build idea hierarchies and connections
 - Clustering – group related fragments together
@@ -72,5 +74,6 @@ Read `references/vibestorming.md` for the full methodology and examples.
 - A clear winner has emerged and the user wants to execute
 - The brainstorm has naturally converged on a plan
 - The user asks for a concrete deliverable (document, code, etc.)
+- The user stops asking "what if" and starts asking "should we" or "how would this work" — hand over to the `project-conception` skill when it is among your available skills
 
 When transitioning, briefly summarize the key decisions before switching to execution mode. Don't lose the brainstorm context.

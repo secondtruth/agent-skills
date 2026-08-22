@@ -33,7 +33,7 @@ This split *is* the scope; it replaces the in-scope/out-of-scope lists. It is al
 The handoff lands in the repo, not in the knowledge base:
 
 - **A concept document in the repo**, not only in the knowledge base. It belongs next to the code it describes, where it gets reviewed in diffs and rots visibly instead of silently.
-- **Tracked issues**, cut along the three categories from Phase 2.
+- **Tracked issues**, cut along the three categories from Phase 2, each declaring what blocks it. When the `to-spec` and `to-tickets` skills are among your available skills, hand off through them: the concept becomes the spec, the three-way split becomes tracer-bullet tickets with blocking edges, published to the repo's configured tracker. Without them: one issue per phase carrying a `Blocked by:` line.
 - **Phases with explicit dependencies between them.** Not just an ordered list – state which phase blocks which and why. Phases without stated dependencies degrade into wish lists the moment something slips.
 
 ## Output

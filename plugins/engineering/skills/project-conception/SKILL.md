@@ -13,11 +13,13 @@ Three phases, in rough order but with feedback loops:
 
 1. **Discovery** – establish what already exists, where the gap is, whether to build at all. Ends in a go / no-go.
 2. **Concept Shaping** – problem statement, scope, MVP cut, architecture sketch. Ends in a concept document.
-3. **Plan Handoff** – risks, dependencies, open questions. Ends in a package `roadmap-management` can consume.
+3. **Plan Handoff** – risks, dependencies, open questions. Ends in a package for prioritisation (`roadmap-management`, when available) or execution (`to-tickets`, when available).
 
 The skill is opinionated about one thing above all: **be willing to recommend not building**. A clear "this is a waste of time because X exists and is healthy" or "this belongs as an extension to your existing project Y" is more valuable than another half-finished repo.
 
 ## When to use vs. adjacent skills
+
+Each named skill applies when it is among your available skills; otherwise this skill carries the step itself.
 
 | Situation | Skill |
 |---|---|
@@ -43,7 +45,7 @@ Before Phase 1, read the user's profile where one is present — their instructi
 
 ## Research during conception
 
-Delegate the actual searching to `information-retrieval`. **Source quality is that skill's job, not this one's**: which sources count as primary, how far to trust a blog post, verifying package existence and versions against the registry – all of that lives there. Follow it; don't restate or fork those rules here.
+Delegate the searching. The `information-retrieval` skill, when it is among your available skills, owns source quality — which sources count as primary, how far to trust a blog post, verifying package existence and versions against the registry. The `research` skill, when available, runs the investigation in the background and leaves a cited file in the repo, which *is* the landscape document. With neither, work the sources in `references/competitive-analysis.md` yourself, citing primary sources.
 
 Both paths need it, for different questions: the new-project path asks "who else has built this", the existing-codebase path asks "is there a library that makes this an integration rather than an implementation".
 
@@ -56,11 +58,13 @@ What Phase 1 actually surveys is path-specific: portfolio check plus external la
 - **Pivot** – the original idea is taken, but the underlying motivation could be served by a different cut
 - **Extend** – this belongs as a feature/module of an existing project
 
-State the recommendation directly. Don't hedge. The user can override – but they should override an opinion, not a non-answer.
+State the recommendation as a verdict the user can override — an opinion, not a non-answer. When the `grilling` skill is among your available skills, it is the interview that gets you to the verdict; when Phase 1 surfaces more open decisions than one session can settle and the `wayfinder` skill is available, chart the map there and return to Phase 2 when the way is clear.
 
 ## Phase 2 essentials: what every concept states
 
 Path-independent. Whatever is being conceived, the concept document answers these three before anything path-specific.
+
+When the `domain-modeling` skill is among your available skills, it owns the artefacts: every term the problem statement coins goes into `CONTEXT.md`, and the stack decision, anti-features and forking strategy each become an ADR under `docs/adr/`. Without it, the concept document carries a Glossary and a Decisions section.
 
 ### Problem statement
 
@@ -100,7 +104,7 @@ Where the handoff lands is path-specific – a page in the user's knowledge base
 
 **Open questions** – things that aren't decided yet but don't block starting. List them so they get answered before they become problems.
 
-Then explicitly tell the user "concept is ready for roadmapping" and let them invoke `roadmap-management` from there.
+Then explicitly tell the user "concept is ready for planning" — `roadmap-management` for prioritisation, `to-tickets` for execution, whichever is among your available skills — and let them invoke it from there.
 
 ## AI-Era Scoping: Plan as if unassisted, build as if assisted
 
@@ -116,7 +120,7 @@ Implementation cost has collapsed. Visions that were a company founding in 2020 
 
 **The walking skeleton stays mandatory.** It was never an effort compromise — it is the planning instrument that tests whether the plan holds. A plan is a hypothesis; good planning without an early end-to-end proof is well-formatted confidence.
 
-When the concept involves forking an existing project, settle the forking strategy (Embrace vs. Decomposition) during conception — consult the fork-stewardship skill; the strategy choice shapes scope, architecture, and long-term maintenance cost.
+When the concept involves forking an existing project, settle the forking strategy (Embrace vs. Decomposition) during conception — consult the `fork-stewardship` skill when it is among your available skills; the strategy choice shapes scope, architecture, and long-term maintenance cost.
 
 ## Stop-Criteria: When to recommend not building
 

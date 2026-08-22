@@ -38,12 +38,12 @@ Gather information from all available sources. Read as many as are accessible:
 
 1. **Auto-memory files** — `MEMORY.md` and all linked `.md` files in the current space's memory directory. The most reliable source of structured facts.
 2. **Project knowledge files** — any files in the space's `.project-cache` or imported knowledge directory (uploaded docs, syncs.json references).
-3. **Notion and Obsidian** — not primary sources to mine systematically. Consult on demand only when needed to clarify or add detail to something already identified from the primary sources above. If navigation in these systems is unclear, the `information-retrieval` skill can help locate the right entries.
+3. **Notion and Obsidian** — not primary sources to mine systematically. Consult on demand only when needed to clarify or add detail to something already identified from the primary sources above. If navigation in these systems is unclear, the `knowledge-management` skill, when it is among your available skills, knows where entries live.
 4. **Existing export files** — read current `Digest/STATUS.md`, `Digest/BACKGROUND.md`, `Digest/compendium/INDEX.md`, and individual entry files first. Use them as the baseline to update rather than starting from scratch.
 
-Note: session transcripts are intentionally excluded here — `mcp__session_info__list_sessions` lists sessions across all spaces, not just the current one, making them unreliable as a space-specific source. They serve as additional input for the global digest instead.
+Note: session transcripts are intentionally excluded here — the session-listing tool lists sessions across all spaces, not just the current one, making them unreliable as a space-specific source.
 
-The `Digest/` produced by this skill is itself intended as primary input for the global space digest. The generation of the latter is out of your scope.
+`STATUS.md` is the space-level counterpart of a handoff document; for a single session's continuation use the `handoff` skill when it is among your available skills.
 
 If a source is inaccessible (MCP not connected, file not found, etc.), skip it and note the gap at the top of the affected file.
 

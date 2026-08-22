@@ -35,7 +35,7 @@ Projects that tried this and stopped. The most undervalued category. See §10.
 
 ## 3. Where to look
 
-Delegate the search itself to `information-retrieval`. The relevant sources:
+Delegate the search itself to the `information-retrieval` skill when it is among your available skills. The relevant sources:
 
 - **GitHub** – search by topic + language; sort by stars, also by most-recently-updated to find live ones
 - **GitHub Topics** – e.g., `github.com/topics/<keyword>`

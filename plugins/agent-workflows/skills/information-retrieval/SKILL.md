@@ -24,6 +24,8 @@ Research is warranted in these situations – not just when explicitly asked:
 
 For the full source hierarchy (internal, code/AI, web, connectors) and when to use which, read `references/research-sources.md`. Where the user's own material lives is the `knowledge-management` skill's to know when it is among your available skills.
 
+When the `research` skill is among your available skills and the user wants a topic investigated and written up, dispatch it and apply the source rules below inside it; otherwise research inline and cite sources in the reply.
+
 ## Research Quality Standards
 
 - **Compile across sources.** When a question touches multiple domains or knowledge bases, synthesize from internal, code, and web sources rather than stopping at the first hit. A complete picture often requires combining what the user already has with what exists externally.
@@ -53,4 +55,4 @@ Two rules that follow from this:
 
 ## After Research: Consider Documentation
 
-If research produces substantive results that belong in the user's knowledge base (new project concepts, significant findings, design decisions), the `knowledge-management` skill handles documentation in Notion. This skill stays focused on finding information; that skill handles persisting it.
+If research produces substantive results that belong in the user's knowledge base (new project concepts, significant findings, design decisions), the `knowledge-management` skill, when it is among your available skills, handles documentation in the user's knowledge base. This skill stays focused on finding information; that skill handles persisting it.

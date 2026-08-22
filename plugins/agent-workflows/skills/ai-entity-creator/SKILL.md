@@ -53,6 +53,8 @@ These files contain detailed design principles, structural templates, and best p
 
 ### Step 3: System Prompt Construction
 
+A system prompt is a document for an agent: when the `writing-for-agents` skill is among your available skills, apply it (leading words, positive phrasing, progressive disclosure); otherwise keep the prompt short and state target behaviours rather than prohibitions.
+
 Follow system prompt best practices:
 
 **Structure:**

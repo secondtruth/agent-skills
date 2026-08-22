@@ -11,9 +11,9 @@ description: >-
 
 # Service Application Design
 
-`code-craftsmanship` writes for the next programmer; this skill writes for the **operator** — whoever installs the service, starts it, watches it, and upgrades it, with no way to ask you anything. Every rule below follows from that one reader. It holds whether the operator is a stranger self-hosting your MIT-licensed project or you, six months from now, on your own homelab box.
+Code-structure skills write for the next programmer; this skill writes for the **operator** — whoever installs the service, starts it, watches it, and upgrades it, with no way to ask you anything. Every rule below follows from that one reader. It holds whether the operator is a stranger self-hosting your MIT-licensed project or you, six months from now, on your own homelab box.
 
-`cli-design` owns the command surface itself — flags, help anatomy, exit codes, command trees. This skill owns what the service does around that surface.
+The command surface itself — flags, help anatomy, exit codes, command trees — is the `cli-design` skill's when it is among your available skills. This skill owns what the service does around that surface.
 
 **The bar:** a fresh install, following only the README, reaches a working first sign-in with no undocumented step. Every rule here is checkable against that run; make it before calling a service done.
 
@@ -55,3 +55,5 @@ Report healthy only once the service can actually serve. A process that is merel
 The documented quickstart is a claim about behaviour, so verify it like one: run it against an empty database and an empty data directory, through to a first sign-in.
 
 Two failure shapes survive a careful reading of the code and appear only in that run — a step that lives in a developer's shell history rather than the README, and a failure that surfaces far from its cause, after an OAuth round trip or at the first request, where the operator will suspect whatever they configured most recently.
+
+Steps only a human can take — registering an OAuth client, creating the first admin, placing a secret — are what the `wizard` skill scripts when it is among your available skills; without it, list them as a numbered checklist in the README, each with the URL and the value it produces.

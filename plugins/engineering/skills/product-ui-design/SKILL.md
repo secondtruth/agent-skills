@@ -5,12 +5,17 @@ description: Distinguish product UIs from marketing surfaces when building front
 
 # Product UI vs. Marketing Surface
 
-Before styling any frontend, classify the surface. The frontend-design
-skill's push for bold, distinctive aesthetics applies **at full strength to
-marketing surfaces** (landing pages, product sites, portfolio pieces). A
-**product UI** — admin console, dashboard, management or settings UI,
-internal tool — is a place where people work every day, and it earns trust
-through restraint instead of staging.
+Before styling any frontend, classify the surface. The push for bold,
+distinctive aesthetics (the `frontend-design` skill's, when it is among your
+available skills) applies **at full strength to marketing surfaces**
+(landing pages, product sites, portfolio pieces). A **product UI** — admin
+console, dashboard, management or settings UI, internal tool — is a place
+where people work every day, and it earns trust through restraint instead
+of staging.
+
+When a layout question is easier to see than to argue and the `prototype`
+skill is among your available skills, build the throwaway there and grade
+it against the rules below.
 
 ## Product UI rules
 
@@ -34,9 +39,9 @@ through restraint instead of staging.
   span the full width and wrap on word boundaries, never mid-token. In a
   two-column definition grid, spanning rows go last — one in the middle
   leaves a hole beside its predecessor.
-- **Typography stays characterful but calm** — never Inter/Roboto/Arial
-  (per frontend-design), but pick workhorse families (IBM Plex, Source Sans,
-  Public Sans …) rather than display faces. For the UI/mono split, see below.
+- **Typography stays characterful but calm** — a workhorse family with
+  character (IBM Plex, Source Sans, Public Sans …) rather than a display
+  face or a default system grotesque. For the UI/mono split, see below.
 
 ## Choosing a typeface by purpose
 
@@ -117,8 +122,9 @@ scale — and the failure modes are systematic.
 
 ## Marketing surface rules
 
-Everything the frontend-design skill says: bold aesthetic direction,
-distinctive typography, atmosphere, motion, memorable composition.
+When the `frontend-design` skill is among your available skills, it owns
+this side at full strength. Without it: one bold aesthetic direction,
+distinctive display typography, atmosphere, motion, a memorable composition.
 
 ## When mixed
 
