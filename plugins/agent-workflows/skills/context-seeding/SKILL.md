@@ -1,7 +1,7 @@
 ---
 name: context-seeding
 license: MIT
-description: Set up Claude.ai Projects and Cowork Projects from scratch with well-crafted Instructions and curated Knowledge/context. Use this skill whenever the user wants to create a new Claude.ai Project or Cowork Project, seed an existing Project with context, rewrite Project Instructions, decide what belongs in Project Knowledge vs. what should stay out, audit a Project that "isn't working well," or set up a Cowork workspace with proper context layers. Trigger even when the user doesn't say "seed" — phrases like "I'm setting up a Project for X", "help me write instructions for my Project", "what should I put into the Project Knowledge", "my Project keeps forgetting X", "set up a Cowork Project for Y", or "help me configure my Cowork workspace" all mean this skill applies.
+description: Set up Claude.ai Projects and Cowork Projects — Instructions, curated Knowledge, and the audit of a Project that "isn't working well". Use when the user creates or reworks a Project, asks what belongs in Project Knowledge versus Instructions, or says their Project keeps forgetting things.
 ---
 
 # Context Seeding for Claude Projects
@@ -36,7 +36,7 @@ Duplicating rules across layers wastes tokens and risks contradictions. When in 
 
 ## Workflow
 
-This isn't a single linear sequence — there are two paths, and both start with recon:
+Two paths, both starting with recon:
 
 - **New Project** (seed from scratch): recon → steps 1–4 → Ship.
 - **Existing Project that misbehaves** (audit & fix): recon → the **Audit path** → loop back through whichever build steps (Interview, Draft, Curate) need redoing → Ship.
@@ -88,19 +88,19 @@ Incorporate useful findings as candidate anti-patterns or Working Principles. Do
 
 **Voice**: write Instructions in second person ("You are...", "You should..."). Imperative and specific beats descriptive and fluffy.
 
-**Headings**: No H1 anywhere — the Project name is already in the UI, so a `# Project Name` heading just wastes tokens. The building blocks sit at H2.
+**Headings**: start at H2 — the Project name is already in the UI, so the building blocks sit at H2.
 
 **Standard opening**: Every Instructions set opens the same way — a metadata block, then a short merged intro.
 
-1. **A `<project_metadata>` block first.** This is machine-readable project identity plus pointers to where related context lives, so Claude knows which Project it's in and where to fetch or file related material. Populate it from recon (step 0 — the Notion/Obsidian search). Include the fields that apply and omit the ones that don't (a work Project may have no Obsidian vault; a throwaway Project may have no Notion page):
+1. **A `<project_metadata>` block first.** This is machine-readable project identity plus pointers to where related context lives, so Claude knows which Project it's in and where to fetch or file related material. Populate it from recon (step 0 — the knowledge-base search). Include the fields that apply and omit the ones that don't (a work Project may have no notes folder; a throwaway Project may have no knowledge-base page):
 
    ```
    <project_metadata>
    Name: {project name}
    Emoji: {emoji}
    Type: {personal | work | community | ...}
-   Obsidian Directory: {vault folder — omit if none}
-   Notion Page: {page URL — omit if none}
+   Notes Folder: {folder in the user's notes vault — omit if none}
+   Knowledge Base Page: {page URL — omit if none}
    </project_metadata>
    ```
 
@@ -108,21 +108,11 @@ Incorporate useful findings as candidate anti-patterns or Working Principles. Do
 
 #### Building blocks
 
-After the opening (metadata block + intro), Instructions are composed from whichever of these blocks the Project actually needs. Order by importance; omit anything that doesn't apply; don't pad.
-
-- **Working Principles** — 3–7 bullets of how to operate. Behavior, not facts. Examples: output language, formality, when to ask vs. assume, how deep to go by default, when to use artifacts.
-- **Context You Should Know** — only information that must be in context every turn. Stable facts about the domain, the user's setup, key vocabulary. If it changes often, it belongs in Knowledge, not here.
-- **Out of Scope** — what this Project does NOT do. Useful for broad-purpose Projects; skip for narrowly focused ones where scope is obvious.
-- **Anti-patterns** — concrete things to avoid, ideally pulled from past failures and domain research (step 2). "Don't suggest X when the user asks about Y" beats generic "be careful." Skip if the Project is new and there are no known failure modes yet — they'll emerge during iteration.
-- **Workflow / Process** — step-by-step instructions for Projects with a repeatable task pattern (e.g., "1. Read the PR diff, 2. Check for X, 3. Output in format Y"). Not needed for open-ended Projects.
-- **Output Format** — explicit structure or template for the output, if consistency matters. Can be a few lines or a full example. Unnecessary when the output shape varies by task.
-- **References** — pointers to Knowledge files, Notion pages, URLs, or other context sources with brief notes on what each contains and when to consult it. Only needed when the Project has non-obvious reference material.
-
-Purpose and role aren't in this list because they live in the opening intro. Split **Role** into its own H2 block only when it's complex enough to need real elaboration — a distinct stance, multiple hats, a non-obvious relationship to the user — which is rare; for most Projects the intro carries it.
-
-A lightweight Project (rubber duck, brainstorming partner) might need only the metadata block, a one-line intro, and a couple of Working Principles. A heavyweight Project (automated report generation, code review pipeline) might use most blocks plus a detailed Workflow section.
+After the opening, Instructions are composed from the blocks in `references/building-blocks.md` — Working Principles, Context You Should Know, Out of Scope, Anti-patterns, Workflow, Output Format, References. Read it while drafting; order by importance and omit what does not apply.
 
 **Length target**: 300–800 words for most Projects. If you're pushing past 1500, you're probably putting facts in that belong in Knowledge, or you're over-specifying behavior Claude already does by default. Instructions consume tokens on every turn — brevity is a feature.
+
+Done when the draft fits the length target and every line is a behaviour or an every-turn fact.
 
 ### 4. Curate the Knowledge base
 
@@ -130,7 +120,9 @@ For each candidate file, ask: **"Will Claude need this on *every* turn, *some* t
 
 - **Every turn** → it's not Knowledge, it's Instructions. Extract the essential bits and inline them.
 - **Some turns** → perfect Knowledge candidate. Upload it (or place it in the folder for Cowork).
-- **Rarely** → don't include. Let the user paste it when needed, or store it externally and link.
+- **Rarely** → leave it out. Let the user paste it when needed, or store it externally and link.
+
+Done when every candidate file has an every/some/rarely verdict.
 
 **What belongs in Knowledge**:
 - Reference docs (API specs, style guides, glossaries)
@@ -138,7 +130,7 @@ For each candidate file, ask: **"Will Claude need this on *every* turn, *some* t
 - Examples of desired output (few-shot anchors)
 - Structured data the Project queries against
 
-**What does NOT belong in Knowledge**:
+**Keep out of Knowledge**:
 - Behavior rules ("always respond in German") — goes in Instructions (or Skills/Global)
 - Tiny snippets (< 1 page) — inline them in Instructions
 - Stale or superseded material — retrieval will surface the wrong thing
@@ -153,18 +145,7 @@ For each candidate file, ask: **"Will Claude need this on *every* turn, *some* t
 
 ### Audit path (existing Project)
 
-When the user says "my Project isn't working well," run this checklist instead of the build steps above. Findings feed back into a rewrite, so loop through Interview/Draft/Curate as needed afterward.
-
-1. **Read the Instructions out loud (mentally).** Are they specific, or generic filler? Generic = rewrite.
-2. **Behavior/fact mixing?** Are there rules buried in Knowledge files, or reference data clogging Instructions?
-3. **Contradictions?** Does Instructions say one thing and a Knowledge file imply another?
-4. **Layer confusion?** Review your own system prompt to see what's already active at higher layers (Profile Preferences, Global Instructions, skills). Are Project Instructions duplicating any of that? Is something project-scoped that should be a skill (because it applies across multiple Projects)? Is something in a skill that should be project-scoped (because it only makes sense here)?
-5. **Stale files?** When were Knowledge files last updated? Are any superseded?
-6. **Missing anti-patterns?** Ask the user: "what does it keep getting wrong?" — then encode those as explicit Don'ts.
-7. **Over-scoped?** Is this one Project trying to be three? Split it.
-8. **Under-scoped?** Is the user compensating with long prompts every turn? Promote repeated context into Instructions.
-
-Present findings as a short list with severity, then propose a concrete rewrite.
+When the user says "my Project isn't working well," run the checklist in `references/audit.md` instead of the build steps. Findings feed back into a rewrite, so loop through Interview/Draft/Curate as needed afterward.
 
 ### 5. Ship it (both paths)
 
@@ -175,26 +156,16 @@ Deliver:
 - Optionally: a suggested first test prompt the user can run to sanity-check the setup
 - For Cowork: see the extended delivery checklist in `references/cowork.md`
 
-## Notion KB integration (when available)
+## Knowledge-base integration (when available)
 
-If the user works with a Notion knowledge base (e.g. via the Notion MCP), treat it as a first-class source during seeding.
+If the user works with a live knowledge base (Notion via its MCP, for example), treat it as a first-class source during seeding.
 
 **Notion pages as Knowledge sources**: Notion pages generally should *not* be uploaded as static files into Project Knowledge — they go stale the moment someone edits them in Notion. Instead:
 
 - **Reference them in Instructions** under "Context You Should Know" with their page ID or URL, and note that Claude should fetch fresh via the Notion MCP when needed.
 - **Only snapshot into Knowledge** if the content is explicitly frozen (archived decision docs, historical specs) or if the user won't have MCP access in that Project.
-- **Never upload both** the Notion page and a copy — retrieval will surface conflicting versions.
+- **One copy** — the live reference *or* a frozen snapshot; two versions make retrieval surface the wrong one.
 
 **Cross-linking**: If the Project is tied to an organization, brand, or umbrella already documented in Notion, the Instructions should name the parent entity explicitly so Claude can fetch context on demand rather than having it all inlined.
 
 **Post-seeding documentation**: After shipping the Project setup, consider whether the Project itself deserves a Notion entry — especially for long-lived Projects tied to ongoing work. A short page with purpose, scope, and a link back to the Project makes future seeding of related Projects much faster.
-
-## Heuristics worth keeping in mind
-
-- **If you can't explain why a line is in the Instructions, delete it.** Every sentence earns its place or gets cut.
-- **Specific > generic, always.** "Review PRs with a focus on race conditions and error handling" beats "help with code review."
-- **Name the failure modes.** Claude responds much better to "don't do X" than to implicit expectations.
-- **One Project, one purpose.** If the user describes three unrelated use cases, that's three Projects. Say so.
-- **Instructions are not documentation.** Don't explain the domain to a human reader — write directly to Claude, in the shortest form that conveys the behavior.
-- **Seeding is iterative.** The first version will be wrong in small ways. Tell the user to expect one or two revisions after real use, and to note what goes wrong so they can encode those as anti-patterns.
-- **Context has a budget.** Instructions consume tokens on every turn. Skills share a context budget (~2% of the context window). More isn't always better — prioritize signal over coverage.
