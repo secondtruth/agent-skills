@@ -1,7 +1,7 @@
 ---
 name: driving-ai-chat-websites
 license: MIT
-description: Drive an AI chat assistant's website through the browser to hand it a task and bring the result back. Use for claude.ai, chatgpt.com, gemini.google.com, chat.mistral.ai and kimi.com — updating plugin skills via claude.ai, ingesting a YouTube video via Gemini, asking another model for a second opinion, or any task that must run in a logged-in web session rather than through an API.
+description: Drive an AI chat assistant's website through the user's browser to hand it a task and bring the result back — claude.ai, chatgpt.com, gemini.google.com, chat.mistral.ai, kimi.com. Use for skill updates via claude.ai, YouTube ingestion via Gemini, a second opinion from another model, or any task that must run in a logged-in web session.
 ---
 
 Type into a chat composer and you are one keystroke away from posting a half-written
@@ -27,7 +27,7 @@ disconnect is often transient.
 
 ## Paste the prompt — do not type it
 
-Verified on claude.ai, chatgpt.com, chat.mistral.ai and kimi.com: pasting preserves line
+Verified (August 2026) on claude.ai, chatgpt.com, chat.mistral.ai and kimi.com: pasting preserves line
 breaks **and** blank lines, sends nothing, and costs one round trip instead of dozens.
 Gemini's composer is the same kind of contenteditable element; paste behaviour there has
 not been checked yet — take a screenshot before trusting it.
@@ -51,8 +51,8 @@ containing `\n` to `type` — **Enter sends** in every one of these UIs.
 
 `form_input` fails on all of them — the composers are contenteditable elements, not
 form fields ("Element type DIV is not a supported form input"). Always locate the
-element with `read_page {filter:"interactive"}` first; **refs shift between page
-loads**, so never reuse one from an earlier call.
+element with `read_page {filter:"interactive"}` first; **refs are per page
+load** — `read_page` again after every navigation.
 
 | Site | Composer element |
 | --- | --- |
@@ -62,7 +62,7 @@ loads**, so never reuse one from an earlier call.
 | chat.mistral.ai | unnamed `generic` inside a `form` — no accessible label |
 | kimi.com | unnamed `textbox` |
 
-`chat.mistral.ai/chat` may redirect to `/work`. If the task belongs in plain chat, switch
+`chat.mistral.ai/chat` may redirect to `/work` (seen August 2026). If the task belongs in plain chat, switch
 tabs after loading rather than trusting the URL.
 
 Gemini opens at `gemini.google.com/app`. Its default mode is Flash (the mode picker sits

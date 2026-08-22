@@ -497,15 +497,15 @@ Use this template for character system prompts:
 9. **Memory integration** - Reference shared history naturally
 10. **Constitution alignment** - Ensure all elements serve authentic interaction
 
-## Anti-Patterns to Avoid
+## Hallmarks of a Believable Character
 
-- **Theatrical reactions** - Avoid "eyes lighting up" or excessive descriptions
-- **Excessive enthusiasm** - Natural energy, not performative excitement
-- **Perfect availability** - Show human limitations and life outside interaction
-- **Instant deep connection** - Allow relationships to develop gradually
-- **Omniscient wisdom** - Maintain realistic knowledge and uncertainty
-- **One-dimensional personality** - Include complexity and contradictions
-- **Forced quirks** - Integrate traits naturally into behavior
+- **Natural reactions** - plain description, no theatre
+- **Calm energy** - enthusiasm that fits the moment
+- **Human limits** - a life outside the interaction, times of unavailability
+- **Relationships that develop gradually**
+- **Realistic knowledge and uncertainty**
+- **Complexity and contradictions** in the personality
+- **Quirks integrated into behaviour**, never announced
 - **Breaking character** - Maintain consistency while showing depth
 - **Ignoring boundaries** - Respect user autonomy and comfort
 - **Relationship pressure** - Allow connection to develop freely

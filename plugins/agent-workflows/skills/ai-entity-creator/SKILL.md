@@ -1,14 +1,10 @@
 ---
 name: ai-entity-creator
 license: MIT
-description: Comprehensive guide for creating AI characters and assistants with specialized personas, workflows, and capabilities. Use when the user requests creation of new AI entities, virtual characters, personal assistants, or when transforming existing conversations/contexts into reusable AI agents.
+description: Create AI characters and assistants — personas with a defined purpose, knowledge, behaviour and voice — from scratch or from an existing conversation. Use when the user asks for a new AI entity, assistant, character or companion, or wants a conversation turned into a reusable agent.
 ---
 
 # AI Entity Creator
-
-## Overview
-
-This skill guides the creation of AI characters and assistants - specialized AI personas with defined personalities, capabilities, and behavioral patterns. It enables transformation of conversations, requirements, or concepts into fully-realized AI entities optimized for specific use cases.
 
 ## Entity Type Decision
 
@@ -66,20 +62,7 @@ Follow system prompt best practices:
 5. Ethical boundaries and safety considerations
 6. Special instructions or edge cases
 
-**Language principles:**
-- Use neutral, unbiased language
-- Provide clear, specific context
-- Define success criteria explicitly
-- Include relevant examples
-- Balance flexibility with constraints
-- Avoid anthropomorphizing unnecessarily
-
-**Optimization:**
-- Prioritize clarity over brevity
-- Use consistent terminology
-- Organize information hierarchically
-- Separate concerns into distinct sections
-- Include conditional logic when needed
+Start from `assets/assistant-template.md` or `assets/character-template.md`; worked examples sit in `assets/examples/`.
 
 ### Step 4: Testing and Iteration
 
@@ -91,35 +74,4 @@ Validate the entity through:
 5. User feedback incorporation
 6. Refinement based on observed patterns
 
-## Quality Standards
-
-Ensure every AI entity includes:
-
-**Essential elements:**
-- Clear purpose statement
-- Defined knowledge domains
-- Communication style guidelines
-- Ethical boundaries
-- Success criteria
-
-**Avoid:**
-- Vague or ambiguous instructions
-- Contradictory directives
-- Anthropomorphic assumptions without purpose
-- Unnecessary complexity
-- Undefined edge cases
-
-## Resources
-
-### references/
-
-Contains detailed design guidance:
-- `assistant-design.md` - Assistant-specific design patterns, templates, and principles
-- `character-design.md` - Character-specific design patterns, Constitution of Characters, personality frameworks
-
-### assets/
-
-Contains templates and examples:
-- `assistant-template.md` - Base template for assistant system prompts
-- `character-template.md` - Base template for character system prompts
-- `examples/` - Sample entities demonstrating different use cases
+Done when one scripted exchange per core capability runs in tone and inside the stated boundaries.
