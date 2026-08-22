@@ -1,14 +1,14 @@
 ---
 name: information-retrieval
 license: MIT
-description: "Proactive information gathering and research across all available sources. Trigger this skill on any plain research request – \"research X\", \"what can Y do\", \"how does Z do that\", \"check whether …\", \"is there something for …\" – not only when a web search is explicitly requested. Load it *before* searching, not after: an unassisted search that skips the source-quality rules is the exact failure this skill prevents. Also use whenever up-to-date information is required, when investigating topics of interest, when fact-checking claims, when answering questions about product behaviour, APIs, versions or capabilities, when answering questions that go beyond baked-in model knowledge, for technical/software research and trend analysis, and before starting new projects to check for existing solutions. Always explore what already exists before building something new."
+description: Source rules for any research, lookup or fact-check — primary sources first, registries for versions, secondary sources as signposts only, cite everything. Use on any "research X", "does Y support Z", "what is the current version or behaviour of …", and whenever an answer depends on information newer than training data.
 ---
 
 # Information Retrieval
 
 ## Core Principle
 
-Don't wait to be asked. In situations where up-to-date or comprehensive information would improve the response, proactively gather it. The user expects well-informed answers, not hedged guesses followed by "shall I look that up?"
+Gather current information before answering whenever it would change the answer. The user expects well-informed answers, not hedged guesses followed by "shall I look that up?"
 
 ## When to Proactively Research
 

@@ -1,7 +1,7 @@
 ---
 name: designer-setup
 license: MIT
-description: Set up Claude Design's org-level design system cleanly — particularly when the user's current production assets don't represent where they want their brand to go. Use this skill whenever the user wants to configure, onboard, or fix a Claude Design organization, asks for help with "the design system setup form", wants to upload brand assets to Claude Design, or mentions that their current Claude Design extraction "looks wrong" or "pulled the wrong colors". Also trigger for phrases like "set up Claude Design for X", "onboard our team to Claude Design", "what should I put in the Claude Design form", or "my design system in Claude Design needs fixing".
+description: Set up or repair a Claude Design org design system — decide which assets represent the brand direction, build a reference site when direction is ahead of production, fill the form, validate before publishing. Use when the user mentions the Claude Design setup form, onboarding an org to Claude Design, or an extraction that "looks wrong".
 ---
 
 # Claude Design — Organization Setup
@@ -30,7 +30,7 @@ Three cases, in order of frequency:
 
 **Case A — Direction matches production.** The current site, codebase, or Figma file is an accurate representation of the brand. Feed them to the form directly. This is the path the Claude Design docs assume.
 
-**Case B — Direction is ahead of production.** The user has a design direction document, new brand decisions, or a recent rebrand that has not yet been implemented in any production asset. This is common when the setup conversation is itself part of the rebrand. **Do not feed the old assets to the form.** Build a small reference site first (see step 3).
+**Case B — Direction is ahead of production.** The user has a design direction document, new brand decisions, or a recent rebrand that has not yet been implemented in any production asset. This is common when the setup conversation is itself part of the rebrand. **Feed only a small reference site to the form** (see step 3).
 
 **Case C — No direction exists at all.** Only legacy assets are available and no direction document exists. Warn the user that extraction will encode the status quo. Offer to draft a design direction first, or accept that the resulting system will be a snapshot of the current state.
 
@@ -57,7 +57,7 @@ The form has five fields plus a free-text notes area. Below is the mapping that 
 
 **Company name and blurb.** One or two sentences. Include the organization name, what it does, and — this is the part most users miss — a single aesthetic descriptor. "Quiet, editorial, academic" or "bold, maximalist, high-contrast" tells extraction which direction to resolve ambiguity in. Without this, the extraction will resolve toward the statistical average of the uploaded material, which is rarely what the user wants.
 
-**Link code on GitHub.** Only populate this if the linked repo genuinely represents current brand direction. When in doubt, leave empty. A clean empty field is better than a contaminated extract.
+**Link code on GitHub.** Populate this only when the linked repo represents current brand direction; otherwise leave it empty — a clean empty field beats a contaminated extract.
 
 **Link code from your computer.** This is the primary input for Case B. Upload the reference site folder. For Case A, point at the production frontend — or better, a frontend-focused subfolder that isolates component code from unrelated backend/config files.
 
@@ -77,7 +77,7 @@ Write notes as a structured list with short declarative lines. Prose paragraphs 
 
 ### 5. Validate before publishing
 
-Do not turn the Published toggle on immediately. Create a test project first. Useful validation prompts:
+Validate in a test project before publishing. Useful validation prompts:
 
 - "Design a simple landing page for [a plausible future product]."
 - "Create a one-pager explaining [a topic the team actually writes about]."
@@ -90,7 +90,7 @@ Check the output against the direction document. Common extraction failures to w
 - **Ghost tokens.** Colors from old assets leak in despite not being uploaded — usually because a legacy file was left in the repo that got linked.
 - **Pattern averaging.** Distinctive layout decisions (asymmetry, particular spacing, specific illustration style) get smoothed into generic patterns. This one is hard to fix without better reference material.
 
-If anything is materially wrong, do not republish-and-pray. Use the Remix mode — open the design system in the org settings, click Remix, and correct it in conversation. The chat interface can adjust specific tokens, reassign roles, and tighten constraints without re-uploading anything.
+If anything is materially wrong, correct it via Remix — open the design system in the org settings, click Remix, and correct it in conversation. The chat interface can adjust specific tokens, reassign roles, and tighten constraints without re-uploading anything.
 
 ### 6. Publish and document
 
@@ -98,11 +98,7 @@ Once validation passes, enable Published. Tell the user which assets the system 
 
 ## When to push back
 
-A few patterns where the right answer is to slow down rather than fill the form.
-
-**User wants to upload the current production site, but describes it as "the old look".** Stop. This is Case B in disguise. Build the reference site first.
-
-**User has no design direction document, just vibes.** The extraction will encode the vibes, for better and worse. Offer to draft a short direction document first — even an hour of writing produces notably better extraction than none.
+Two patterns where the right answer is to slow down rather than fill the form (the "old look" and "just vibes" cases are Case B and Case C above).
 
 **User wants to set up multiple design systems for sub-brands at once.** Claude Design supports multiple systems per organization. Do them sequentially, not in parallel. Extraction quality is easier to judge one system at a time.
 

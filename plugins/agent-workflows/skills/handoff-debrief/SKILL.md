@@ -1,7 +1,7 @@
 ---
 name: handoff-debrief
 license: MIT
-description: "Compose and deliver a structured debrief at the end of any handoff session. Trigger this automatically — without being asked — whenever you've completed work that originated from a handoff file. Also trigger when the user says 'write a debrief', 'report back', 'summarize what was done', 'what should I tell the other agent', or anything implying a handoff wrap-up. The debrief captures what was accomplished, current state of affected artifacts, out-of-scope observations (stale references, inconsistencies, things noticed along the way), and concrete recommendations. Output is a standalone markdown artifact the user can copy and bring to the originating space."
+description: Compose the debrief that closes a handoff session — what was done, the current state of the artifacts, out-of-scope observations, recommendations. Trigger automatically when work that started from a handoff file is complete, and when the user asks for a debrief or to report back.
 ---
 
 # Handoff Debrief
@@ -16,13 +16,13 @@ Write the debrief even when everything went smoothly and there's nothing to flag
 
 ## Report structure
 
-Produce a self-contained markdown artifact using this template:
+Produce a self-contained Markdown document using this template:
 
 ```markdown
 # Debrief: {task title}
 
 **Date:** {YYYY-MM-DD}
-**Completed by:** {space name, e.g. "Meta"}
+**Completed by:** {agent, space or session identifier}
 
 ## What was done
 
@@ -31,7 +31,7 @@ The receiving agent needs the outcome, not a step-by-step log.}
 
 ## Current state
 
-{What exists now. File paths, installed versions, Notion pages created/updated, etc.
+{What exists now. File paths, installed versions, knowledge-base pages created/updated, etc.
 Anything the receiving agent needs to know to pick up from here.}
 
 ## Observations
@@ -52,7 +52,9 @@ If nothing to recommend: *No recommendations.*
 
 ## Delivery
 
-Produce the debrief as a **markdown artifact**. The user copies it wherever it needs to go.
+Deliver the debrief as a standalone Markdown block — or a file, where files are the medium — that the user can copy wherever it needs to go.
+
+Done when every artifact you changed appears under Current state and every out-of-scope finding you noticed appears under Observations.
 
 ## Writing observations well
 
@@ -60,7 +62,7 @@ The bar: *would the receiving agent make a wrong assumption without this?* If ye
 
 Be as specific as the situation calls for. When the fix is surgical and the location is unambiguous, name it precisely. When the issue is a pattern across many places, describe the pattern — a line number that might shift next week is worse than a clear description of what to look for.
 
-Either way, avoid observations that don't tell the receiving agent what to do:
+Calibration:
 
 - Too vague: "Some files may be outdated."
 - Overfit: listing exact coordinates for something that's obviously a widespread pattern
