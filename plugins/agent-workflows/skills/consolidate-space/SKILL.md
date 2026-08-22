@@ -1,7 +1,7 @@
 ---
 name: consolidate-space
 license: MIT
-description: "Reflective pass over the current Cowork Space — distil what's in flight, what matters, and how work happens here into a structured Digest (STATUS.md, BACKGROUND.md, compendium/). Use when the user asks to export, sync, or snapshot space knowledge, or says things like 'export the space', 'sync context', 'update memory files', 'aktualisiere den Export', 'exportiere den Space'."
+description: Export the current Cowork Space into a Digest — STATUS.md (what is in flight), BACKGROUND.md (space-specific context), compendium/ (projects, organizations, topics, conventions) — merged with the previous export. Use when the user asks to export, sync or snapshot the space's knowledge ("exportiere den Space", "aktualisiere den Export", "update memory files").
 ---
 
 # Consolidate Space
@@ -52,8 +52,6 @@ If a source is inaccessible (MCP not connected, file not found, etc.), skip it a
 
 This file answers: *What's been happening, and what's next?*
 
-Always replaced entirely — it's a point-in-time snapshot, not an accumulation.
-
 ```markdown
 ---
 updated: {YYYY-MM-DD}
@@ -89,7 +87,7 @@ A distilled, encyclopedic reference of everything that matters in this space —
 
 ### INDEX.md
 
-A single-line entry per entity, sorted alphabetically within each category. Rebuilt from the current set of entry files on every export.
+A single-line entry per entity, sorted alphabetically within each category.
 
 ```markdown
 ---
@@ -147,16 +145,16 @@ updated: {YYYY-MM-DD}
 **Category guidance:**
 - `projects/` — named projects the user works on or maintains (the product itself, its libraries and internal tools)
 - `organizations/` — organizations, initiatives, collectives, communities (the user's companies, collectives, initiatives)
-- `topics/` — tools, systems, protocols, or recurring concepts discussed across multiple sessions with project-specific context. Don't create entries for generic tools without that context (no "Git", no "PHP").
+- `topics/` — tools, systems, protocols, or recurring concepts discussed across multiple sessions with project-specific context. Entries go to tools that carry project-specific nuance.
 - `conventions/` — rules and conventions that emerged from actual work in the space. Not aspirational guidelines — only things that have demonstrably shaped how work is done here.
 
-**What does NOT get an entry:** things mentioned only once in passing, generic tools/technologies without project-specific nuance, or conventions that belong in a project's own AGENTS.md rather than the space digest.
+**Below the bar:** things mentioned only once in passing, generic tools/technologies without project-specific nuance, or conventions that belong in a project's own AGENTS.md rather than the space digest.
 
 ## BACKGROUND.md Format
 
 This file answers: *What context does an agent need to work effectively in this space that isn't already covered by the user's system prompt or compendium entries?*
 
-Don't document general information about the user — that's already known to any agent via the system prompt. Only capture what's specific and relevant to this space. Merged on each export.
+Capture only what is specific to this space; the user's general profile reaches every agent through the system prompt. Merged on each export.
 
 ```markdown
 ---
@@ -190,7 +188,7 @@ updated: {YYYY-MM-DD}
 
 **compendium/INDEX.md** — rebuild from the current set of entry files on every export.
 
-**Individual compendium entry files** — update in place: edit body and frontmatter if something changed, leave the file untouched if nothing new is known. Never create a duplicate entry. If new information contradicts existing content and you can't resolve it confidently, keep both versions with an inline note: `{Conflicting info — verify}`. Mark superseded conventions with `status: Superseded` in frontmatter rather than deleting them.
+**Individual compendium entry files** — update in place: edit body and frontmatter if something changed, leave the file untouched if nothing new is known. One file per entity; update in place. If new information contradicts existing content and you can't resolve it confidently, keep both versions with an inline note: `{Conflicting info — verify}`. Mark superseded conventions with `status: Superseded` in frontmatter rather than deleting them.
 
 Always update the `updated` frontmatter field in every file you touch.
 
@@ -199,7 +197,7 @@ Always update the `updated` frontmatter field in every file you touch.
 1. Determine the export directory (default: `Digest/` inside the space's project folder; ask if ambiguous).
 2. Create directories as needed (`Digest/`, `Digest/compendium/projects/`, `Digest/compendium/organizations/`, `Digest/compendium/topics/`, `Digest/compendium/conventions/`).
 3. Read all existing export files as baseline.
-4. Gather source material: memory files → session transcripts → project knowledge files.
+4. Gather source material: memory files → project knowledge files → the knowledge base on demand.
 5. Write `Digest/STATUS.md` (replace entirely).
 6. Update or create individual compendium entry files.
 7. Rebuild `Digest/compendium/INDEX.md` from current entries.
@@ -214,4 +212,4 @@ Before writing, verify:
 - **Compendium entries**: Are all facts grounded in what was discussed — no invented details? Are statuses current? Do convention entries include their origin?
 - **BACKGROUND.md**: Is this background still valid? Does it contain anything that's just restating the user's general profile rather than space-specific context?
 
-If session transcripts are unavailable and memory files are the only source, note this prominently at the top of STATUS.md, since its recency can't be verified.
+When memory files are the only source, note this at the top of STATUS.md, since its recency can't be verified.
