@@ -1,5 +1,6 @@
 ---
 name: context-seeding
+license: MIT
 description: Set up Claude.ai Projects and Cowork Projects from scratch with well-crafted Instructions and curated Knowledge/context. Use this skill whenever the user wants to create a new Claude.ai Project or Cowork Project, seed an existing Project with context, rewrite Project Instructions, decide what belongs in Project Knowledge vs. what should stay out, audit a Project that "isn't working well," or set up a Cowork workspace with proper context layers. Trigger even when the user doesn't say "seed" — phrases like "I'm setting up a Project for X", "help me write instructions for my Project", "what should I put into the Project Knowledge", "my Project keeps forgetting X", "set up a Cowork Project for Y", or "help me configure my Cowork workspace" all mean this skill applies.
 ---
 

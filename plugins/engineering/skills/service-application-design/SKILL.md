@@ -1,5 +1,6 @@
 ---
 name: service-application-design
+license: MIT
 description: >-
   What a long-running service owes its operator — schema migrations and
   startup behaviour, health checks, graceful shutdown, environment

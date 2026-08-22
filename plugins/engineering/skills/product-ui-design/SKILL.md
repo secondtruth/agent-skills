@@ -1,5 +1,6 @@
 ---
 name: product-ui-design
+license: MIT
 description: Distinguish product UIs from marketing surfaces when building frontends, then get the product side right — which facts a surface shows and where, and which typeface carries them. Use whenever building or restyling a web UI (admin consoles, dashboards, management/settings UIs, internal tools = product UI; landing/marketing pages = marketing surface), and whenever deciding what belongs in a header, status bar or detail view, why a screen feels empty, how to render IDs, states, timers or long values, or when a monospace face is warranted. Complements the frontend-design skill by deciding how much aesthetic staging the surface warrants.
 ---
 

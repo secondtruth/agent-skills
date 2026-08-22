@@ -1,5 +1,6 @@
 ---
 name: analytical-lenses
+license: MIT
 description: "Apply structured analytical perspectives to illuminate aspects of a topic that single-frame analysis misses. Use whenever the user asks for multi-perspective analysis, wants to evaluate a decision or proposal, asks 'what am I missing', requests a stakeholder analysis, asks for a critique or steelman, or whenever a complex situation involves competing values, multiple parties, externalities, or time-horizon tradeoffs. Also trigger proactively when the user is making a substantial decision (project scoping, architectural choice, policy proposal, organizational change) where single-lens analysis would underrepresent the situation. This skill is framework-neutral and complementary to `critical-traditions` (which handles ideological/normative lenses); apply both together when the user wants the full picture."
 ---
 

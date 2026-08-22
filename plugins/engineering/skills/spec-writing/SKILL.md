@@ -1,5 +1,6 @@
 ---
 name: spec-writing
+license: MIT
 description: Writing, reviewing, and improving protocol specifications, technical standards, and RFC-style documents. Use this skill whenever the user works on a spec, standard, protocol definition, or any formal technical document that uses normative language (MUST, SHOULD, MAY). Also trigger when the user asks to review a spec for quality, requests RFC-style formatting, wants to restructure or improve an existing specification, or discusses spec writing best practices. Covers document structure, normative prose, scope discipline, terminology consistency, example placement, and versioning. This skill should be used even for initial drafts — getting the structure right from the start saves painful refactoring later.
 ---
 

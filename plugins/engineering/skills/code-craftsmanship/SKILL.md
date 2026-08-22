@@ -1,5 +1,6 @@
 ---
 name: code-craftsmanship
+license: MIT
 description: >-
   Structure code and its files like a craftsman — repo layout, file naming,
   module shape, and symbol craft for TypeScript/React, Python, Go, PHP, and

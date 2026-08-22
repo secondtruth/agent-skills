@@ -1,5 +1,6 @@
 ---
 name: cli-design
+license: MIT
 version: "2.0"
 description: >-
   Design and structure command-line applications in any language — the

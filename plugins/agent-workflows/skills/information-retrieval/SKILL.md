@@ -1,5 +1,6 @@
 ---
 name: information-retrieval
+license: MIT
 description: "Proactive information gathering and research across all available sources. Trigger this skill on any plain research request – \"research X\", \"what can Y do\", \"how does Z do that\", \"check whether …\", \"is there something for …\" – not only when a web search is explicitly requested. Load it *before* searching, not after: an unassisted search that skips the source-quality rules is the exact failure this skill prevents. Also use whenever up-to-date information is required, when investigating topics of interest, when fact-checking claims, when answering questions about product behaviour, APIs, versions or capabilities, when answering questions that go beyond baked-in model knowledge, for technical/software research and trend analysis, and before starting new projects to check for existing solutions. Always explore what already exists before building something new."
 ---
 

@@ -1,5 +1,6 @@
 ---
 name: driving-ai-chat-websites
+license: MIT
 description: Drive an AI chat assistant's website through the browser to hand it a task and bring the result back. Use for claude.ai, chatgpt.com, gemini.google.com, chat.mistral.ai and kimi.com — updating plugin skills via claude.ai, ingesting a YouTube video via Gemini, asking another model for a second opinion, or any task that must run in a logged-in web session rather than through an API.
 ---
 

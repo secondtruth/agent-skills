@@ -1,5 +1,6 @@
 ---
 name: self-review
+license: MIT
 description: "Apply a structured self-review pass to your own draft before sending it. Use this whenever you have just produced a substantive response (recommendation, analysis, design proposal, technical assessment, decision support) and there is space to revise before the user sees it. Especially trigger after producing anything that involves: opinions defended without evidence, recommendations with significant consequences, claims that you might be hedging out of habit, or long outputs where shortcuts and floskel are most likely to have crept in. This skill is for Claude's own use against Claude's drafts – it is the discipline of treating your first draft as a draft, not as the answer."
 ---
 

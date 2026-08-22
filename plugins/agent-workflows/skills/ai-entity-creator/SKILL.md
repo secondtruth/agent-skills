@@ -1,5 +1,6 @@
 ---
 name: ai-entity-creator
+license: MIT
 description: Comprehensive guide for creating AI characters and assistants with specialized personas, workflows, and capabilities. Use when the user requests creation of new AI entities, virtual characters, personal assistants, or when transforming existing conversations/contexts into reusable AI agents.
 ---
 

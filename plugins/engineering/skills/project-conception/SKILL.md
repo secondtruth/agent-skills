@@ -1,5 +1,6 @@
 ---
 name: project-conception
+license: MIT
 description: Shape a rough idea into a concrete concept ready for roadmapping – a whole new project, or a single feature or subsystem inside an existing codebase. Use whenever the user has an idea for a tool, library, service, or project and wants it developed from vague to actionable – competitive landscape, scoping, MVP definition, architecture sketch, stack decision. Also trigger when designing a feature, module, or subsystem into an existing codebase – "how should we build X into Y?", "how do we get this properly into X?", "what would it take to add Z?" – where the job is to survey what already exists and map the target design onto it. Also trigger on "does this already exist?", "should I even build this?", "how do I scope this?", "what's the MVP?", "what's our USP vs. X?", or comparing against existing tools before committing. Use it for re-scoping existing projects too. Triggers naturally after a brainstorming session, once an idea has enough substance to commit to.
 ---
 

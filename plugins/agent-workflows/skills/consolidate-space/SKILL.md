@@ -1,5 +1,6 @@
 ---
 name: consolidate-space
+license: MIT
 description: "Reflective pass over the current Cowork Space — distil what's in flight, what matters, and how work happens here into a structured Digest (STATUS.md, BACKGROUND.md, compendium/). Use when the user asks to export, sync, or snapshot space knowledge, or says things like 'export the space', 'sync context', 'update memory files', 'aktualisiere den Export', 'exportiere den Space'."
 ---
 

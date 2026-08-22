@@ -1,5 +1,6 @@
 ---
 name: designer-setup
+license: MIT
 description: Set up Claude Design's org-level design system cleanly — particularly when the user's current production assets don't represent where they want their brand to go. Use this skill whenever the user wants to configure, onboard, or fix a Claude Design organization, asks for help with "the design system setup form", wants to upload brand assets to Claude Design, or mentions that their current Claude Design extraction "looks wrong" or "pulled the wrong colors". Also trigger for phrases like "set up Claude Design for X", "onboard our team to Claude Design", "what should I put in the Claude Design form", or "my design system in Claude Design needs fixing".
 ---
 

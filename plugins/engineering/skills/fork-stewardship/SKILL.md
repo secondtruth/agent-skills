@@ -1,5 +1,6 @@
 ---
 name: fork-stewardship
+license: MIT
 description: Manage forks of third-party projects over their whole lifecycle — choosing a forking strategy (Embrace vs. Decomposition), setting up fork/upstream branch topology, watching upstream for relevant changes, syncing and backporting upstream commits, maintaining a divergence ledger, and deciding what to contribute back. Use whenever the user plans, creates, or maintains a fork of an existing repository, mentions syncing with upstream, backporting, cherry-picking upstream fixes, watching an origin project, or asks whether to fork at all. Also trigger when a project in discussion is known to be a fork (e.g. a "*-fork of X" project) and work touches its relationship to upstream.
 ---
 

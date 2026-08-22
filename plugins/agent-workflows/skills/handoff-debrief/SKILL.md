@@ -1,5 +1,6 @@
 ---
 name: handoff-debrief
+license: MIT
 description: "Compose and deliver a structured debrief at the end of any handoff session. Trigger this automatically — without being asked — whenever you've completed work that originated from a handoff file. Also trigger when the user says 'write a debrief', 'report back', 'summarize what was done', 'what should I tell the other agent', or anything implying a handoff wrap-up. The debrief captures what was accomplished, current state of affected artifacts, out-of-scope observations (stale references, inconsistencies, things noticed along the way), and concrete recommendations. Output is a standalone markdown artifact the user can copy and bring to the originating space."
 ---
 

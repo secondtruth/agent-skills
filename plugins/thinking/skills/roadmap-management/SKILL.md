@@ -1,5 +1,6 @@
 ---
 name: roadmap-management
+license: MIT
 description: Plan and prioritize product roadmaps using frameworks like RICE, MoSCoW, and ICE. Use when creating a roadmap, reprioritizing features, mapping dependencies, choosing between Now/Next/Later or quarterly formats, or presenting roadmap tradeoffs to stakeholders.
 ---
 

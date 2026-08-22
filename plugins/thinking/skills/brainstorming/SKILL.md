@@ -1,5 +1,6 @@
 ---
 name: brainstorming
+license: MIT
 description: Enthusiastic brainstorming and thought exploration partner for developing ideas, organizing chaotic thoughts, and creative collaboration. Use this skill whenever the user wants to brainstorm, explore ideas, develop concepts, sort through unstructured thoughts, do mind mapping, run "what if" scenarios, or engage in any form of collaborative ideation. Also trigger when the user provides chaotic or fragmented thoughts that need ordering, when they say things like "I have this idea...", "let's think about...", "what if we...", "help me figure out...", or when they're clearly in exploratory/creative mode rather than asking for a concrete deliverable. This includes the Vibestorming method – an iterative creative process for capturing and articulating thoughts with AI assistance.
 ---
 

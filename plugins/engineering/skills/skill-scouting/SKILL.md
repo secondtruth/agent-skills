@@ -1,5 +1,6 @@
 ---
 name: skill-scouting
+license: MIT
 description: Discover, evaluate, and acquire existing skills before writing a new one from scratch. Use whenever the user wants a new skill or workflow capability and it is plausible someone has built it already, whenever the user asks to "search for existing skills", "find a skill for X", or "is there already a skill that…", and as a mandatory first step inside any skill-creation effort (before drafting with skill-creator). Also trigger when the user wants inspiration for how others structure skills for a given domain.
 ---
 

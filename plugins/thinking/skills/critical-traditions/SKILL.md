@@ -1,5 +1,6 @@
 ---
 name: critical-traditions
+license: MIT
 description: "Apply specific intellectual traditions as analytical lenses on a topic, with each tradition treated as a distinct school with its own concepts, characteristic moves, internal disagreements, and known weaknesses. Use whenever the user names a tradition (e.g. 'ecofeminist take', 'degrowth critique', 'Kantian view'), names a family of traditions ('feminist perspective', 'ecological perspective', 'ethical analysis'), or explicitly asks for ideological / normative / critical-theoretical analysis of a topic. Also use when the user asks 'what would X think about Y' for X being a school or thinker covered here. Do NOT trigger automatically on politically charged topics without explicit invitation – this skill activates by request, not by topic recognition."
 ---
 
