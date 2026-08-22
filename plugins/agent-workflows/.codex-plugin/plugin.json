@@ -1,6 +1,6 @@
 {
   "name": "agent-workflows",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Workflows whose subject is AI agents: handoff debriefs, Project seeding, space consolidation, AI entity design, research source rules, driving chat assistants in the browser, scouting existing skills.",
   "author": {
     "name": "Christian Neff",
