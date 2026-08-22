@@ -1,0 +1,22 @@
+{
+  "name": "thinking",
+  "version": "0.1.0",
+  "description": "Thinking tools: multi-lens analysis, critical traditions, brainstorming, self-review, roadmap prioritisation.",
+  "author": {
+    "name": "Christian Neff",
+    "url": "https://github.com/secondtruth"
+  },
+  "keywords": [
+    "analysis",
+    "brainstorming",
+    "review",
+    "roadmap"
+  ],
+  "license": "MIT",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Thinking",
+    "shortDescription": "Thinking tools: multi-lens analysis, critical traditions, brainstorming, self-review, roadmap prioritisation.",
+    "category": "Productivity"
+  }
+}

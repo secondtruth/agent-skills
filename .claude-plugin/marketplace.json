@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "secondtruth",
+  "owner": {
+    "name": "Christian Neff",
+    "url": "https://github.com/secondtruth"
+  },
+  "description": "secondtruth's agent skills \u2014 engineering craft, thinking tools, agent workflows.",
+  "plugins": [
+    {
+      "name": "engineering",
+      "source": "./plugins/engineering",
+      "description": "Craft skills for building software: code structure and naming, CLI and service design, product UI, fork stewardship, spec writing, project conception, skill scouting.",
+      "version": "0.1.0",
+      "category": "development",
+      "keywords": [
+        "engineering",
+        "code-quality",
+        "cli",
+        "architecture",
+        "ui"
+      ],
+      "homepage": "https://github.com/secondtruth/agent-skills"
+    },
+    {
+      "name": "thinking",
+      "source": "./plugins/thinking",
+      "description": "Thinking tools: multi-lens analysis, critical traditions, brainstorming, self-review, roadmap prioritisation.",
+      "version": "0.1.0",
+      "category": "productivity",
+      "keywords": [
+        "analysis",
+        "brainstorming",
+        "review",
+        "roadmap"
+      ],
+      "homepage": "https://github.com/secondtruth/agent-skills"
+    },
+    {
+      "name": "agent-workflows",
+      "source": "./plugins/agent-workflows",
+      "description": "Workflows for working with AI agents: handoff debriefs, Project seeding, space consolidation, AI entity design, research source rules, driving chat assistants in the browser.",
+      "version": "0.1.0",
+      "category": "productivity",
+      "keywords": [
+        "agents",
+        "handoff",
+        "research",
+        "cowork"
+      ],
+      "homepage": "https://github.com/secondtruth/agent-skills"
+    }
+  ]
+}

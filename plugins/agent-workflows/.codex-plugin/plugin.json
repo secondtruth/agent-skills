@@ -1,0 +1,22 @@
+{
+  "name": "agent-workflows",
+  "version": "0.1.0",
+  "description": "Workflows for working with AI agents: handoff debriefs, Project seeding, space consolidation, AI entity design, research source rules, driving chat assistants in the browser.",
+  "author": {
+    "name": "Christian Neff",
+    "url": "https://github.com/secondtruth"
+  },
+  "keywords": [
+    "agents",
+    "handoff",
+    "research",
+    "cowork"
+  ],
+  "license": "MIT",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Agent Workflows",
+    "shortDescription": "Workflows for working with AI agents: handoff debriefs, Project seeding, space consolidation, AI entity design, research",
+    "category": "Productivity"
+  }
+}
