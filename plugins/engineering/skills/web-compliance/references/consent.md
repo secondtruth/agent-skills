@@ -1,6 +1,6 @@
 # Consent — § 25 TDDDG, Art. 6/7 DSGVO, with orestbida/cookieconsent v3
 
-**Stand: 2026-08.** cookieconsent 3.1.x (npm `vanilla-cookieconsent`); API reference at cookieconsent.orestbida.com.
+**Stand: 2026-08.** cookieconsent 3.1.x (npm `vanilla-cookieconsent`, pinned as `@3.1` so a later minor with API changes is a deliberate upgrade); API reference at cookieconsent.orestbida.com.
 
 ## The two laws that stack
 
@@ -29,7 +29,7 @@ When the answer is "no" throughout, the site ships with a privacy policy and zer
 ## Install self-hosted
 
 ```bash
-npm i vanilla-cookieconsent@3
+npm i vanilla-cookieconsent@3.1
 ```
 
 Bundler projects import the package; the CSS and JS then ship with the site's own assets:
@@ -46,6 +46,16 @@ Static sites copy `node_modules/vanilla-cookieconsent/dist/cookieconsent.{css,um
 Categories come from the inventory. Keep to the four that users recognise — `necessary`, `functionality`, `analytics`, `marketing` — and drop the ones with no service in them. Every optional service appears as a toggle (`services`) so users can accept one without the other.
 
 ```js
+import * as CookieConsent from 'vanilla-cookieconsent';
+import iframemanager from '@orestbida/iframemanager';   // only with embeds — see Embeds below
+
+const im = iframemanager();
+im.run({
+  services: {
+    youtube: { embedUrl: 'https://www.youtube-nocookie.com/embed/{data-id}', /* languages, thumbnail … */ },
+  },
+});
+
 CookieConsent.run({
   // mode 'opt-in' is the default and the compliant one; 'opt-out' runs scripts first.
   revision: 1,                       // bump whenever the set of services or the policy changes
@@ -60,7 +70,7 @@ CookieConsent.run({
     consentModal: {
       layout: 'box wide',
       position: 'bottom left',
-      equalWeightButtons: true,      // reject looks like accept — the DSK requirement
+      equalWeightButtons: true,      // reject styled like accept (drops the secondary-button class — colour and weight, not only width): the DSK requirement
       flipButtons: false,
     },
     preferencesModal: {
@@ -72,12 +82,15 @@ CookieConsent.run({
   categories: {
     necessary: { enabled: true, readOnly: true },
     analytics: {
-      autoClear: {                   // rejecting later removes what the service left behind
+      autoClear: {                   // rejecting later removes what the service left behind …
         cookies: [{ name: /^_ga/ }, { name: '_gid' }],
-        reloadPage: false,
+        reloadPage: false,           // … but the loaded runtime keeps running: stop it in onReject, or set true
       },
       services: {
-        ga4: { label: 'Google Analytics 4' },
+        ga4: {
+          label: 'Google Analytics 4',
+          onReject: () => { window['ga-disable-G-XXXXXXX'] = true; },   // GA4's kill switch for this property
+        },
       },
     },
     marketing: {
@@ -85,7 +98,7 @@ CookieConsent.run({
       services: {
         youtube: {
           label: 'YouTube-Videos',
-          onAccept: () => im.acceptService('youtube'),   // iframemanager, see Embeds
+          onAccept: () => im.acceptService('youtube'),   // the instance created above
           onReject: () => im.rejectService('youtube'),
         },
       },
@@ -194,7 +207,7 @@ Without iframemanager, the same two-click pattern by hand: render a `<div data-e
 <a href="#" data-cc="show-preferencesModal">Cookie-Einstellungen</a>
 ```
 
-in the footer of every page, next to Impressum and Datenschutz. Rejecting a category triggers `autoClear` for the cookies listed; anything the service keeps in localStorage is cleared in the service's `onReject`.
+in the footer of every page, next to Impressum and Datenschutz. Rejecting a category triggers `autoClear` for the cookies listed — but a script that already ran keeps running on the current page. Either stop it in the service's `onReject` (GA4: `window['ga-disable-<ID>'] = true`; Matomo: `_paq.push(['optUserOut'])`; anything kept in localStorage: remove it there) or set `autoClear.reloadPage: true` so withdrawal reloads the page without the service.
 
 ## Consent record
 

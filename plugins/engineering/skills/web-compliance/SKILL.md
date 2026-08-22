@@ -32,9 +32,9 @@ Your edge over a template generator is that you can read the code. Every obligat
 
 4. **Consent layer** — only for what remains. Implement with orestbida/cookieconsent v3 per `references/consent.md`: self-hosted, categories mapped from the inventory, every optional script blocked via `type="text/plain" data-category="…"`, reject as prominent as accept, a withdrawal link in the footer.
 
-5. **Documents.** Write or fix the Impressum from `references/impressum.md` and the Datenschutzerklärung from `references/privacy-policy.md`, section by section from the inventory. Facts you cannot read from the code (register number, VAT ID, chamber, the data-protection officer) become `TODO:` placeholders in the page — guessing them is worse than leaving a visible gap.
+5. **Documents.** Write or fix the Impressum from `references/impressum.md` and the Datenschutzerklärung from `references/privacy-policy.md`, section by section from the inventory. Facts you cannot read from the code (register number, VAT ID, chamber, the data-protection officer) become `TODO:` placeholders — and a page with a placeholder is a draft: it stays unpublished, or the existing page stays live, until the operator supplies the value. Guessing is worse than a gap; publishing the gap is worse than waiting.
 
-6. **Verify.** Run the checklist at the end of `references/consent.md` in a browser: network tab before any interaction, after reject, after accept, after withdrawal. Confirm both legal pages are reachable from every page within two clicks and are labelled `Impressum` and `Datenschutz`/`Datenschutzerklärung`. Then report what was implemented, what remains `TODO`, and which points need counsel.
+6. **Verify.** Run the checklist at the end of `references/consent.md` in a browser: network tab before any interaction, after reject, after accept, after withdrawal. Confirm both legal pages are reachable from every page within two clicks and are labelled `Impressum` and `Datenschutz`/`Datenschutzerklärung`. Grep the legal pages for `TODO` — go-live needs zero hits. Then report what was implemented, what remains `TODO` (and therefore blocks publishing), and which points need counsel.
 
 ## Hard rules
 
@@ -47,7 +47,7 @@ These are where real banners and real Impressums fail. Treat them as invariants 
 - **Impressum and Datenschutzerklärung are HTML pages**, linked from every page under exactly those labels, reachable within two clicks — hidden under "Kontakt" or "Über uns" or delivered as PDF has been the subject of Abmahnungen.
 - **Cite current statutes.** `§ 5 DDG` (DE Impressum), `§ 25 TDDDG` (DE consent), `Art. 13 DSGVO` (privacy information). The ODR-platform link belongs in the Impressum of 2024, removed in 2026.
 - **The privacy policy names exactly the inventory.** Every service the site loads or forwards data to appears with purpose, legal basis, recipient and third-country status; services the site dropped in step 3 disappear from the text.
-- **Unknown facts stay visible as `TODO`**, with a one-line note on where the operator finds the value.
+- **Unknown facts stay visible as `TODO` in the draft**, with a one-line note on where the operator finds the value — and the draft goes live only once the last `TODO` is gone.
 
 ## Out of scope — say so and point onward
 

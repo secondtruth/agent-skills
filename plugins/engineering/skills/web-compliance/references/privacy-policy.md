@@ -16,9 +16,9 @@ Each processing activity states **purpose, legal basis, recipient, third-country
 | # | Section | Required content |
 |---|---|---|
 | 1 | Verantwortlicher | name, address, e-mail, telephone (matches the Impressum) |
-| 2 | Datenschutzbeauftragte:r | contact when one is appointed — mandatory above 20 persons regularly processing personal data (§ 38 BDSG), or for core activities with sensitive data |
+| 2 | Datenschutzbeauftragte:r | contact when one is appointed — mandatory once at least 20 persons (§ 38 Abs. 1 BDSG: „in der Regel mindestens 20 Personen") regularly process personal data by automated means, or for core activities with sensitive data |
 | 3 | Hosting und Server-Logs | provider as Auftragsverarbeiter (Art. 28 contract exists — `TODO` if unknown), log fields (IP, timestamp, URL, user agent, referrer), Art. 6 Abs. 1 lit. f, retention (7–14 days is customary), seat country of the provider |
-| 4 | Cookies und Einwilligung | which categories exist, § 25 TDDDG + Art. 6 Abs. 1 lit. a, how to withdraw (the footer link), the consent cookie's lifetime; on banner-free sites: the statement that only necessary storage is used |
+| 4 | Cookies und Einwilligung | two tiers: strictly necessary storage (session, login, cart, the consent record) under § 25 Abs. 2 TDDDG with Art. 6 Abs. 1 lit. b or lit. f; optional categories under § 25 Abs. 1 TDDDG with Art. 6 Abs. 1 lit. a — then how to withdraw (the footer link) and the consent cookie's lifetime; on banner-free sites: the statement that only necessary storage is used |
 | 5 ◇ | Kontaktformular / E-Mail | data fields, lit. b (pre-contractual) or lit. f, mail provider as recipient, retention |
 | 6 ◇ | Newsletter | double opt-in, lit. a, § 7 UWG reference, provider (recipient, seat, DPF/SCC), open-rate tracking if enabled, withdrawal via unsubscribe link |
 | 7 ◇ | Registrierung / Kundenkonto | account fields, lit. b, retention until deletion |
@@ -31,7 +31,7 @@ Each processing activity states **purpose, legal basis, recipient, third-country
 | 14 ◇ | Fehler- und Leistungsmonitoring | Sentry & co.: lit. f, that stack traces may contain personal data, scrubbing in place |
 | 15 ◇ | Social-Media-Präsenzen | one paragraph per platform the operator runs a profile on, joint controllership for Facebook/Instagram insights |
 | 16 | Drittlandübermittlung | the general statement: transfers to the USA rest on the EU-US Data Privacy Framework for certified providers (name them), otherwise Standardvertragsklauseln (Art. 46 Abs. 2 lit. c) |
-| 17 | Speicherdauer | the general rule: as long as the purpose needs, then statutory retention (§ 147 AO: 10 years; § 257 HGB: 6 years for commercial letters) |
+| 17 | Speicherdauer | the general rule: as long as the purpose needs, then statutory retention by record class (§ 147 AO, § 257 HGB, since 2025): books, inventories and annual accounts 10 years; Buchungsbelege 8 years; commercial and business letters 6 years |
 | 18 | Betroffenenrechte | Auskunft (15), Berichtigung (16), Löschung (17), Einschränkung (18), Datenübertragbarkeit (20), Widerspruch (21) with the prominent Art. 21 notice, Widerruf einer Einwilligung (7 Abs. 3) |
 | 19 | Beschwerderecht | Art. 77: any supervisory authority, typically the one of the operator's Bundesland — name it |
 | 20 ◇ | Automatisierte Entscheidungen | Art. 22, only when profiling with legal effect exists |
