@@ -1,7 +1,7 @@
 ---
 name: project-conception
 license: MIT
-description: Shape a rough idea into a concrete concept ready for roadmapping – a whole new project, or a single feature or subsystem inside an existing codebase. Use whenever the user has an idea for a tool, library, service, or project and wants it developed from vague to actionable – competitive landscape, scoping, MVP definition, architecture sketch, stack decision. Also trigger when designing a feature, module, or subsystem into an existing codebase – "how should we build X into Y?", "how do we get this properly into X?", "what would it take to add Z?" – where the job is to survey what already exists and map the target design onto it. Also trigger on "does this already exist?", "should I even build this?", "how do I scope this?", "what's the MVP?", "what's our USP vs. X?", or comparing against existing tools before committing. Use it for re-scoping existing projects too. Triggers naturally after a brainstorming session, once an idea has enough substance to commit to.
+description: Shape a rough idea into a concept ready for planning – a new project (landscape, scope, MVP, architecture, stack) or a feature or subsystem inside an existing codebase (surface inventory, wiring vs. building). Use when the user asks whether to build something, what the MVP is, how to scope or re-scope it, or how to fit X into Y.
 ---
 
 # Project Conception
@@ -109,17 +109,12 @@ Then explicitly tell the user "concept is ready for planning" — `roadmap-manag
 
 ## AI-Era Scoping: Plan as if unassisted, build as if assisted
 
-Implementation cost has collapsed. Visions that were a company founding in 2020 are one-person projects now, so ambition is the correct default — "too much code" is no longer a reason to shrink a concept, and "contribute instead of build" loses weight when building no longer costs a decade. But AI raises the ceiling, not the floor: one human brain still has to verify, decide, and stay motivated, and that is the bottleneck now. The practical rule:
+Implementation cost has collapsed; ambition is the correct default. What has not changed is the bottleneck: one human brain still has to verify, decide, and stay motivated. So methods that rationed *effort* (phase plans sized by typing speed, feature cuts justified by workload) are relaxed; methods that ration *judgment, verification, and motivation* — the walking skeleton, wedge-proof-first sequencing, interfaces before layers — apply unchanged.
 
-- **Pre-AI methods that rationed *effort* are obsolete.** Relax them without guilt. Phase plans sized by typing speed, "core first, comfort later" as cost control, feature cuts justified only by workload — gone.
-- **Pre-AI methods that ration *judgment, verification, and motivation* apply unchanged.** Walking skeleton, ruthless wedge-proof-first sequencing, interfaces before layers. These never existed because of typing speed; they manage risk and morale. Same slices, eaten faster.
-
-**Sequencing rule:** sort features by *dependency on unvalidated decisions* — not by effort, and not by certainty of wanting them. "I definitely want it" is a wish criterion, not a planning criterion.
+**Sequencing rule:** sort features by *dependency on unvalidated decisions* — not by effort, and not by certainty of wanting them.
 
 - Build early: anything behind a stable contract/interface, regardless of where it sits in a classic phase plan.
-- Defer: anything that bakes in domain decisions the skeleton hasn't validated yet. Refactoring code is cheap, even free; refactoring *concepts* is expensive, AI or not.
-
-**The walking skeleton stays mandatory.** It was never an effort compromise — it is the planning instrument that tests whether the plan holds. A plan is a hypothesis; good planning without an early end-to-end proof is well-formatted confidence.
+- Defer: anything that bakes in domain decisions the skeleton hasn't validated yet. Refactoring code is cheap; refactoring *concepts* is expensive, AI or not.
 
 When the concept involves forking an existing project, settle the forking strategy (Embrace vs. Decomposition) during conception — consult the `fork-stewardship` skill when it is among your available skills; the strategy choice shapes scope, architecture, and long-term maintenance cost.
 
@@ -137,4 +132,4 @@ Stating these out loud is the job. The user can still say "yeah, I want to build
 
 ## Output
 
-Every conception pass produces three persistent artifacts – a landscape or inventory, a concept document, and a handoff package. What form each takes, and where it lives, is defined in `references/new-project.md` and `references/feature-in-existing-codebase.md` respectively. The rule that holds for both: the content has to exist somewhere persistent before this skill is "done". Bullets in chat don't count.
+Three persistent artifacts – a landscape or inventory, a concept document, and a handoff package – defined per path in the references. This skill is done when all three exist somewhere persistent; bullets in chat do not count.

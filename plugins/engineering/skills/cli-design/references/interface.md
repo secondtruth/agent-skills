@@ -66,18 +66,11 @@ Run '<app> --help' for the full reference.
 - If input is required and stdin is not a TTY (or `--no-input` was passed), fail and name the flag the user should have provided.
 - Read secrets with terminal echo off.
 
-The confirmation tiers in full:
-
-1. **Mild** (recoverable, local): no confirmation; offer `--dry-run`.
-2. **Moderate** (remote or hard to undo): prompt for y/N; `--force` skips; offer `--dry-run`.
-3. **Severe** (irreversible, plural, production): require typing a non-trivial value — the resource name — or `--confirm=<name>`. `--force` alone is not enough.
-
 ## Environment variables and configuration
 
 - Env vars are for context that varies per execution environment, not a substitute for a config file. Uppercase, digits, underscores; single-line values.
-- Respect the general-purpose set where relevant: `NO_COLOR`, `DEBUG`, `EDITOR`, `PAGER`, `HTTP_PROXY`/`HTTPS_PROXY`/`NO_PROXY`, `TERM`, `TMPDIR`, `HOME`, `LINES`/`COLUMNS`. Never commandeer a POSIX name for something else.
-- Secrets arrive via `--token-file`, stdin, or a credential service.
-- Never rewrite the user's config files without consent; prefer writing new files, and use dated comments when modifying is unavoidable.
+- Respect the general-purpose set where relevant: `NO_COLOR`, `DEBUG`, `EDITOR`, `PAGER`, `HTTP_PROXY`/`HTTPS_PROXY`/`NO_PROXY`, `TERM`, `TMPDIR`, `HOME`, `LINES`/`COLUMNS`. A POSIX name keeps its POSIX meaning.
+- Write new config files rather than rewriting the user's; when modifying is unavoidable, ask first and leave dated comments.
 
 ## Responsiveness and robustness
 

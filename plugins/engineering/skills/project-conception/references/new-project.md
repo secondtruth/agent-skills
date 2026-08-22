@@ -26,7 +26,7 @@ The list below is not a source-quality ranking – it's where competitors hide, 
 
 ### Step 3: Structured analysis
 
-Read `competitive-analysis.md` for the full methodology – taxonomy, feature matrix template, traction signals, license/business-model check, USP destillation, anti-features, and how to mine dead projects for lessons.
+Read `competitive-analysis.md` for the full methodology – taxonomy, feature matrix template, traction signals, license/business-model check, USP distillation, anti-features, and how to mine dead projects for lessons.
 
 Produce a written competitive landscape document. Not bullets in chat. A real artifact filed in the knowledge base under the project page.
 

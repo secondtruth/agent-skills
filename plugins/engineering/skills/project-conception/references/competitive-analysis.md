@@ -119,7 +119,7 @@ Check:
 
 If a healthy, well-licensed competitor exists with an active maintainer team, **contributing is almost always cheaper than building**. State this directly in the recommendation.
 
-## 8. USP destillation
+## 8. USP distillation
 
 After the comparison, write down: **what does the proposed project do that none of the competitors do, or do well?**
 
