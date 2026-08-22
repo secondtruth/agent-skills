@@ -1,7 +1,7 @@
 {
   "name": "engineering",
-  "version": "0.2.0",
-  "description": "Craft skills for building software: code structure and naming, CLI and service design, product UI, fork stewardship, spec writing, project conception.",
+  "version": "0.1.0",
+  "description": "Craft skills for building software: code structure and naming, CLI and service design, product UI, web compliance (Impressum, consent, DSGVO), fork stewardship, spec writing, project conception.",
   "author": {
     "name": "Christian Neff",
     "url": "https://github.com/secondtruth"
@@ -11,13 +11,14 @@
     "code-quality",
     "cli",
     "architecture",
-    "ui"
+    "ui",
+    "compliance"
   ],
   "license": "MIT",
   "skills": "./skills/",
   "interface": {
     "displayName": "Engineering",
-    "shortDescription": "Craft skills for building software: code structure and naming, CLI and service design, product UI, fork stewardship, spe",
+    "shortDescription": "Craft skills for building software: code structure and naming, CLI and service design, product UI, web compliance (Impre",
     "category": "Development"
   }
 }
