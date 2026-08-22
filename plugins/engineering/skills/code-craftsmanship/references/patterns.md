@@ -16,7 +16,7 @@ Patterns are tools, not religions. Choose the one that fits the situation. The g
 
 **Summary.** Group all the files for one product feature into a folder named after the feature.
 
-**When to use.** In any application with more than one feature. The default for React, Next.js, Vue, Svelte, and most full-stack frameworks. In Go, the equivalent is one package per feature under `internal/` (e.g. `internal/invoices/`). In PHP, Laravel's layer-based convention (`app/Services/`, `app/Http/Controllers/`, `app/Models/`) is the boring choice; a feature-folder overlay inside `app/` is acceptable for large apps.
+**When to use.** In any application with more than one feature. The default for React, Next.js, Vue, Svelte, and most full-stack frameworks. In Go, the equivalent is one package per feature under `internal/` (e.g. `internal/invoices/`). In PHP, the framework's layer-based convention is the boring choice — Symfony's `src/Controller/`, `src/Entity/`, `src/Service/` or Laravel's `app/Http/Controllers/`, `app/Models/`, `app/Services/`; a feature-folder overlay (`src/Invoicing/…`) is acceptable for large apps.
 
 **Why it works.** Files that change together live together. A feature requirement touches the feature's component, API, types, styles, and tests; co-locating them makes the change atomic and the diff readable. See Principle 2 in `SKILL.md`.
 
@@ -48,6 +48,19 @@ internal/invoices/        # package invoices
   doc.go                  # package documentation
 ```
 
+**Example (PHP / Symfony).**
+
+```text
+src/Service/InvoiceService.php        # domain logic
+src/Controller/InvoiceController.php
+src/Entity/Invoice.php
+src/Repository/InvoiceRepository.php
+src/Form/InvoiceType.php
+migrations/Version20250620000001.php
+templates/invoice/show.html.twig
+tests/Service/InvoiceServiceTest.php
+```
+
 **Example (PHP / Laravel).**
 
 ```text
@@ -56,7 +69,6 @@ app/Http/Controllers/InvoiceController.php
 app/Models/Invoice.php
 app/Http/Requests/StoreInvoiceRequest.php
 database/migrations/2025_06_20_000001_create_invoices_table.php
-tests/Feature/InvoiceControllerTest.php
 tests/Unit/InvoiceServiceTest.php
 ```
 
@@ -91,14 +103,18 @@ internal/invoices/invoice.go
 internal/invoices/invoice_test.go     # required by the go tool
 ```
 
-**Example (PHP).** PHPUnit convention is `*Test.php`. Modern setups co-locate; Laravel and Symfony conventions use a `tests/` directory split into `Feature/` and `Unit/` — this is a framework override, accepted because the testing tooling expects it.
+**Example (PHP).** PHPUnit convention is `*Test.php`. Modern framework-agnostic setups co-locate; Symfony and Laravel both use a `tests/` directory instead — a framework override, accepted because the testing tooling expects it.
 
 ```text
 # Co-located (modern, framework-agnostic)
 src/Invoice.php
 src/InvoiceTest.php
 
-# Laravel convention (framework override)
+# Symfony convention (tests/ mirrors src/ as App\Tests\)
+src/Service/InvoiceService.php
+tests/Service/InvoiceServiceTest.php
+
+# Laravel convention (Feature/ and Unit/ split)
 app/Services/InvoiceService.php
 tests/Unit/InvoiceServiceTest.php
 ```
@@ -111,11 +127,11 @@ tests/Unit/InvoiceServiceTest.php
 
 **When to use.** Every source file. Especially valuable for files longer than ~50 lines.
 
-**Why it works.** A reader scanning a file wants the contract first and the body second — same as a newspaper article. Leading with private helpers inverts this and forces the reader to scroll past details to find the entry point. See Principle 4.
+**Why it works.** A reader scanning a file wants the contract first and the body second — same as a newspaper article. Leading with private helpers inverts this and forces the reader to scroll past details to find the entry point. See Principle 5.
 
 **Counter-pattern.** Bottom-Up File — the exported function appears at line 200, after the writer "built up" to it with helpers. Reads like a proof, not a story.
 
-**Example.** See the "Fix" example under Principle 4 in `SKILL.md`.
+**Example.** See the "Fix" example under Principle 5 in `SKILL.md`.
 
 ---
 
@@ -125,7 +141,7 @@ tests/Unit/InvoiceServiceTest.php
 
 **When to use.** For library packages, for shared internal modules, and for any folder that callers from outside the folder will import from.
 
-**Why it works.** Restricting the public surface makes the module's contract explicit. The maintainer is free to refactor internals — rename, split, restructure — without breaking callers, because callers only see the curated surface. See Principle 4.
+**Why it works.** Restricting the public surface makes the module's contract explicit. The maintainer is free to refactor internals — rename, split, restructure — without breaking callers, because callers only see the curated surface. See Principle 5.
 
 **Counter-pattern.** Barrel File — an `index.ts` that re-exports every internal symbol for convenience. Hides the real source, breaks tree-shaking, and silently becomes the public API whether you intended it or not.
 
@@ -150,11 +166,11 @@ export { useInvoices } from './use-invoices';
 
 **When to use.** Whenever a comment explains *what* a block of code does. Almost always.
 
-**Why it works.** The function name becomes reusable documentation at every call site. The comment was localized to one place. See Principle 5.
+**Why it works.** The function name becomes reusable documentation at every call site. The comment was localized to one place. See Principle 7.
 
 **Counter-pattern.** Apology Comment — `// loop over users and send email to active ones` above a five-line block that does exactly that. The comment is a confession that the code is not self-describing.
 
-**Example.** See the "Fix" example under Principle 5 in `SKILL.md`.
+**Example.** See the "Fix" example under Principle 7 in `SKILL.md`.
 
 ---
 
@@ -164,7 +180,7 @@ export { useInvoices } from './use-invoices';
 
 **When to use.** Use barrels *only* for: a library package's entry point, a folder that is the explicit public surface of a module. Do not use barrels to shorten import paths inside an app. In Go, the public API is decided by capitalisation (`Invoice` is exported, `invoice` is not) and the `internal/` directory is compiler-enforced private, so there is no need for a barrel file. In PHP, PSR-4 autoloading makes the filename equal to the class name, so a "barrel" is meaningless — you import the class by its fully-qualified name and the autoloader finds the file.
 
-**Why it works.** Barrels hide the real source location, force importers to pull the whole barrel (defeating tree-shaking in bundlers), and silently become the public API whether the maintainer intended it or not. TkDodo's "Please Stop Using Barrel Files" remains the canonical warning. See Principle 11.
+**Why it works.** Barrels hide the real source location, force importers to pull the whole barrel (defeating tree-shaking in bundlers), and silently become the public API whether the maintainer intended it or not. TkDodo's "Please Stop Using Barrel Files" remains the canonical warning. See Principle 5.
 
 **Counter-pattern.** Convenience Barrel — an `index.ts` in every folder so that imports look like `import { X } from './features'` instead of `import { X } from './features/invoices/InvoiceList'`. Convenient for the writer, expensive for the bundler and the reader.
 
@@ -198,7 +214,7 @@ export { Modal } from './Modal';
 
 **When to use.** As the default for every architectural decision. Diverge only with a measured reason.
 
-**Why it works.** Convention is compressed documentation. Every reader who knows the ecosystem can read conventional code for free. Divergence is a tax on every future reader. See Principle 9.
+**Why it works.** Convention is compressed documentation. Every reader who knows the ecosystem can read conventional code for free. Divergence is a tax on every future reader. See Principle 10.
 
 **Counter-pattern.** Not Invented Here — a bespoke state container, a custom error hierarchy, a hand-rolled logger, a parallel test runner. Each one feels small in isolation; together they make the codebase illegible to anyone who knows the ecosystem but not the team.
 
@@ -228,22 +244,22 @@ func (e *AppError) Is(target error) bool { /* custom logic */ }
 // Six months later: nobody's Is() works with the ecosystem.
 ```
 
-**Example (PHP / Laravel).**
+**Example (PHP / Symfony).**
 
 ```php
-// BORING (good):
-public function store(StoreInvoiceRequest $request, InvoiceService $service)
+// BORING (good): autowired service, attribute routing, framework validation
+#[Route('/invoices', methods: ['POST'])]
+public function store(#[MapRequestPayload] InvoiceInput $input, InvoiceService $service): JsonResponse
 {
-    $invoice = $service->create($request->validated());
-    return new InvoiceResource($invoice);
+    return $this->json($service->create($input), Response::HTTP_CREATED);
 }
 
 // BESPOKE (avoid):
-public function store(Request $request)
+public function store(Request $request): Response
 {
-    $data = $this->customValidator->validate($request->all(), /* ... */);
+    $data = $this->customValidator->validate($request->request->all(), /* ... */);
     $invoice = $this->manualContainer->resolve('invoice')->create($data);
-    return response()->json($this->customSerializer->toArray($invoice));
+    return new Response($this->customSerializer->toArray($invoice));
 }
 // A year later: nobody knows which validator/container/serializer is in use.
 ```
@@ -280,25 +296,25 @@ Three commits, each reviewable in isolation. The reviewer can rubber-stamp Commi
 
 **When to use.** When laying out a new project, or restructuring an existing one. The first decision a contributor makes is "which folder do I open first?" — the folders should answer that without code.
 
-**Why it works.** Folders are the chapter headings of the codebase. Domain folders (`features/invoices/`) teach the domain as the reader navigates. Technical folders (`utils/`, `misc/`) force the reader to already know the codebase. See Principle 7.
+**Why it works.** Folders are the chapter headings of the codebase. Domain folders (`features/invoices/`) teach the domain as the reader navigates. Technical folders (`utils/`, `misc/`) force the reader to already know the codebase. See Principle 1.
 
 **Counter-pattern.** Junk Drawer — a top-level `utils/` or `misc/` folder that accumulates everything that did not fit elsewhere. Within six months it contains 80 files, no two related, and nobody can find anything.
 
-**Example.** See the "Counter-example" and "Fix" trees under Principle 7 in `SKILL.md`.
+**Example.** See the "Counter-example" and "Fix" trees under Principle 1 in `SKILL.md`.
 
 ---
 
-## 10. Single Concept File
+## 10. Single Concept Unit
 
-**Summary.** A file holds exactly one concept — one component, one service, one domain type, one cohesive utility family.
+**Summary.** Each unit of encapsulation — the file in most languages, the package in Go — holds exactly one concept: one component, one service, one domain type, one cohesive utility family.
 
 **When to use.** Always. The filesystem is the cheapest index a programmer has.
 
-**Why it works.** The filename is the first sentence of documentation. A 600-line `utils.ts` (or `utils.go`, or the classic PHP `functions.php`) destroys that signal. See Principle 1.
+**Why it works.** The filename is the first sentence of documentation. A 600-line `utils.ts` (or the classic PHP `functions.php`) destroys that signal. In Go the same smell appears one level up, as a grab-bag `util` / `common` / `helpers` package. See Principle 3.
 
-**Counter-pattern.** Junk File — a `utils.ts` / `helpers.ts` / `misc.ts` (TypeScript), or `utils.go` / `helpers.go` (Go), or `functions.php` / `helpers.php` (PHP) that grows without bound because it is the path of least resistance. Every new helper gets appended because the writer did not want to create a new file.
+**Counter-pattern.** Junk File — a `utils.ts` / `helpers.ts` / `misc.ts` (TypeScript), or `functions.php` / `helpers.php` (PHP), or a `util` package (Go) that grows without bound because it is the path of least resistance. Every new helper gets appended because the writer did not want to create a new file or name a real package.
 
-**Example.** See the "Counter-example" and "Fix" trees under Principle 1 in `SKILL.md`. Per-ecosystem filename conventions are in `references/naming-and-trees.md` §2.
+**Example.** See the "Counter-example" and "Fix" trees under Principle 3 in `SKILL.md`. Per-ecosystem filename conventions are in `references/naming-and-trees.md` §2.
 
 ---
 
@@ -322,7 +338,7 @@ Three commits, each reviewable in isolation. The reviewer can rubber-stamp Commi
 
 **When to use.** When the *why* is non-obvious: a constraint from an upstream system, a bug that was fixed, a trade-off that was made, a magic number with a source.
 
-**Why it works.** The code already tells the reader *what*. The comment carries the institutional memory the code cannot. See Principle 5.
+**Why it works.** The code already tells the reader *what*. The comment carries the institutional memory the code cannot. See Principle 7.
 
 **Counter-pattern.** Restating Comment — `// increment i by 1` above `i++`. Adds noise without information.
 
@@ -347,7 +363,7 @@ await api.post(invoice);
 
 **When to use.** When naming any variable, function, type, or file whose shape is not obvious from the context.
 
-**Why it works.** The reader infers the shape from the name without jumping to the definition. See Principle 3.
+**Why it works.** The reader infers the shape from the name without jumping to the definition. See Principle 8.
 
 **Counter-pattern.** Generic Noun — `items`, `data`, `info`, `flag` — that hides both the domain and the shape.
 
@@ -369,7 +385,7 @@ const InvoiceRow = () => <tr>...</tr>;           // Row → component variant
 
 **When to use.** Always, but especially when naming things that will outlive the current PR: exported functions, types, files, folders, database columns.
 
-**Why it works.** Names outlive their writers. A vague name (`data`, `process`, `handle`) taxes every future reader. A precise name pays the tax once, at writing time. See Principle 3.
+**Why it works.** Names outlive their writers. A vague name (`data`, `process`, `handle`) taxes every future reader. A precise name pays the tax once, at writing time. See Principle 8.
 
 **Counter-pattern.** Writer-Centric Name — `temp`, `stuff`, `thing2`, `newAndImproved` — names that made sense to the writer in the moment and nobody else afterwards.
 
@@ -398,6 +414,122 @@ const activeUsers = users.filter(u => u.active);
 **Counter-pattern.** Drive-by Refactor — the cleanup is large enough to need its own PR but is bundled into the feature PR, making the feature PR unreviewable and the cleanup invisible.
 
 **Example.** See the example under Campsite Rule above.
+
+---
+
+## 16. Contiguous Member Block
+
+**Summary.** Everything belonging to one type — its declaration, constructor, methods, constants, and errors — occupies one uninterrupted block of the file.
+
+**When to use.** Any file that declares more than one type, and any type with more than two members. In Go, whenever you are tempted to put a method in a different file than its receiver type.
+
+**Why it works.** The unit of change is the unit of reading: adding a field touches the constructor, the accessors, and the validation, so they belong on one screen. It also keeps members visible — a method far from its type gets skipped in refactors and lingers dead for years. See Principle 4.
+
+**Counter-pattern.** Shredded Type — two or more types interleaved down the file (`Invoice` declaration, `Customer` declaration, an `Invoice` method, a `Customer` error), usually the residue of appending each new member at the bottom of the file.
+
+**Example (Go).**
+
+```go
+var ErrInvoiceNotFound = errors.New("invoice not found")
+
+type Invoice struct { /* ... */ }
+
+func NewInvoice(c Customer) *Invoice { /* ... */ }
+
+func (i *Invoice) Total() Money { /* ... */ }
+
+// --- Customer ---
+
+type Customer struct { /* ... */ }
+
+func (c *Customer) DisplayName() string { /* ... */ }
+```
+
+---
+
+## 17. Explicit Assembly
+
+**Summary.** Build the object graph — the command tree, the route table, the plugin list — by explicit calls in one visible place, not by hidden side-effect registration.
+
+**When to use.** Any time components must be discovered and wired: CLI subcommands, HTTP routes, event handlers, plugins, DI containers, test fixtures.
+
+**Why it works.** Hidden registration makes the wiring invisible: the reader who opens the assembly point sees nothing, and the only way to learn what is registered is to grep the whole tree for the magic call. Explicit assembly turns that into one scannable list — and a list is also a table of contents (principle 5). It removes an entire class of ordering bugs (import order deciding behaviour) and makes the graph constructible twice, which is what tests need. Framework-provided declarative wiring (Symfony autowiring, Laravel service providers, Spring components) is a different thing: it is the boring choice (principle 10), documented and inspectable via tooling. The anti-pattern is *bespoke* implicit registration you invented.
+
+**Counter-pattern.** Side-Effect Registration — Go's `func init() { rootCmd.AddCommand(fooCmd) }`, a Python decorator appending to a module-global registry, a JS module that registers itself on import. Works until someone reorders imports or tree-shakes the module away.
+
+**Example (Go).**
+
+```go
+// Explicit: the tree is visible in one place, and testable twice.
+func NewFileCommand(app *App) *cobra.Command {
+    cmd := &cobra.Command{Use: "file", Short: "File operations"}
+    cmd.AddCommand(NewFileListCommand(app))
+    cmd.AddCommand(NewFileStatCommand(app))
+    return cmd
+}
+
+// Hidden (avoid): nothing at the assembly point tells the reader this exists.
+func init() { fileCmd.AddCommand(fileListCmd) }
+```
+
+---
+
+## 18. Exit at the Boundary
+
+**Summary.** Terminating the process, deciding the exit code, and rendering the final error belong to the top-level entry point. Everything below returns errors.
+
+**When to use.** Every application with an entry point: CLIs, servers, jobs, scripts. Especially in any code that might later be called from a test, a REPL, an interactive mode, or another command.
+
+**Why it works.** `os.Exit` / `sys.exit` / `die()` / `process.exit()` in the middle of a call stack is an uncatchable jump: the caller cannot recover, cannot add context, cannot test the failure path, and cannot reuse the function in a longer-lived process. Deferred cleanup does not run. Returning the error keeps every one of those options open and concentrates the policy — how errors are rendered, which exit code means what, whether usage is printed — in one place where it can stay consistent. This is the general form of "effects at the edge": the further a side effect sits from the boundary, the more code it makes untestable.
+
+**Counter-pattern.** Fatal Helper — a convenience `Fatal()` / `die()` on a logger or console helper, called from deep inside handlers. It reads as tidy at the call site and quietly makes the whole call chain unusable in any other context.
+
+**Example (Go).**
+
+```go
+// Boundary: one place decides rendering and exit code.
+func Execute() {
+    if err := NewRootCommand(app).Execute(); err != nil {
+        app.RenderError(err)
+        os.Exit(1)
+    }
+}
+
+// Handler: returns, never exits.
+func runList(cmd *cobra.Command, args []string) error {
+    items, err := store.List(cmd.Context())
+    if err != nil {
+        return fmt.Errorf("listing items: %w", err)
+    }
+    return output.PrintItems(cmd.OutOrStdout(), items)
+}
+```
+
+---
+
+## 19. Policy Lives With Its Model
+
+**Summary.** The lifecycle rules for a thing — how it is loaded, validated, persisted, defaulted, located on disk — live next to the thing, exposed as intent-revealing helpers, not as private glue at every call site.
+
+**When to use.** Configuration, settings, credentials, caches, any state with a load/modify/save cycle; also entities with invariants.
+
+**Why it works.** Scattered lifecycle glue drifts: one caller forgets the file permissions, another skips defaulting, a third saves without validating. Keeping the policy in the owning package makes the correct path the easy path and gives callers a vocabulary instead of a procedure — `config.Update(fn)` says what is happening, whereas load-mutate-save at the call site says how. Callers then read as behaviour, not as plumbing, and the invariant has exactly one home to fix when it changes.
+
+**Counter-pattern.** Glue at the Call Site — every command opening the config file, unmarshalling, mutating, remembering to `chmod 0600`, and writing it back. Twelve copies, and the twelfth is subtly wrong.
+
+**Example (Go).**
+
+```go
+// The config package owns path handling, defaults, permissions, save policy.
+config.LoadAnd(func(cfg *config.Config) error {
+    // read-only work
+})
+
+config.Update(func(cfg *config.Config) error {
+    cfg.Profiles[name] = profile
+    return nil // Save handled centrally
+})
+```
 
 ---
 

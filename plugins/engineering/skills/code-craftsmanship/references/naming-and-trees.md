@@ -1,6 +1,6 @@
 # Naming Pairs and Folder Trees
 
-This file is the concrete reference for the third lens in `SKILL.md`: naming and structure. It expands Principle 3 (Names Outlive Their Writers), Principle 7 (The Folder Tree Tells the Domain Story), and Principle 11 (Name Files the Way You'd Name Symbols) with ready-to-use tables and ASCII trees.
+This file is the concrete reference for the third lens in `SKILL.md`: naming, plus the folder structures it names. It expands Principle 1 (The Folder Tree Tells the Domain Story) and Principle 8 (Names Outlive Their Writers, which also covers filenames) with ready-to-use tables and ASCII trees.
 
 ## Table of Contents
 
@@ -16,7 +16,7 @@ This file is the concrete reference for the third lens in `SKILL.md`: naming and
    - [3.2 Full-Stack Monorepo](#32-full-stack-monorepo)
    - [3.3 TypeScript Backend Service](#33-typescript-backend-service)
    - [3.4 Go Service](#34-go-service)
-   - [3.5 PHP / Laravel Application](#35-php--laravel-application)
+   - [3.5 PHP Application (Symfony, Laravel)](#35-php-application-symfony-laravel)
 
 ---
 
@@ -74,6 +74,8 @@ Each row shows a vague name, an intent-revealing replacement, and a one-line rat
 | `Thing` | `AuditEvent` | name the domain concept |
 | `Item` | `CartLine` | name the domain concept |
 | `Record` | `InvoiceRow` | name the domain concept |
+| `Deps` | `App` | "Deps" names the implementation shape; "App" names the thing it *is* — the running application context |
+| `Context` (your own) | `RequestScope` | do not shadow a language/framework concept with a different meaning |
 
 ### Files
 
@@ -86,7 +88,8 @@ Each row shows a vague name, an intent-revealing replacement, and a one-line rat
 | `data.ts` | `invoice-types.ts` | name the domain |
 | `index.ts` (as barrel) | (delete; import from the source file directly) | barrels hide the real source |
 | `App.tsx` (1000 lines) | split into `AppShell.tsx`, `AppRoutes.tsx`, `AppProviders.tsx` | one concept per file |
-| `helpers.go` | `slugify.go` | one concept per file (Go) |
+| `package util` (Go) | `package slug`, `package httpx` — one capability per package | in Go the unit is the package; `util`/`common` are rejected by Go style guides |
+| `helpers.go` (inside a package) | `parse.go`, `render.go` — one aspect per file | group by aspect, not one micro-file per function |
 | `util.php` | `slugify.php` | one concept per file (PHP) |
 | `functions.php` (PHP, 2000 lines) | split into `slugify.php`, `format-date.php`, `invoice-helpers.php` | "functions.php" is the classic PHP junk drawer |
 | `inc/` (PHP) | `src/` or `app/` | "inc" tells you nothing |
@@ -95,7 +98,7 @@ Each row shows a vague name, an intent-revealing replacement, and a one-line rat
 
 ## 2. Filename Conventions per Ecosystem
 
-Apply language-idiomatic casing to filenames. Make the filename match the default export or primary content. Use suffix conventions for role. The conventions below are the boring choices (Principle 9 in `SKILL.md`) — follow them unless your ecosystem's framework has a stronger convention.
+Apply language-idiomatic casing to filenames. Make the filename match the default export or primary content. Use suffix conventions for role. The conventions below are the boring choices (Principle 10 in `SKILL.md`) — follow them unless your ecosystem's framework has a stronger convention.
 
 ### 2.1 TypeScript / JavaScript / React
 
@@ -123,7 +126,7 @@ Apply language-idiomatic casing to filenames. Make the filename match the defaul
 | Schema file | `*_schema.py` | `invoice_schema.py` |
 | Config file | `config.py` or `settings.py` | `settings.py` |
 
-Note: Python projects often use a top-level `tests/` folder rather than co-located tests. This is a community convention and acceptable — but if your project is small and the team prefers co-location, `test_invoice.py` next to `invoice.py` is fine and arguably better (see Principle 10 in `SKILL.md`).
+Note: Python projects often use a top-level `tests/` folder rather than co-located tests. This is a community convention and acceptable — but if your project is small and the team prefers co-location, `test_invoice.py` next to `invoice.py` is fine and arguably better (see Principle 11 in `SKILL.md`).
 
 ### 2.3 Go
 
@@ -150,7 +153,7 @@ Notes specific to Go:
 
 ### 2.4 PHP
 
-PHP has two strong sub-conventions depending on whether the project follows PSR-4 autoloading (modern, framework-agnostic) or a framework's own conventions (Laravel, Symfony). The table below gives the PSR-4 baseline; framework addenda follow.
+PHP has two strong sub-conventions depending on whether the project follows PSR-4 autoloading (modern, framework-agnostic) or a framework's own conventions (Symfony, Laravel). The table below gives the PSR-4 baseline; framework addenda follow.
 
 | File role | Convention | Example |
 |---|---|---|
@@ -158,9 +161,9 @@ PHP has two strong sub-conventions depending on whether the project follows PSR-
 | Source file (non-class, e.g. functions) | `snake_case.php` | `slugify.php`, `format_date.php` |
 | Test file | `*Test.php` (PHPUnit, co-located or in `tests/` per framework convention) | `InvoiceListTest.php` |
 | Config file | `snake_case.php` or `*.config.php` | `tax_rates.php`, `app.config.php` |
-| Routes file | `routes.php` or framework convention | `routes/web.php` (Laravel), `routes/api.php` |
-| Migration file | framework convention, usually `yyyy_mm_dd_HHMMSS_description.php` | `2025_06_20_000001_add_discount_to_invoices.php` |
-| View / template | framework convention, usually `snake_case.blade.php` (Laravel) or `snake_case.twig.html` (Symfony/Twig) | `invoice-list.blade.php` |
+| Routes file | framework convention | `config/routes.yaml` or PHP attributes (Symfony); `routes/web.php`, `routes/api.php` (Laravel) |
+| Migration file | framework convention | `migrations/Version20250620000001.php` (Doctrine); `2025_06_20_000001_add_discount_to_invoices.php` (Laravel) |
+| View / template | framework convention | `invoice/show.html.twig` (Symfony/Twig); `invoices/show.blade.php` (Laravel/Blade) |
 | Public entry point | `index.php` in the web root (e.g. `public/index.php`); all other code outside the web root | `public/index.php` |
 
 PSR-4 and namespaces:
@@ -168,17 +171,21 @@ PSR-4 and namespaces:
 - PSR-4 maps a fully-qualified class name `\App\Features\Invoices\InvoiceRepository` to the file `app/Features/Invoices/InvoiceRepository.php` (case-sensitive, exact match). **This is enforced by the autoloader** — get the casing wrong and the class will not load. Unlike TypeScript, PHP filenames are not stylistic; they are a hard requirement.
 - Namespaces mirror directory structure: `App\Features\Invoices` lives in `app/Features/Invoices/`. The namespace is the filesystem, made legal. Use this to your advantage: a folder rename in PHP *forces* a namespace update, which *forces* a `use` statement update at every call site — the language itself enforces co-location discipline.
 
-Laravel-specific notes (the boring choice for new PHP web apps):
+Symfony-specific notes:
+
+- Follow the layout Symfony ships with: `src/Controller/`, `src/Entity/`, `src/Repository/`, `src/Service/`, with service definitions in `config/services.yaml`. The boring choice is whatever `bin/console make:` produces — accept its output rather than renaming it to taste.
+- Prefer autowiring and autoconfiguration over manual service registration. Type-hint the interface, let the container resolve it; register by hand only for the cases autowiring genuinely cannot express (multiple implementations of one interface, scalar arguments).
+- Put domain logic in `src/Service/` (or `src/Domain/` in a domain-driven layout), not in controllers and not in entities. Controllers translate HTTP into domain calls and back; entities model persistence.
+- Use Doctrine repositories (`src/Repository/`) as the persistence boundary — they are already the repository pattern, so do not wrap them in a second hand-written repository layer.
+- Tests live in `tests/` mirroring `src/` under the `App\Tests\` namespace, using `KernelTestCase` / `WebTestCase`. This is one of the few places where the framework convention overrides the general "co-located unit tests" principle.
+- For validation and serialization, use the attribute-driven Validator and Serializer components before reaching for hand-rolled checks; for forms, `src/Form/*Type.php`; for authorization, voters in `src/Security/`.
+
+Laravel-specific notes:
 
 - Follow Laravel's conventions exactly: `app/Models/`, `app/Http/Controllers/`, `app/Services/`, `app/Repositories/` are the framework's idiomatic layers. Do not invent parallel structures.
 - Use Laravel's `Illuminate\Support\` facades and helpers as the boring choice; reach for plain classes only when the facade genuinely gets in the way.
 - Put domain logic in `app/Services/` (or `app/Actions/` for action-style classes), not in controllers or models. Controllers handle HTTP, models handle persistence and basic validation, services hold the domain.
-- Use Laravel's built-in test helpers (`RefreshDatabase`, `TestCase`) and put tests in `tests/Feature/` (HTTP-level) and `tests/Unit/` (isolated). This is one of the few places where the framework convention overrides the general "co-located unit tests" principle — Laravel's testing tooling expects the `tests/` directory layout.
-
-Symfony-specific notes (the boring choice for enterprise PHP):
-
-- Follow the bundle / module layout Symfony ships with. Service definitions go in `config/services.yaml`; controllers in `src/Controller/`; entities in `src/Entity/`; repositories in `src/Repository/`.
-- Prefer Symfony's autowiring and autoconfiguration over manual service registration. The boring choice is the one the framework's `bin/console make:` commands produce.
+- Use Laravel's built-in test helpers (`RefreshDatabase`, `TestCase`) and put tests in `tests/Feature/` (HTTP-level) and `tests/Unit/` (isolated) — the same framework override of the co-located-tests principle.
 
 PHP anti-patterns to refuse:
 
@@ -526,9 +533,9 @@ my-service/
 
 Why it works: `cmd/api/main.go` and `cmd/worker/main.go` are thin entry points that wire dependencies and start the server — they contain no business logic. Everything else lives under `internal/`, which the Go compiler enforces as private to this module (no other module can import `my-service/internal/invoices`). Each domain feature is a package (`invoices/`, `auth/`, `billing/`) containing its types, service, repository, handler, routes, and tests — co-located and changing together. The package name (`invoices`) is the public API surface: only the exported symbols (`Invoice`, `NewService`, `RegisterRoutes`) are visible to other packages. There is no `pkg/` directory (the modern Go community has moved away from it). Tests are `*_test.go` next to the source, as the `go` tool requires. A new contributor reading the tree immediately sees: this service has invoices, auth, and billing, plus the shared `httpserver` and `postgres` infrastructure.
 
-### 3.5 PHP / Laravel Application
+### 3.5 PHP Application (Symfony, Laravel)
 
-PHP web applications have a distinctive shape because the web entry point (`public/index.php`) is fixed by the framework, all routing goes through a front controller, and PSR-4 autoloading ties class names to file paths exactly. The Laravel layout below is the boring choice for new PHP web apps; Symfony's layout is similar in spirit.
+PHP web applications have a distinctive shape because the web entry point (`public/index.php`) is fixed by the framework, all routing goes through a front controller, and PSR-4 autoloading ties class names to file paths exactly. Symfony is the primary layout below; the Laravel variant follows, and the two differ in folder names rather than in principle.
 
 #### Questionable
 
@@ -553,6 +560,68 @@ my-app/
 ```
 
 Problems: `inc/` is a junk-drawer name; `functions.php` is the classic PHP anti-pattern; `classes/` does not match PSR-4 (which expects `src/` or `app/`); assets mixed with the entry point in `public/`; ad-hoc config and routes in the root rather than framework convention.
+
+#### Good (Symfony)
+
+```text
+my-app/
+  src/                            # PSR-4 root: App\ namespace
+    Controller/
+      InvoiceController.php       # App\Controller\InvoiceController
+      SecurityController.php
+    Entity/                       # Doctrine entities
+      Invoice.php
+      User.php
+    Repository/                   # Doctrine repositories
+      InvoiceRepository.php
+    Service/                      # domain logic — the boring place for it
+      InvoiceService.php
+      BillingService.php
+    Form/                         # form types
+      InvoiceType.php
+    Dto/                          # request/response shapes
+      InvoiceInput.php
+    EventSubscriber/
+      InvoiceSubscriber.php
+    Security/
+      InvoiceVoter.php
+    Command/                      # console commands
+      ImportInvoicesCommand.php
+    Kernel.php
+  config/
+    services.yaml                 # DI: autowiring + autoconfiguration
+    routes.yaml                   # or attribute routing on the controllers
+    packages/                     # per-bundle config
+      doctrine.yaml
+      security.yaml
+      twig.yaml
+  migrations/                     # DoctrineMigrationsBundle
+    Version20250620000001.php
+    Version20250620000002.php
+  templates/                      # Twig, mirrors the controller structure
+    invoice/
+      index.html.twig
+      show.html.twig
+    base.html.twig
+  translations/
+    messages.en.xlf
+  public/
+    index.php                     # the single web entry point
+  tests/                          # mirrors src/, PSR-4 as App\Tests\
+    Controller/
+      InvoiceControllerTest.php
+    Service/
+      InvoiceServiceTest.php
+  bin/
+    console                       # CLI entry point
+  var/                            # cache, logs (gitignored)
+  composer.json
+  .env
+```
+
+Why it works: PSR-4 maps `App\Service\InvoiceService` to `src/Service/InvoiceService.php` exactly — the namespace is the filesystem, made legal. The folder names are the ones `bin/console make:` generates, so every Symfony developer can navigate the tree without being told. Domain logic lives in `src/Service/` (or `src/Domain/` in a domain-driven layout), not in controllers, which only translate HTTP to domain calls, and not in entities, which only model persistence. Autowiring in `config/services.yaml` means services are wired by type rather than registered by hand — the boring choice. Migrations are versioned classes managed by DoctrineMigrationsBundle. Templates mirror the controller structure (`src/Controller/InvoiceController.php` → `templates/invoice/`), so a reader who found the controller can guess the template path. Tests mirror `src/` under the `App\Tests\` namespace — Symfony's convention, and one of the few places a framework overrides the general "co-located unit tests" principle. The single web entry point is `public/index.php`; everything else lives outside the web root, so a misconfigured server cannot serve source files directly.
+
+For a large Symfony application, a feature-oriented overlay is acceptable and increasingly common: `src/Invoicing/{Controller,Entity,Service}/`, `src/Billing/{...}/` — one top-level folder per bounded context, each holding the same layer folders. Principle 1 (the folder tree tells the domain story) favours this once the app has several contexts; below that size, the flat layer layout is the boring choice.
 
 #### Good (Laravel)
 
@@ -620,9 +689,9 @@ my-app/
   .env.example
 ```
 
-Why it works: PSR-4 maps `App\Models\Invoice` to `app/Models/Invoice.php` exactly — the namespace is the filesystem, made legal. Laravel's conventions (`app/Http/Controllers/`, `app/Services/`, `app/Models/`, `routes/`, `config/`, `database/migrations/`, `tests/Feature/`, `tests/Unit/`) are the boring choice and the entire ecosystem expects them; deviating forces every future contributor to learn your custom layout. Domain logic lives in `app/Services/` (or `app/Actions/` for single-action classes), not in controllers (which only handle HTTP) or models (which only handle persistence and validation). Migrations are timestamped and framework-managed — the filesystem itself is the migration history. Tests are split into `Feature/` (HTTP-level, with database refresh) and `Unit/` (isolated), which is Laravel's testing convention and overrides the general "co-located unit tests" principle because Laravel's test tooling expects this layout. The single web entry point is `public/index.php`; everything else is outside the web root, so a misconfigured server cannot serve source files directly.
+Why it works: the same reasoning as the Symfony tree, with Laravel's folder names. `app/` is the PSR-4 root instead of `src/`; controllers sit under `app/Http/Controllers/`; models are Eloquent classes in `app/Models/` rather than Doctrine entities; routes live in dedicated `routes/*.php` files instead of attributes or `config/routes.yaml`; migrations are timestamped files rather than versioned classes; templates are Blade under `resources/views/` rather than Twig under `templates/`. Domain logic still belongs in `app/Services/` (or `app/Actions/` for single-action classes), not in controllers or models. Tests split into `tests/Feature/` (HTTP-level, with database refresh) and `tests/Unit/` (isolated) — again a framework override of the co-located-tests principle.
 
-Why the Symfony version differs: Symfony puts application code in `src/` (not `app/`), uses YAML or PHP config in `config/`, and organises by bundle in larger projects. The principles are identical — PSR-4 mapping, framework conventions as the boring choice, domain logic in services rather than controllers — but the specific folder names follow Symfony's conventions. When in doubt, run `bin/console make:` and accept whatever Symfony generates.
+Which to pick: whichever the project already uses. For a new project, take the one your team knows — both are boring choices in their own ecosystem, and mixing their conventions (Laravel folder names in a Symfony app, or a hand-rolled service container in either) is the only genuinely wrong answer. When in doubt inside an existing project, run `bin/console make:` (Symfony) or `artisan make:` (Laravel) and accept what the framework generates.
 
 ---
 
