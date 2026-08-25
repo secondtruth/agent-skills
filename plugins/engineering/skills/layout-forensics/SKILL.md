@@ -31,21 +31,37 @@ Walk the loaded stylesheets and collect every rule that matches the element and 
 
 ```js
 (() => {
-  const el = document.querySelector('.your-element'), prop = 'margin-bottom', hits = [];
+  const el = document.querySelector('.your-element'), prop = 'margin-bottom';
+  const hits = [], unreadable = [];
+  // a conditional group only counts when its condition holds right now
+  const active = r => r.media ? matchMedia(r.conditionText).matches
+                    : r.conditionText ? CSS.supports(r.conditionText)
+                    : true;
   const walk = (rules, href) => { for (const r of rules) {
+    if (r.styleSheet) {                                    // @import
+      try { walk(r.styleSheet.cssRules, (r.styleSheet.href || href).split('/').pop()); }
+      catch { unreadable.push(r.href); }
+      continue;
+    }
     if (r.selectorText && r.style?.getPropertyValue(prop)) {
       try { if (el.matches(r.selectorText)) hits.push({ file: href, sel: r.selectorText,
         value: r.style.getPropertyValue(prop), important: r.style.getPropertyPriority(prop) }); }
       catch { /* a selector the engine declines to match, e.g. ::before */ }
     }
-    if (r.cssRules?.length) walk(r.cssRules, href);       // @media, @supports, @layer, nesting
+    if (r.cssRules?.length && active(r)) walk(r.cssRules, href);   // @media, @supports, @layer, nesting
   }};
   for (const s of document.styleSheets) {
-    try { walk(s.cssRules, (s.href || 'inline').split('/').pop()); } catch { /* cross-origin */ }
+    try { walk(s.cssRules, (s.href || 'inline').split('/').pop()); }
+    catch { unreadable.push(s.href || 'inline'); }        // cross-origin: CSSOM stays closed
   }
-  return hits;                                    // last entry usually wins; !important always does
+  return { hits, inline: el.style.getPropertyValue(prop) || null, unreadable };
 })()
 ```
+
+**The result is a candidate list, not a verdict.** The cascade picks the winner by origin and importance, then layer, then specificity, then order — so the last entry wins only among rules of equal weight, and an earlier ID selector still beats a later class. Inline styles come back separately because they outrank all of it. When the winning declaration is what you need rather than the set of places the value is declared, read it off the browser's matched-rules panel, which computes the cascade for you. What this snippet answers reliably is the question the panel answers poorly: *which files and selectors participate*, which is what tells you where a fix belongs.
+
+A non-empty `unreadable` means some stylesheet stayed closed, so treat the hits as partial until those are checked another way.
+
 
 Test the recursion condition on `r.cssRules?.length` rather than on `r.cssRules`. Since CSS nesting shipped, every plain style rule carries an empty rule list, which is truthy — a version that branches on the bare property skips every rule it was meant to examine and reports a confident empty result.
 
@@ -57,15 +73,23 @@ A missing rule and a wrong rule look identical in a screenshot and behave differ
 
 ```js
 (() => {
-  let n = 0;
+  let n = 0; const unreadable = [];
   const walk = rules => { for (const r of rules) {
+    if (r.styleSheet) {                                    // @import
+      try { walk(r.styleSheet.cssRules) } catch { unreadable.push(r.href) }
+      continue;
+    }
     if (r.selectorText?.includes('fill-success')) n++;
-    if (r.cssRules?.length) walk(r.cssRules);
+    if (r.cssRules?.length) walk(r.cssRules);   // a class defined only inside @media still exists
   }};
-  for (const s of document.styleSheets) { try { walk(s.cssRules) } catch { } }
-  return n;                                   // 0 means the class was never generated
+  for (const s of document.styleSheets) {
+    try { walk(s.cssRules) } catch { unreadable.push(s.href || 'inline') }
+  }
+  return { count: n, unreadable };
 })()
 ```
+
+A count of zero carries the conclusion only while `unreadable` is empty. A framework served from a CDN keeps its CSSOM closed to the page, and the same zero then means "this sheet stayed shut" rather than "the class was never generated" — check those separately, by fetching the stylesheet and searching its text.
 
 Frameworks generate utility families selectively: a theme-colour loop that covers backgrounds may skip fills, and a consuming template that assumes the full set gets silence rather than an error. Confirm against the built stylesheet, since the source may define what the build declines to emit.
 
@@ -92,7 +116,7 @@ Geometry has inputs beyond margins and padding. Check these when the numbers loo
 
 ## Confirming the fix
 
-Re-measure at every viewport that was in question, against a control element that already rendered correctly. Stylesheets cache aggressively: when a verified-correct edit appears to do nothing, force a fresh document — a changed query string on the page URL is the blunt, reliable way — before doubting the edit. Two rounds of chasing a fix that had already landed is the usual cost of skipping this.
+Re-measure at every viewport that was in question, against a control element that already rendered correctly. Stylesheets cache aggressively, and the cache key is the stylesheet's own URL, so a fresh query string on the *page* leaves a cached CSS response eligible for reuse. Bypass it at the stylesheet instead: load the page with the cache disabled, or give the stylesheet URL its own cache-busting parameter. Then confirm by measuring a value the edit changed, rather than by trusting that the reload did what it looked like it did — reload gestures behave differently across browsers and embedded panes, and two rounds of chasing a fix that had already landed is the usual cost of assuming.
 
 ## Scope
 
