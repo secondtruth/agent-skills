@@ -1,0 +1,5 @@
+interface:
+  display_name: "Style Pass"
+  short_description: "Sweep a UI for style defects and fix them"
+policy:
+  allow_implicit_invocation: false
