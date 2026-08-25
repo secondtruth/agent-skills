@@ -11,6 +11,8 @@ disable-model-invocation: true
 
 # Style Pass
 
+Each step below is another skill's job: invoke it rather than redoing its work here. One report at the end, covering all of them.
+
 1. **Spatial audit** — the `spacing-rhythm-auditor` skill. Establishes the project's spacing system, then measures against it.
 2. **Token drift** — the `audit-design-tokens` skill: colour, type, z-index.
 3. **Causation** — the `layout-forensics` skill when it is among your available skills, for findings whose source or owning layer is unclear, or that return after a fix. Findings with an obvious local cause skip it.
