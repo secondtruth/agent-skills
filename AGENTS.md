@@ -36,9 +36,19 @@ The trap this repository sets. Bumping a plugin means editing all of:
    `interface.shortDescription`
 
 Missing the third produces a plugin that reports a stale version and description to Codex
-while Claude sees the new one. `grep -rn "<old-version>" --include='*.json' .` comes back
-empty when the bump is complete. Adding or removing a skill also updates the plugin
-description, its keywords, and the README's table.
+while Claude sees the new one. The bump is complete once the plugin's three version fields
+agree. Check them directly rather than grepping the repository for the old number, which
+raises a false alarm whenever another plugin still legitimately carries it:
+
+```bash
+p=engineering
+{ jq -r --arg p "$p" '.plugins[]|select(.name==$p)|.version' .claude-plugin/marketplace.json
+  jq -r .version plugins/$p/.claude-plugin/plugin.json plugins/$p/.codex-plugin/plugin.json
+} | sort -u          # one line: the three agree
+```
+
+Adding or removing a skill also updates the plugin description, its keywords, and the
+README's table.
 
 Validate with `claude plugin validate .` before opening the pull request.
 
@@ -48,9 +58,14 @@ A release is a version bump merged via pull request — adding a skill is a mino
 wording or content fix a patch. Merge by squash; the merge appends the PR number to the
 subject, which is where the history's `(#N)` suffixes come from.
 
-## The synced copies are install targets
+## Installed copies are outputs
 
-`scripts/check-drift.sh` compares each skill here with the copy claude.ai has synced to the
-machine, reporting SAME, DIFFER or NOT ONLINE. Those copies, and the ones under
-`~/.agents/skills/` and `~/.codex/plugins/`, are outputs: edits made there are lost on the
-next sync. Every change starts in this repository.
+`scripts/check-drift.sh` compares each skill here with the copy **claude.ai** has synced to
+this machine, reporting SAME, DIFFER or NOT ONLINE. It takes that directory from
+`CLAUDE_SKILLS_SYNC` when the variable is set and discovers it otherwise, and it looks at no
+other install path.
+
+The remaining paths — the skills CLI, the Claude Code plugin install, Codex — each write a
+copy of their own somewhere else. Every one of them is an output: an edit made in an
+installed copy is lost on the next sync, and the drift script stays silent about it. Every
+change starts in this repository.
