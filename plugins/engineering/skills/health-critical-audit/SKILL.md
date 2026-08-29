@@ -122,6 +122,11 @@ Flag gaps against the regime the app targets; make no determinations.
   the Art. 6/9 stacking and DPIA content.
 - Disclaimers and review-status claims in README/regulatory notes must match
   the metadata found in step 1; every mismatch is a finding.
+- General site-law duties of a public deployment — Impressum, privacy
+  policy, consent management — are the `web-compliance` skill's territory:
+  flag their absence, then hand over rather than re-auditing them here.
+  This audit keeps one slice of that surface: whether the privacy claims
+  match what the code transmits.
 
 ## Step 6 — Report
 
