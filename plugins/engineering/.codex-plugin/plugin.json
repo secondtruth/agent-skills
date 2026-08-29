@@ -1,7 +1,7 @@
 {
   "name": "engineering",
-  "version": "0.4.0",
-  "description": "Craft skills for building software: code structure and naming, CLI and service design, product UI, layout forensics and style passes, web compliance (Impressum, consent, DSGVO), fork stewardship, spec writing, project conception.",
+  "version": "0.5.0",
+  "description": "Craft skills for building software: code structure and naming, CLI and service design, product UI, layout forensics and style passes, web compliance (Impressum, consent, DSGVO), health-critical audit, fork stewardship, spec writing, project conception.",
   "author": {
     "name": "Christian Neff",
     "url": "https://github.com/secondtruth"
@@ -13,13 +13,14 @@
     "architecture",
     "ui",
     "layout",
-    "compliance"
+    "compliance",
+    "audit"
   ],
   "license": "MIT",
   "skills": "./skills/",
   "interface": {
     "displayName": "Engineering",
-    "shortDescription": "Building software well: code structure, CLI and service design, product UI, layout forensics, web compliance, fork stewardship, specs.",
+    "shortDescription": "Building software well: code structure, CLI and service design, product UI, layout forensics, web compliance, health-critical audit, fork stewardship, specs.",
     "category": "Development"
   }
 }

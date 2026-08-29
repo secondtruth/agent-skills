@@ -5,13 +5,13 @@
     "name": "Christian Neff",
     "url": "https://github.com/secondtruth"
   },
-  "description": "secondtruth's agent skills — engineering craft, thinking tools, agent workflows.",
+  "description": "secondtruth's agent skills \u2014 engineering craft, thinking tools, agent workflows.",
   "plugins": [
     {
       "name": "engineering",
       "source": "./plugins/engineering",
-      "description": "Craft skills for building software: code structure and naming, CLI and service design, product UI, layout forensics and style passes, web compliance (Impressum, consent, DSGVO), fork stewardship, spec writing, project conception.",
-      "version": "0.4.0",
+      "description": "Craft skills for building software: code structure and naming, CLI and service design, product UI, layout forensics and style passes, web compliance (Impressum, consent, DSGVO), health-critical audit, fork stewardship, spec writing, project conception.",
+      "version": "0.5.0",
       "category": "development",
       "keywords": [
         "engineering",
@@ -20,7 +20,8 @@
         "architecture",
         "ui",
         "layout",
-        "compliance"
+        "compliance",
+        "audit"
       ],
       "homepage": "https://github.com/secondtruth/agent-skills"
     },
