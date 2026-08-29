@@ -48,9 +48,10 @@ repo carries; a registry entry that is a "general pointer" rather than a
 line-level derivation is a finding, and content with no source at all is a
 severity-1 finding.
 
-Medication, dosing, or diagnosis statements are outside first-aid scope
-wherever the app's own regulatory notes say so — each occurrence is a
-finding regardless of correctness.
+Every medication, dosing, or diagnosis statement is a finding regardless of
+correctness — first-aid scope excludes all three. The app's own regulatory
+notes serve as evidence inside the finding, never as the condition for
+raising it: notes that are silent on a statement leave the finding standing.
 
 Done when every instruction is either traced to a named source or flagged.
 
@@ -64,9 +65,19 @@ text is a finding, not a rail. Check:
 - Red-flag detection runs on every user turn before any triage question.
 - Emergency-first messaging: on a red flag the emergency number comes first,
   with a one-tap call affordance; triage questions follow, never precede.
-- Emergency and crisis numbers are region-correct data (112/116117 and
-  Telefonseelsorge 0800-111-0-111 for de-DE; 911/988 for en-US), maintained
-  as a table, kept out of the prompt.
+- Emergency and crisis numbers are jurisdiction-keyed data, maintained as a
+  table, kept out of the prompt. A locale is a language; a jurisdiction is
+  where the user stands. Routing keyed to the UI locale is a finding: a
+  traveller with a German UI gets a one-tap call to a number that is dead
+  where they are. The audit checks for a jurisdiction source (deployment
+  region constraint, or device region with a stated fallback) independent of
+  localization.
+- Each table entry carries its branch condition. Germany: 112 for
+  life-threatening emergencies, 116117 only for urgent problems that are
+  clearly not life-threatening, Telefonseelsorge 0800-111-0-111 for crisis
+  support. US: 911 and 988. A red flag routes to the emergency number
+  alone — an entry whose condition is undefined can surface 116117 as an
+  emergency option, which is a finding.
 - Handoff to a human — dispatcher, crisis line — is reachable from every
   conversational state.
 - Offline behaviour: when the model is unreachable, the deterministic path
@@ -94,11 +105,16 @@ a finding.
 
 Flag gaps against the regime the app targets; make no determinations.
 
-- EU market: does the repo carry an MDR classification assessment
-  (MDCG 2019-11 / Annex VIII Rule 11)? An ISO 14971 risk file? Absence of
-  each is a finding. The `mdr-745-specialist` and
-  `risk-management-specialist` skills, when they are among your available
-  skills, supply the classification algorithm and risk-file structure.
+- EU market: establish applicability first. Does the repo assess the app's
+  intended purpose against MDR Art. 2(1) (MDCG 2019-11 / Annex VIII
+  Rule 11)? A missing assessment is its own finding, reported as "MDR
+  applicability unresolved". Where the assessment concludes the app is a
+  medical device — or the repo itself claims that regime — an absent
+  ISO 14971 risk file is a severity-3 finding; for software the assessment
+  places outside MDR scope, it is a recommendation rather than a blocker.
+  The `mdr-745-specialist` and `risk-management-specialist` skills, when
+  they are among your available skills, supply the classification algorithm
+  and risk-file structure.
 - Health data under GDPR: voice input, location, and path logs are
   Art. 9 special-category candidates — check the DPIA status and that the
   privacy claims in the docs match what the code transmits. The
