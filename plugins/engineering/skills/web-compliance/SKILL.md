@@ -55,7 +55,8 @@ These are where real banners and real Impressums fail. Treat them as invariants 
 - **Newsletters:** double opt-in, § 7 UWG, the advertising-consent wording. Implementation belongs to the mail tool; the privacy section is covered here.
 - **Accessibility (BFSG, since 2025-06-28):** applies to B2C e-commerce and services above the micro-enterprise threshold; WCAG 2.1 AA via EN 301 549. Flag applicability; the implementation is UI work (the `product-ui-design` skill when it is among your available skills).
 - **AI transparency (AI Act Art. 50, since 2026-08-02):** chatbots disclose that they are AI; synthetic media is labelled. Flag it when the inventory shows a chat widget or generated imagery.
-- **Consent-or-pay ("Pur-Abo") models, employee data, health data, minors:** counsel.
+- **Consent-or-pay ("Pur-Abo") models, employee data, minors:** counsel.
+- **Health data:** counsel makes the legal call; the `gdpr-health-data` and `health-critical-audit` skills, when they are among your available skills, cover the Art. 9/DPIA engineering controls and the audit of apps whose content affects health outcomes.
 
 ## Tooling and alternatives
 
