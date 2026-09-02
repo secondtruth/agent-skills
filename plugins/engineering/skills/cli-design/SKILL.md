@@ -52,6 +52,7 @@ Structure and naming rules come from the `code-craftsmanship` skill when it is a
 ### Configuration
 
 - **Precedence, highest first:** flags → environment variables → project config → user config → system config.
+- **Flags name choices, the environment names context.** When a second subcommand needs the connection details a first one already takes (endpoint, region, credentials), the shared part moves to the ecosystem's env contract — `AWS_*` for S3-compatible stores, `PG*` for Postgres — and each subcommand keeps one flag naming its own target, URL-shaped where the target has a URL form (`--backup-s3 s3://bucket/prefix` — one flag per purpose where a `--backup-s3-*` family would grow five). The general rule and its timing live in the `code-craftsmanship` skill when it is among your available skills (context once, choices per use).
 - **Secrets arrive via file, stdin, or a credential service.** Flags and env vars leak them — `ps`, shell history, logs, `docker inspect`.
 
 The full conventions — standard env vars, responsiveness targets, robustness, future-proofing — are in `references/interface.md`.
