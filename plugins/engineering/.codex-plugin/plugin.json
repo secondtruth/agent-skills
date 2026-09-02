@@ -1,6 +1,6 @@
 {
   "name": "engineering",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Craft skills for building software: code structure and naming, CLI and service design, product UI, layout forensics and style passes, web compliance (Impressum, consent, DSGVO), health-critical audit, fork stewardship, spec writing, project conception.",
   "author": {
     "name": "Christian Neff",
