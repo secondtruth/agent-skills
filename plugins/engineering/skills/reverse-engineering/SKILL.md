@@ -102,6 +102,5 @@ off the repository in a scratch directory the document names. A consumer's
 constants live in one header with a comment per address that points back to
 the document.
 
-When the `code-craftsmanship` skill is among your available skills its rules
-apply to the consumer code; the `cli-design` skill, when available, to any
-tool built around the session.
+The consumer code follows the `code-craftsmanship` skill when it is among your available skills.
+A tool built around the session follows the `cli-design` skill when it is among your available skills.
