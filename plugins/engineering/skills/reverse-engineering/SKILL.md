@@ -95,9 +95,14 @@ the native side lost.
 
 ## Writing it down
 
-Document per finding: the address (file image base, with the note that the
-loaded image is relocated), the layout as a table of offsets, the scale
-constants, the evidence, and the standing. Keep working listings and dumps
+Document per finding: the address as a virtual address at the file's
+preferred image base (which is what disassemblers print), the layout as a
+table of offsets, the scale constants, the evidence, and the standing. A
+loaded image is relocated, so the consumer resolves every address as the
+module's runtime base plus the address minus the preferred base -- one
+function (`At(fileAddress)`) used everywhere, and stated once in the
+document. Keep file offsets (what `strings -t x` prints) apart from virtual
+addresses: the section table maps between them. Keep working listings and dumps
 off the repository in a scratch directory the document names. A consumer's
 constants live in one header with a comment per address that points back to
 the document.
