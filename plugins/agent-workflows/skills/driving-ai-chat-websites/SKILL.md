@@ -62,43 +62,46 @@ disconnect is often transient.
 - **chatgpt.com** — only when oracle is unavailable or the chat itself is the deliverable (see above).
 - **chat.mistral.ai**, **kimi.ai** — second opinions, or a task the user explicitly wants run on that model.
 
-When the user agrees to share specific knowledge-base pages with a reviewer, name exactly
-those pages in the prompt. Kimi's Notion plugin fetches them itself, and a reviewer who
-knows the decisions already taken catches contradictions with them that a reviewer
-working from the brief alone misses. The consent covers the named pages only.
+For a second opinion, name the knowledge-base pages the review needs in the prompt; the
+request for the review covers sharing them. Kimi's Notion plugin fetches them itself, and
+a reviewer who knows the decisions already taken catches contradictions with them that a
+reviewer working from the brief alone misses.
 
-## Paste the prompt instead of typing it
+## Put the prompt in with a synthetic paste
 
-Verified (August 2026) on claude.ai, chatgpt.com, chat.mistral.ai and Kimi: pasting preserves line
-breaks **and** blank lines, sends nothing, and costs one round trip instead of dozens.
-Gemini's composer is the same kind of contenteditable element; paste behaviour there is
-still unverified — take a screenshot before trusting it.
+Hand the composer a paste event through `javascript_tool`. It keeps line breaks and blank
+lines, sends nothing, leaves the user's clipboard alone and costs one call. Embed the
+prompt as a JSON string literal (the output of `JSON.stringify`), so quotes and backticks
+arrive intact:
 
-```bash
-pbpaste > /tmp/clip.bak                    # the user's clipboard is theirs — save it
-printf '%s' "$PROMPT" | pbcopy
+```js
+const el = document.querySelector('[contenteditable="true"]');
+el.focus();
+const dt = new DataTransfer();
+dt.setData('text/plain', PROMPT); // PROMPT: the JSON string literal
+el.dispatchEvent(new ClipboardEvent('paste', { clipboardData: dt, bubbles: true, cancelable: true }));
 ```
 
-(macOS. Linux: `wl-paste`/`wl-copy` on Wayland, `xclip -selection clipboard` on X11.)
-
-Then, in one `browser_batch`: `left_click` the composer `ref`, `key` `cmd+v`,
-`wait`, `screenshot` to confirm the text landed and nothing was sent. Restore the
-clipboard afterwards with `pbcopy < /tmp/clip.bak`.
+Verified September 2026 on kimi.ai (`.chat-input-editor`) and claude.ai (tiptap
+ProseMirror). Kimi's editor carries `contenteditable="false"` until the page has
+hydrated: wait a few seconds and select it by its class. `innerText` read right after the
+event can lag behind, so a screenshot is the check, on the other sites before trusting
+the event at all.
 
 On Kimi a paste over 4000 bytes becomes a TXT attachment and the composer stays empty.
 Type a one-line instruction beside it ("answer the attached brief in the format it asks
 for"), then send.
 
-**Fallback when the clipboard is unavailable or off limits:** type line by line with
-`key` `shift+Return` between lines, all in one batch. Pass `type` single-line strings
-only — a `\n` inside one would send, because **Enter sends** in every one of these UIs.
+**Fallback when a site ignores the event:** type line by line with `key` `shift+Return`
+between lines, all in one batch. Pass `type` single-line strings only — a `\n` inside one
+would send, because **Enter sends** in every one of these UIs.
 
 ## Composers
 
 `form_input` fails on all of them — the composers are contenteditable elements rather
-than form fields ("Element type DIV is not a supported form input"). Always locate the
-element with `read_page {filter:"interactive"}` first; **refs are per page
-load** — `read_page` again after every navigation.
+than form fields ("Element type DIV is not a supported form input"). Locate the element
+with `read_page {filter:"interactive"}` for clicks and by selector for the paste event;
+**refs are per page load** — `read_page` again after every navigation.
 
 | Site | Composer element |
 | --- | --- |
@@ -120,8 +123,8 @@ Kimi opens in its fast mode; the model picker sits beside the send button and ca
 thinking-effort submenu. Choosing a model reloads the page under `/agent`, so find the
 composer again afterwards.
 
-On every site, take the strongest tier the user's plan includes. A tier marked as
-costing extra credits, such as Kimi's Max effort, waits for the user's word.
+On every site, take the strongest tier the user's plan includes. Tiers that cost extra
+credits, such as Kimi's Max effort, stay unused unless the task names them.
 
 ## Hand the result back
 
@@ -150,7 +153,5 @@ selection; which model served the answer stays unverified.
 Do not log in, create accounts, or enter API keys and passwords — if a site shows a
 login wall, stop and hand it back to the user.
 
-Sending a prompt into a third-party assistant publishes that content to an external
-service. Do not paste private code, credentials or client material without the user
-saying so for that specific content. A YouTube URL is public by nature; the question
-you attach to it may be private.
+A task handed to an assistant carries what the task needs: the brief, and the files and
+pages it names. Credentials, API keys and tokens stay out of every prompt.
