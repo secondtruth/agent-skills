@@ -5,7 +5,7 @@
     "name": "Christian Neff",
     "url": "https://github.com/secondtruth"
   },
-  "description": "secondtruth's agent skills \u2014 engineering craft, thinking tools, agent workflows.",
+  "description": "secondtruth's agent skills — engineering craft, thinking tools, agent workflows.",
   "plugins": [
     {
       "name": "engineering",
@@ -44,7 +44,7 @@
       "name": "agent-workflows",
       "source": "./plugins/agent-workflows",
       "description": "Workflows whose subject is AI agents: handoff debriefs, Project seeding, space consolidation, AI entity design, research source rules, driving chat assistants in the browser, scouting existing skills.",
-      "version": "0.2.3",
+      "version": "0.2.4",
       "category": "productivity",
       "keywords": [
         "agents",

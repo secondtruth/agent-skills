@@ -1,7 +1,7 @@
 ---
 name: driving-ai-chat-websites
 license: MIT
-description: Drive an AI chat assistant's website through the user's browser to hand it a task and bring the result back — claude.ai, chatgpt.com, gemini.google.com, chat.mistral.ai, kimi.com. Use for skill updates via claude.ai, YouTube ingestion via Gemini, a second opinion from another model, or any task that must run in a logged-in web session. Prefer oracle for ChatGPT when available.
+description: Drive an AI chat assistant's website through the user's browser to hand it a task and bring the result back — claude.ai, chatgpt.com, gemini.google.com, chat.mistral.ai, kimi.ai. Use for skill updates via claude.ai, YouTube ingestion via Gemini, a second opinion from another model, or any task that must run in a logged-in web session. Prefer oracle for ChatGPT when available.
 ---
 
 Type into a chat composer and you are one keystroke away from posting a half-written
@@ -26,6 +26,17 @@ Drive the site by hand when oracle is absent, for claude.ai, Mistral and Kimi, f
 YouTube ingestion via Gemini, and whenever the deliverable is the chat itself — a link
 the user continues in, or a button they press there.
 
+## Kimi: the CLI first, the website when its quota runs out
+
+When the Kimi Code CLI (`kimi`) is installed, it answers headless: run
+`kimi -m <model> -p "<prompt>"` from a scratch directory and read stdout. State in the
+prompt that the answer is text only, from the model's own knowledge. Verified September
+2026 with kimi-code 0.41:
+
+- `-p` refuses to combine with `--plan`, so the scratch directory is the safeguard.
+- The CLI's plan runs on a five-hour quota. A 403 naming the usage limit means the window
+  is spent; the website keeps working on the same account in the meantime.
+
 ## Which browser surface
 
 Use **claude-in-chrome** (`mcp__claude-in-chrome__*`) — it drives the user's real
@@ -43,11 +54,15 @@ disconnect is often transient.
 - **claude.ai** — plugin skill updates (the install button lives in the resulting chat), and anything that should run as Claude with the user's claude.ai context.
 - **gemini.google.com** — **YouTube videos.** Gemini reads a public YouTube video straight from its URL: paste the link into the prompt together with the question (summary, transcript, timestamps, "what does the speaker claim about X"). No download, no transcript tool, no upload step. Also the natural choice for anything else living in the user's Google account. oracle's Gemini support is documented for text and images only — drive the site for video.
 - **chatgpt.com** — only when oracle is unavailable or the chat itself is the deliverable (see above).
-- **chat.mistral.ai**, **kimi.com** — second opinions, or a task the user explicitly wants run on that model.
+- **chat.mistral.ai**, **kimi.ai** — second opinions, or a task the user explicitly wants run on that model.
+
+For a second opinion, name the knowledge-base pages the reviewer should read. Kimi's
+Notion plugin fetches them itself, and a reviewer who knows the decisions already taken
+catches contradictions with them that a reviewer working from the brief alone misses.
 
 ## Paste the prompt — do not type it
 
-Verified (August 2026) on claude.ai, chatgpt.com, chat.mistral.ai and kimi.com: pasting preserves line
+Verified (August 2026) on claude.ai, chatgpt.com, chat.mistral.ai and Kimi: pasting preserves line
 breaks **and** blank lines, sends nothing, and costs one round trip instead of dozens.
 Gemini's composer is the same kind of contenteditable element; paste behaviour there has
 not been checked yet — take a screenshot before trusting it.
@@ -62,6 +77,10 @@ printf '%s' "$PROMPT" | pbcopy
 Then, in one `browser_batch`: `left_click` the composer `ref`, `key` `cmd+v`,
 `wait`, `screenshot` to confirm the text landed and nothing was sent. Restore the
 clipboard afterwards with `pbcopy < /tmp/clip.bak`.
+
+On Kimi a paste over 4000 bytes becomes a TXT attachment and the composer stays empty.
+Type a one-line instruction beside it ("answer the attached brief in the format it asks
+for"), then send.
 
 **Fallback when the clipboard is unavailable or must not be touched:** type line by
 line with `key` `shift+Return` between lines, all in one batch. Never pass a string
@@ -80,7 +99,7 @@ load** — `read_page` again after every navigation.
 | chatgpt.com | `textbox "Message ChatGPT"` (localised) |
 | gemini.google.com | `textbox "Enter a prompt for Gemini"` (localised; German UI: "Einen Prompt für Gemini eingeben") |
 | chat.mistral.ai | unnamed `generic` inside a `form` — no accessible label |
-| kimi.com | unnamed `textbox` |
+| kimi.ai | unnamed `textbox` |
 
 `chat.mistral.ai/chat` may redirect to `/work` (seen August 2026). If the task belongs in plain chat, switch
 tabs after loading rather than trusting the URL.
@@ -89,6 +108,13 @@ Gemini opens at `gemini.google.com/app`. Its default mode is Flash (the mode pic
 next to the composer); switch to a stronger mode for long videos or dense material. A
 "Temporary chat" toggle keeps a one-off ingestion out of the user's Gemini history — use
 it when the video is not worth keeping.
+
+Kimi opens in its fast mode; the model picker sits beside the send button and carries a
+thinking-effort submenu. Choosing a model reloads the page under `/agent`, so find the
+composer again afterwards.
+
+On every site, take the strongest tier the user's plan includes. A tier marked as
+costing extra credits, such as Kimi's Max effort, waits for the user's word.
 
 ## Hand the result back
 
@@ -102,6 +128,15 @@ files; edit them directly instead.
 When the result is *content* (a video summary, a second opinion), read it back with
 `get_page_text` and bring it into the conversation rather than sending the user to
 the other tab. The link is then a citation, not the deliverable.
+
+Thinking models answer in minutes. Wait inside one `browser_batch`: `wait` allows 10
+seconds per action, so chain several and end on a screenshot, until the stop button
+turns back into the send button. `get_page_text` then returns the whole transcript,
+tool calls and thinking trace included and citation markers stripped; keep the answer.
+
+Store a second opinion with its provenance: the chat URL, the model and effort as the
+picker showed them, and the plugins the assistant used. A picker proves only the UI
+selection; which model served the answer stays unverified.
 
 ## Boundaries
 
