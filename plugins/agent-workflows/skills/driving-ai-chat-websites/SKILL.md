@@ -1,11 +1,30 @@
 ---
 name: driving-ai-chat-websites
 license: MIT
-description: Drive an AI chat assistant's website through the user's browser to hand it a task and bring the result back — claude.ai, chatgpt.com, gemini.google.com, chat.mistral.ai, kimi.com. Use for skill updates via claude.ai, YouTube ingestion via Gemini, a second opinion from another model, or any task that must run in a logged-in web session.
+description: Drive an AI chat assistant's website through the user's browser to hand it a task and bring the result back — claude.ai, chatgpt.com, gemini.google.com, chat.mistral.ai, kimi.com. Use for skill updates via claude.ai, YouTube ingestion via Gemini, a second opinion from another model, or any task that must run in a logged-in web session. Prefer oracle for ChatGPT when available.
 ---
 
 Type into a chat composer and you are one keystroke away from posting a half-written
 message into the user's real account. That is the failure this skill prevents.
+
+## ChatGPT: hand it to oracle when it is available
+
+When the oracle MCP server (a `consult` tool) or the `oracle` CLI is available, send
+ChatGPT tasks through it instead of driving chatgpt.com. It pastes prompt and files into
+the composer itself, selects and verifies the model and thinking time, and stores every
+run as a session that survives a timeout. When the `oracle` skill is among your available
+skills, follow it for flags and model choice. Verified September 2026 with oracle 0.20.0:
+
+- Pass `files` as absolute paths — the MCP server resolves relative ones against its own
+  working directory.
+- For long runs, start with `waitForCompletion: false` and block on the `wait` tool
+  instead of holding the turn open.
+- When oracle refuses to submit because it cannot confirm the requested model or tier,
+  the account most likely lacks it. Pick one the account has.
+
+Drive the site by hand when oracle is absent, for claude.ai, Mistral and Kimi, for
+YouTube ingestion via Gemini, and whenever the deliverable is the chat itself — a link
+the user continues in, or a button they press there.
 
 ## Which browser surface
 
@@ -22,8 +41,9 @@ disconnect is often transient.
 ## Which site
 
 - **claude.ai** — plugin skill updates (the install button lives in the resulting chat), and anything that should run as Claude with the user's claude.ai context.
-- **gemini.google.com** — **YouTube videos.** Gemini reads a public YouTube video straight from its URL: paste the link into the prompt together with the question (summary, transcript, timestamps, "what does the speaker claim about X"). No download, no transcript tool, no upload step. Also the natural choice for anything else living in the user's Google account.
-- **chatgpt.com**, **chat.mistral.ai**, **kimi.com** — second opinions, or a task the user explicitly wants run on that model.
+- **gemini.google.com** — **YouTube videos.** Gemini reads a public YouTube video straight from its URL: paste the link into the prompt together with the question (summary, transcript, timestamps, "what does the speaker claim about X"). No download, no transcript tool, no upload step. Also the natural choice for anything else living in the user's Google account. oracle's Gemini support is documented for text and images only — drive the site for video.
+- **chatgpt.com** — only when oracle is unavailable or the chat itself is the deliverable (see above).
+- **chat.mistral.ai**, **kimi.com** — second opinions, or a task the user explicitly wants run on that model.
 
 ## Paste the prompt — do not type it
 
