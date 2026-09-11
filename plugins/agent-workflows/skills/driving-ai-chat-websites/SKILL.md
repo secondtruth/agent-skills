@@ -26,24 +26,30 @@ Drive the site by hand when oracle is absent, for claude.ai, Mistral and Kimi, f
 YouTube ingestion via Gemini, and whenever the deliverable is the chat itself — a link
 the user continues in, or a button they press there.
 
-## Kimi: the CLI first, the website when its quota runs out
+## Kimi: the CLI for standalone prompts, kimi.ai for the rest
 
-When the Kimi Code CLI (`kimi`) is installed, it answers headless: run
+The Kimi Code CLI (`kimi`), when installed, answers a standalone prompt headless: run
 `kimi -m <model> -p "<prompt>"` from a scratch directory and read stdout. State in the
 prompt that the answer is text only, from the model's own knowledge. Verified September
 2026 with kimi-code 0.41:
 
 - `-p` refuses to combine with `--plan`, so the scratch directory is the safeguard.
+- The prompt travels on the command line and shows in the process list; keep the CLI for
+  prompts that may appear there.
 - The CLI's plan runs on a five-hour quota. A 403 naming the usage limit means the window
   is spent; the website keeps working on the same account in the meantime.
+
+Use kimi.ai for everything else: a review that reads knowledge-base pages through Kimi's
+plugins, a chat link the user continues in, or a prompt that belongs out of the process
+list.
 
 ## Which browser surface
 
 Use **claude-in-chrome** (`mcp__claude-in-chrome__*`) — it drives the user's real
-browser with their existing logins. The in-app Browser pane has no sessions and lands
+browser with their existing logins. The in-app Browser pane starts signed out and lands
 on a login wall.
 
-If `tabs_context_mcp` reports "not connected": check whether the browser is running and
+If `tabs_context_mcp` reports a lost connection, check whether the browser is running and
 whether it just updated. **A browser update disconnects the extension** — the most
 common cause when the tools worked earlier in the same session. The fix is the user's:
 restart the browser, open the Claude side panel once. Retry once or twice first; the
@@ -52,20 +58,21 @@ disconnect is often transient.
 ## Which site
 
 - **claude.ai** — plugin skill updates (the install button lives in the resulting chat), and anything that should run as Claude with the user's claude.ai context.
-- **gemini.google.com** — **YouTube videos.** Gemini reads a public YouTube video straight from its URL: paste the link into the prompt together with the question (summary, transcript, timestamps, "what does the speaker claim about X"). No download, no transcript tool, no upload step. Also the natural choice for anything else living in the user's Google account. oracle's Gemini support is documented for text and images only — drive the site for video.
+- **gemini.google.com** — **YouTube videos.** Gemini reads a public YouTube video straight from its URL: paste the link into the prompt together with the question (summary, transcript, timestamps, "what does the speaker claim about X"). The URL alone is enough; downloads, transcript tools and uploads are unnecessary. Also the natural choice for anything else living in the user's Google account. oracle's Gemini support is documented for text and images only — drive the site for video.
 - **chatgpt.com** — only when oracle is unavailable or the chat itself is the deliverable (see above).
 - **chat.mistral.ai**, **kimi.ai** — second opinions, or a task the user explicitly wants run on that model.
 
-For a second opinion, name the knowledge-base pages the reviewer should read. Kimi's
-Notion plugin fetches them itself, and a reviewer who knows the decisions already taken
-catches contradictions with them that a reviewer working from the brief alone misses.
+When the user agrees to share specific knowledge-base pages with a reviewer, name exactly
+those pages in the prompt. Kimi's Notion plugin fetches them itself, and a reviewer who
+knows the decisions already taken catches contradictions with them that a reviewer
+working from the brief alone misses. The consent covers the named pages only.
 
-## Paste the prompt — do not type it
+## Paste the prompt instead of typing it
 
 Verified (August 2026) on claude.ai, chatgpt.com, chat.mistral.ai and Kimi: pasting preserves line
 breaks **and** blank lines, sends nothing, and costs one round trip instead of dozens.
-Gemini's composer is the same kind of contenteditable element; paste behaviour there has
-not been checked yet — take a screenshot before trusting it.
+Gemini's composer is the same kind of contenteditable element; paste behaviour there is
+still unverified — take a screenshot before trusting it.
 
 ```bash
 pbpaste > /tmp/clip.bak                    # the user's clipboard is theirs — save it
@@ -82,14 +89,14 @@ On Kimi a paste over 4000 bytes becomes a TXT attachment and the composer stays 
 Type a one-line instruction beside it ("answer the attached brief in the format it asks
 for"), then send.
 
-**Fallback when the clipboard is unavailable or must not be touched:** type line by
-line with `key` `shift+Return` between lines, all in one batch. Never pass a string
-containing `\n` to `type` — **Enter sends** in every one of these UIs.
+**Fallback when the clipboard is unavailable or off limits:** type line by line with
+`key` `shift+Return` between lines, all in one batch. Pass `type` single-line strings
+only — a `\n` inside one would send, because **Enter sends** in every one of these UIs.
 
 ## Composers
 
-`form_input` fails on all of them — the composers are contenteditable elements, not
-form fields ("Element type DIV is not a supported form input"). Always locate the
+`form_input` fails on all of them — the composers are contenteditable elements rather
+than form fields ("Element type DIV is not a supported form input"). Always locate the
 element with `read_page {filter:"interactive"}` first; **refs are per page
 load** — `read_page` again after every navigation.
 
@@ -98,7 +105,7 @@ load** — `read_page` again after every navigation.
 | claude.ai | `textbox "Write your prompt to Claude"` (localised) |
 | chatgpt.com | `textbox "Message ChatGPT"` (localised) |
 | gemini.google.com | `textbox "Enter a prompt for Gemini"` (localised; German UI: "Einen Prompt für Gemini eingeben") |
-| chat.mistral.ai | unnamed `generic` inside a `form` — no accessible label |
+| chat.mistral.ai | unnamed `generic` inside a `form`, without an accessible label |
 | kimi.ai | unnamed `textbox` |
 
 `chat.mistral.ai/chat` may redirect to `/work` (seen August 2026). If the task belongs in plain chat, switch
@@ -107,7 +114,7 @@ tabs after loading rather than trusting the URL.
 Gemini opens at `gemini.google.com/app`. Its default mode is Flash (the mode picker sits
 next to the composer); switch to a stronger mode for long videos or dense material. A
 "Temporary chat" toggle keeps a one-off ingestion out of the user's Gemini history — use
-it when the video is not worth keeping.
+it for a video worth one look.
 
 Kimi opens in its fast mode; the model picker sits beside the send button and carries a
 thinking-effort submenu. Choosing a model reloads the page under `/agent`, so find the
@@ -120,14 +127,14 @@ costing extra credits, such as Kimi's Max effort, waits for the user's word.
 
 After sending, the chat URL appears in the tab context. **Give the user that link.**
 For a claude.ai skill update it is the whole point — the install button lives in that
-chat, and the user acts on it, not you.
+chat, and the user is the one who acts on it.
 
 Only skills hosted on claude.ai need this detour. Locally installed skills are
 files; edit them directly instead.
 
 When the result is *content* (a video summary, a second opinion), read it back with
 `get_page_text` and bring it into the conversation rather than sending the user to
-the other tab. The link is then a citation, not the deliverable.
+the other tab. The link then serves as a citation; the content is the deliverable.
 
 Thinking models answer in minutes. Wait inside one `browser_batch`: `wait` allows 10
 seconds per action, so chain several and end on a screenshot, until the stop button
@@ -146,4 +153,4 @@ login wall, stop and hand it back to the user.
 Sending a prompt into a third-party assistant publishes that content to an external
 service. Do not paste private code, credentials or client material without the user
 saying so for that specific content. A YouTube URL is public by nature; the question
-you attach to it may not be.
+you attach to it may be private.
