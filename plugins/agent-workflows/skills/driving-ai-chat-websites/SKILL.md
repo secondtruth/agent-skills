@@ -73,7 +73,7 @@ disconnect is often transient.
 ## Which site
 
 - **claude.ai** — plugin skill updates (the install button lives in the resulting chat), and anything that should run as Claude with the user's claude.ai context.
-- **gemini.google.com** — **YouTube videos.** Gemini reads a public YouTube video straight from its URL: paste the link into the prompt together with the question (summary, transcript, timestamps, "what does the speaker claim about X"). The URL alone is enough; downloads, transcript tools and uploads are unnecessary. Also the natural choice for anything else living in the user's Google account. oracle's Gemini support is documented for text and images only — drive the site for video. The Gemini CLI stopped serving individual accounts in September 2026 (`IneligibleTierError`), so reviews go through the website too.
+- **gemini.google.com** — **YouTube videos.** Gemini reads a public YouTube video straight from its URL: paste the link into the prompt together with the question (summary, transcript, timestamps, "what does the speaker claim about X"). The URL alone is enough; downloads, transcript tools and uploads are unnecessary. Also the natural choice for anything else living in the user's Google account. oracle's Gemini support is documented for text and images only — drive the site for video. The Gemini CLI stopped serving individual accounts in September 2026 (`IneligibleTierError`), so reviews go through the website too. oracle also reaches gemini.google.com through its cookie client, but oracle 0.20.x knows Gemini only up to 3.1 Pro and 3.5 Flash (plus Deep Think) and falls back to Flash-Lite unless `--no-gemini-fallback` is set; the newest models and notebooks need the website.
 - **chatgpt.com** — only when oracle is unavailable or the chat itself is the deliverable (see above).
 - **chat.mistral.ai**, **kimi.ai** — second opinions, or a task the user explicitly wants run on that model.
 
@@ -143,6 +143,16 @@ out. Take the newest model the account's picker actually lists, using announceme
 to tell versions and tiers apart, then switch on extended thinking. To hand Gemini files,
 open "Uploads & Tools" (the + button): that adds hidden `input[type=file]` elements, and
 `file_upload` fills one directly while the native file dialog stays closed.
+
+Gemini notebooks (Notebooks, then New notebook, a name and Enter) keep sources for
+recurring reviews. Their "Add sources" dialog creates the file input only on click and
+opens the native dialog with it. Override `HTMLInputElement.prototype.click` for
+`type=file` inputs first, so the click hands the input back instead: append it to the
+page, give it an `aria-label`, locate it with `find` and fill it with `file_upload`. In
+September 2026 a six-part review failed three times in a notebook on 3.8 Flash
+("Something went wrong"); the same questions in two halves went through, so split long
+asks there. The retry button opens a menu (longer, shorter, retry); retry is its last
+item.
 
 Kimi opens in its fast mode; the model picker sits beside the send button and carries a
 thinking-effort submenu. Choosing a model reloads the page under `/agent`, so find the
