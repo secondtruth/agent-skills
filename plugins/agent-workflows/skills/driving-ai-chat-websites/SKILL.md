@@ -45,12 +45,18 @@ list.
 
 ## Codex: the CLI reads the files itself
 
-For a second opinion from Codex, run
-`codex exec --sandbox read-only --skip-git-repo-check -o <answer-file> "<prompt>"` in
-the directory under review: it reads the files itself and writes only the answer file.
-When it reports that the configured model requires a newer version, upgrade the CLI
-first (September 2026: 0.147 to 0.154 for gpt-6-astra). Record the model and reasoning
-effort from its header as provenance.
+For a second opinion from Codex, write the prompt to a file in a scratch directory and
+run, in the directory under review:
+
+```bash
+codex exec --sandbox read-only --skip-git-repo-check --ephemeral -o <answer-file> - < <prompt-file>
+```
+
+Codex reads the files itself. The prompt arrives on stdin, so it stays out of the
+process list and out of shell interpolation, and `--ephemeral` keeps the session off
+disk, leaving the answer file as the only output. When it reports that the configured
+model requires a newer version, upgrade the CLI first (September 2026: 0.147 to 0.154
+for gpt-6-astra). Record the model and reasoning effort from its header as provenance.
 
 ## Which browser surface
 
@@ -133,7 +139,8 @@ next to the composer); switch to a stronger mode for long videos or dense materi
 it for a video worth one look. Its picker lists models plus a separate "Thinking
 (extended)" toggle. The "Pro" label marks a tier, not the newest model: in September 2026
 the picker still offered 3.1 Pro while 3.8 Flash, released on 2 September, was rolling
-out. Pick the newest model by its announcement, then switch on extended thinking. To hand Gemini files,
+out. Take the newest model the account's picker actually lists, using announcements only
+to tell versions and tiers apart, then switch on extended thinking. To hand Gemini files,
 open "Uploads & Tools" (the + button): that adds hidden `input[type=file]` elements, and
 `file_upload` fills one directly while the native file dialog stays closed.
 
