@@ -43,6 +43,21 @@ Use kimi.ai for everything else: a review that reads knowledge-base pages throug
 plugins, a chat link the user continues in, or a prompt that belongs out of the process
 list.
 
+## Codex: the CLI reads the files itself
+
+For a second opinion from Codex, write the prompt to a file in a scratch directory and
+run, in the directory under review:
+
+```bash
+codex exec --sandbox read-only --skip-git-repo-check --ephemeral -o <answer-file> - < <prompt-file>
+```
+
+Codex reads the files itself. The prompt arrives on stdin, so it stays out of the
+process list and out of shell interpolation, and `--ephemeral` keeps the session off
+disk, leaving the answer file as the only output. When it reports that the configured
+model requires a newer version, upgrade the CLI first (September 2026: 0.147 to 0.154
+for gpt-6-astra). Record the model and reasoning effort from its header as provenance.
+
 ## Which browser surface
 
 Use **claude-in-chrome** (`mcp__claude-in-chrome__*`) — it drives the user's real
@@ -58,7 +73,7 @@ disconnect is often transient.
 ## Which site
 
 - **claude.ai** — plugin skill updates (the install button lives in the resulting chat), and anything that should run as Claude with the user's claude.ai context.
-- **gemini.google.com** — **YouTube videos.** Gemini reads a public YouTube video straight from its URL: paste the link into the prompt together with the question (summary, transcript, timestamps, "what does the speaker claim about X"). The URL alone is enough; downloads, transcript tools and uploads are unnecessary. Also the natural choice for anything else living in the user's Google account. oracle's Gemini support is documented for text and images only — drive the site for video.
+- **gemini.google.com** — **YouTube videos.** Gemini reads a public YouTube video straight from its URL: paste the link into the prompt together with the question (summary, transcript, timestamps, "what does the speaker claim about X"). The URL alone is enough; downloads, transcript tools and uploads are unnecessary. Also the natural choice for anything else living in the user's Google account. oracle's Gemini support is documented for text and images only — drive the site for video. The Gemini CLI stopped serving individual accounts in September 2026 (`IneligibleTierError`), so reviews go through the website too. oracle also reaches gemini.google.com through its cookie client, but oracle 0.20.x knows Gemini only up to 3.1 Pro and 3.5 Flash (plus Deep Think) and falls back to Flash-Lite unless `--no-gemini-fallback` is set; the newest models and notebooks need the website.
 - **chatgpt.com** — only when oracle is unavailable or the chat itself is the deliverable (see above).
 - **chat.mistral.ai**, **kimi.ai** — second opinions, or a task the user explicitly wants run on that model.
 
@@ -87,6 +102,10 @@ ProseMirror). Kimi's editor carries `contenteditable="false"` until the page has
 hydrated: wait a few seconds and select it by its class. `innerText` read right after the
 event can lag behind, so a screenshot is the check, on the other sites before trusting
 the event at all.
+
+Gemini's Quill editor ignores the paste event. There, `document.execCommand('insertText',
+false, PROMPT)` on the focused `.ql-editor` fills the composer, line breaks included and
+the clipboard untouched (verified September 2026).
 
 On Kimi a paste over 4000 bytes becomes a TXT attachment and the composer stays empty.
 Type a one-line instruction beside it ("answer the attached brief in the format it asks
@@ -117,7 +136,23 @@ tabs after loading rather than trusting the URL.
 Gemini opens at `gemini.google.com/app`. Its default mode is Flash (the mode picker sits
 next to the composer); switch to a stronger mode for long videos or dense material. A
 "Temporary chat" toggle keeps a one-off ingestion out of the user's Gemini history — use
-it for a video worth one look.
+it for a video worth one look. Its picker lists models plus a separate "Thinking
+(extended)" toggle. The "Pro" label marks a tier, not the newest model: in September 2026
+the picker still offered 3.1 Pro while 3.8 Flash, released on 2 September, was rolling
+out. Take the newest model the account's picker actually lists, using announcements only
+to tell versions and tiers apart, then switch on extended thinking. To hand Gemini files,
+open "Uploads & Tools" (the + button): that adds hidden `input[type=file]` elements, and
+`file_upload` fills one directly while the native file dialog stays closed.
+
+Gemini notebooks (Notebooks, then New notebook, a name and Enter) keep sources for
+recurring reviews. Their "Add sources" dialog creates the file input only on click and
+opens the native dialog with it. Override `HTMLInputElement.prototype.click` for
+`type=file` inputs first, so the click hands the input back instead: append it to the
+page, give it an `aria-label`, locate it with `find` and fill it with `file_upload`. In
+September 2026 a six-part review failed three times in a notebook on 3.8 Flash
+("Something went wrong"); the same questions in two halves went through, so split long
+asks there. The retry button opens a menu (longer, shorter, retry); retry is its last
+item.
 
 Kimi opens in its fast mode; the model picker sits beside the send button and carries a
 thinking-effort submenu. Choosing a model reloads the page under `/agent`, so find the
