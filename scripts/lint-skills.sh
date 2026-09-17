@@ -62,7 +62,7 @@ for skill_md in $(find "$root" -name SKILL.md -path '*/skills/*' | sort); do
   if [ "$words" -eq 0 ]; then err "description missing"
   elif [ "$words" -gt "$DESCRIPTION_BUDGET" ]; then err "description is $words words (budget $DESCRIPTION_BUDGET)"; fi
 
-  if [ "$public" -eq 1 ] && ! frontmatter "$skill_md" | grep -q '^license:'; then warn "no license: in frontmatter"; fi
+  if [ "$public" -eq 1 ] && ! frontmatter "$skill_md" | grep -q '^license:'; then err "no license: in frontmatter"; fi
 
   report err "hard references" "$(grep -rnE "(^|[^a-zA-Z0-9_/.])/[a-z][a-z0-9-]+ skill|anthropic-skills:|mattpocock-skills:" "$dir" 2>/dev/null | sed "s|^$dir/||")"
   # a principle number may point at the skill's own list (fine) or at another skill's (a hard reference): a human decides
