@@ -127,12 +127,22 @@ class Session:
                 self.save()
         return out
 
-    def save(self):
-        if not self.project or not self.dirty:
+    def save(self, project=None):
+        """Writes the project; returns the reply line. A failed save keeps the session dirty."""
+        target = project or self.project
+        if not target or not (self.dirty or project):
             return ""
-        os.makedirs(os.path.dirname(self.project), exist_ok=True)
-        # Ps prints git's chatter; the record and the reply say what matters
-        self.r2.cmd("e dir.projects=%s; Ps %s" % (os.path.dirname(self.project), os.path.basename(self.project)))
+        rc = os.path.join(target, "rc.r2")
+        before = os.path.getmtime(rc) if os.path.exists(rc) else 0
+        try:
+            os.makedirs(os.path.dirname(target), exist_ok=True)
+            # prj.vc is set here, not at start: a loaded project script turns it back on
+            self.r2.cmd("e prj.vc=false; e dir.projects=%s; Ps %s" % (os.path.dirname(target), os.path.basename(target)))
+        except Exception as e:
+            return "r2q: save failed: %s\n" % e
+        if not os.path.exists(rc) or os.path.getmtime(rc) <= before:
+            return "r2q: save failed: %s was not written (see the r2: lines)\n" % rc
+        self.project = target  # a named save adopts the project only once it is on disk
         self.dirty, self.changed_at = 0, None
         self.saves += 1
         self.last_save = time.time()
@@ -174,9 +184,8 @@ class Session:
                 if cmd == "\x00stop":
                     reply(conn, self.save() + "stopped\n", self.stderr_since())
                     break
-                if cmd == "\x00save":
-                    self.dirty = max(self.dirty, 1)
-                    reply(conn, self.save(), self.stderr_since())
+                if cmd.startswith("\x00save"):
+                    reply(conn, self.save(cmd[5:].strip() or None), self.stderr_since())
                     continue
                 out = self.run(cmd)
                 reply(conn, out, self.stderr_since())
@@ -337,17 +346,18 @@ def main():
     elif project and (session_info(sock) or {}).get("project") != project:
         print("r2q: session already open with project %s; --stop to reopen with %s" % ((session_info(sock) or {}).get("project") or "-", project), file=sys.stderr)
     if a.save is not None:
-        if a.save:
-            target = os.path.abspath(a.save)
-            ask(sock, "e dir.projects=%s; Ps %s" % (os.path.dirname(target), os.path.basename(target)))
-            out, err = "saved %s\n" % target, ""
-        elif (session_info(sock) or {}).get("project"):
-            out, err = ask(sock, "\x00save")
-        else:
+        target = os.path.abspath(a.save) if a.save else (session_info(sock) or {}).get("project")
+        if not target:
             sys.exit("r2q: --save needs a project name or a session started with -P")
+        out, err = ask(sock, "\x00save " + target)
+        if a.save and out.startswith("saved"):  # the named project becomes the session's, remembered like -P
+            with open(sock[:-5] + ".project", "w") as f:
+                f.write(target + "\n")
         sys.stdout.write(out)
         if err:
             print("\n".join("r2: " + l for l in err.splitlines()), file=sys.stderr)
+        if out.startswith("r2q: save failed"):
+            sys.exit(1)
 
     commands = commands_from(a)
     batch = len(commands) > 1 or a.cmd == ["-"]

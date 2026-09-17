@@ -16,7 +16,13 @@ case "$1" in
   *) echo "usage: ghidra-headless <project-or-device>/<ghidra-project> [analyzeHeadless args]" >&2; exit 2 ;;
 esac
 shift
-here=$(cd "$(dirname "$(readlink -f "$0")")" && pwd)
+# resolve the symlink chain by hand: macOS's readlink has no -f before 12.3
+self=$0
+while [ -L "$self" ]; do
+  target=$(readlink "$self")
+  case $target in /*) self=$target ;; *) self=$(dirname "$self")/$target ;; esac
+done
+here=$(cd "$(dirname "$self")" && pwd)
 export JAVA_HOME="${JAVA_HOME:-/opt/homebrew/opt/openjdk@21}"
 GHIDRA=${GHIDRA_HOME:-$(ls -d "$HOME"/Entwicklung/Tools/ghidra_*_PUBLIC 2>/dev/null | tail -1)}
 [ -n "$GHIDRA" ] || { echo "ghidra-headless: set GHIDRA_HOME to the Ghidra install" >&2; exit 2; }
