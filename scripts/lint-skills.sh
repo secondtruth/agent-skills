@@ -4,8 +4,14 @@
 # personal/private markers, and licence frontmatter.
 #
 # Usage: scripts/lint-skills.sh [--public] [--strict] [plugins-dir]
-#   --public   treat personal markers as errors (public repository)
+#   --public   the repository is public: personal markers are errors and a
+#              license: line is required
 #   --strict   exit non-zero when any error was reported
+#
+# Rules of the rubric itself (description budget, hard references, paths into
+# sibling skills) are errors in every repository; heuristics that need a human
+# eye (negation density, sibling names without an availability clause) stay
+# warnings.
 set -u
 
 public=0; strict=0; root=""
@@ -54,11 +60,13 @@ for skill_md in $(find "$root" -name SKILL.md -path '*/skills/*' | sort); do
   desc=$(description "$skill_md")
   words=$(printf '%s' "$desc" | wc -w | tr -d ' ')
   if [ "$words" -eq 0 ]; then err "description missing"
-  elif [ "$words" -gt "$DESCRIPTION_BUDGET" ]; then warn "description is $words words (budget $DESCRIPTION_BUDGET)"; fi
+  elif [ "$words" -gt "$DESCRIPTION_BUDGET" ]; then err "description is $words words (budget $DESCRIPTION_BUDGET)"; fi
 
   if [ "$public" -eq 1 ] && ! frontmatter "$skill_md" | grep -q '^license:'; then warn "no license: in frontmatter"; fi
 
-  report warn "hard references" "$(grep -rnE "(^|[^a-zA-Z0-9_/.])/[a-z][a-z0-9-]+ skill|anthropic-skills:|mattpocock-skills:|[Pp]rinciple [0-9]+" "$dir" 2>/dev/null | sed "s|^$dir/||")"
+  report err "hard references" "$(grep -rnE "(^|[^a-zA-Z0-9_/.])/[a-z][a-z0-9-]+ skill|anthropic-skills:|mattpocock-skills:" "$dir" 2>/dev/null | sed "s|^$dir/||")"
+  # a principle number may point at the skill's own list (fine) or at another skill's (a hard reference): a human decides
+  report warn "principle numbers" "$(grep -rnE "[Pp]rinciple [0-9]+" "$dir" 2>/dev/null | sed "s|^$dir/||")"
 
   paths=""; named=""
   for other in $skill_names; do
@@ -66,7 +74,7 @@ for skill_md in $(find "$root" -name SKILL.md -path '*/skills/*' | sort); do
     m=$(grep -rnE "\b$other/(references|SKILL\.md|scripts)" "$dir" 2>/dev/null | sed "s|^$dir/||"); [ -n "$m" ] && paths="$paths${paths:+$'\n'}$m"
     m=$(grep -rnE "\`$other\`" "$dir" 2>/dev/null | grep -vE 'available|when present|if present' | sed "s|^$dir/||"); [ -n "$m" ] && named="$named${named:+$'\n'}$m"
   done
-  report warn "paths into sibling skills" "$paths"
+  report err "paths into sibling skills" "$paths"
   report warn "siblings named without availability clause" "$named"
 
   total=0; neg=0
