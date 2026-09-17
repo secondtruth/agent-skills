@@ -1,7 +1,7 @@
 ---
 name: critical-traditions
 license: MIT
-description: "Apply specific intellectual traditions as analytical lenses on a topic, with each tradition treated as a distinct school with its own concepts, characteristic moves, internal disagreements, and known weaknesses. Use whenever the user names a tradition (e.g. 'ecofeminist take', 'degrowth critique', 'Kantian view'), names a family of traditions ('feminist perspective', 'ecological perspective', 'ethical analysis'), or explicitly asks for ideological / normative / critical-theoretical analysis of a topic. Also use when the user asks 'what would X think about Y' for X being a school or thinker covered here. Activates on explicit request only."
+description: Use when the user names an intellectual tradition ('ecofeminist take', 'degrowth critique', 'Kantian view') or a family ('feminist perspective', 'ethical analysis'), asks for ideological, normative or critical-theoretical analysis, or asks what a school or thinker would say about a topic; explicit request only. Reads the topic through each tradition as a distinct school with its own concepts, moves and weaknesses.
 ---
 
 # Critical Traditions
