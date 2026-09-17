@@ -10,8 +10,8 @@
     {
       "name": "engineering",
       "source": "./plugins/engineering",
-      "description": "Craft skills for building software: code structure and naming, CLI and service design, product UI, layout forensics and style passes, web compliance (Impressum, consent, DSGVO), health-critical audit, fork stewardship, spec writing, project conception, reverse engineering for interoperability.",
-      "version": "0.6.0",
+      "description": "Craft skills for building software: code structure and naming, CLI and service design, product UI, layout forensics and style passes, web compliance (Impressum, consent, DSGVO), health-critical audit, fork stewardship, spec writing, project conception, reverse engineering for interoperability, rooting owned embedded devices via firmware modification.",
+      "version": "0.7.0",
       "category": "development",
       "keywords": [
         "engineering",
@@ -22,21 +22,24 @@
         "layout",
         "compliance",
         "audit",
-        "reverse-engineering"
+        "reverse-engineering",
+        "device-rooting",
+        "embedded-firmware"
       ],
       "homepage": "https://github.com/secondtruth/agent-skills"
     },
     {
       "name": "thinking",
       "source": "./plugins/thinking",
-      "description": "Thinking tools: multi-lens analysis, critical traditions, brainstorming, self-review, roadmap prioritisation.",
-      "version": "0.1.0",
+      "description": "Thinking tools: multi-lens analysis, critical traditions, brainstorming, PC and console game conception, self-review, roadmap prioritisation.",
+      "version": "0.2.0",
       "category": "productivity",
       "keywords": [
         "analysis",
         "brainstorming",
         "review",
-        "roadmap"
+        "roadmap",
+        "game-design"
       ],
       "homepage": "https://github.com/secondtruth/agent-skills"
     },
