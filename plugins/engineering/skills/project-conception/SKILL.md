@@ -1,7 +1,7 @@
 ---
 name: project-conception
 license: MIT
-description: Shape a rough idea into a concept ready for planning – a new project (landscape, scope, MVP, architecture, stack) or a feature or subsystem inside an existing codebase (surface inventory, wiring vs. building). Use when the user asks whether to build something, what the MVP is, how to scope or re-scope it, or how to fit X into Y.
+description: Shape an idea into a plannable concept – a new project (landscape, scope, MVP, architecture, stack) or a feature inside an existing codebase (surface inventory, wiring vs. building). Use when the user asks whether to build something, what the MVP is, how to scope it or fit X into Y, or names a product as a feature wish list.
 ---
 
 # Project Conception
@@ -33,7 +33,7 @@ Each named skill applies when it is among your available skills; otherwise this 
 
 The transition from `brainstorming` to this skill happens when the user stops asking "what if" and starts asking "should we" or "how would this work". When in doubt, ask which mode the user is in.
 
-The handover also runs the other way. When the request arrives as a list of wishes rather than a question ("integrates X, Y, maybe Z, best effort"), run one divergent/convergent pass with the `brainstorming` skill, when it is among your available skills, before Phase 1 ends — after the landscape is in, so the pass works on facts: which wishes the landscape already fulfils, which nobody does, which combination is new. Record what survived and what was dropped in the concept's origin section.
+The handover also runs the other way. When the request names a product as a list of wishes rather than a question ("integrates X, Y, maybe Z, best effort"), it belongs here, not in `brainstorming`: the user wants the thing, not the exploring. Run one divergent/convergent pass before Phase 1 ends — once the path's evidence is in (the landscape, or the surface inventory), so the pass works on facts: which wishes are already fulfilled, which nobody covers, which combination is new. The `brainstorming` skill runs the pass when it is among your available skills; otherwise generate the alternative cuts yourself and argue against the strongest before choosing. Record what survived and what was dropped under *Origin* in the concept document (see Phase 2 essentials).
 
 ## Pick the path first, then read its reference
 
@@ -65,13 +65,17 @@ State the recommendation as a verdict the user can override — an opinion, not 
 
 ## Phase 2 essentials: what every concept states
 
-Path-independent. Whatever is being conceived, the concept document answers these three before anything path-specific.
+Path-independent. Whatever is being conceived, the concept document answers these four before anything path-specific.
 
 When the `domain-modeling` skill is among your available skills, it owns the artefacts: every term the problem statement coins goes into `CONTEXT.md`, and the stack decision, anti-features and forking strategy each become an ADR under `docs/adr/`. Without it, the concept document carries a Glossary and a Decisions section.
 
 ### Problem statement
 
 One paragraph. Who has the problem, what is the problem, why does it suck today, what does success look like. If you can't write this paragraph, you don't understand the project yet.
+
+### Origin
+
+Where the idea came from and what conception changed about it: the request as first stated, what the Phase 1 evidence turned around, which ideas survived and which were dropped, each with its reason. Two or three paragraphs; a concept that went through unchanged says so in a sentence. A later session reads this to tell a deliberate cut from an oversight.
 
 ### MVP cut (Walking Skeleton)
 

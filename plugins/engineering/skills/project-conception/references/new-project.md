@@ -64,7 +64,7 @@ Follow the documentation framework the user's profile names (Diátaxis — Tutor
 
 ## Phase 3: Handoff format
 
-A single page in the user's knowledge base (or an update to an existing one) containing risks, dependencies and open questions. Then trigger `knowledge-management`, when it is among your available skills, to file it where the umbrella's project records live and to note the new conception wherever the user tracks project evolutions.
+A single page in the user's knowledge base (or an update to an existing one) containing risks, dependencies and open questions. Then trigger `knowledge-management`, when it is among your available skills, to file it where the umbrella's project records live and to note the new conception wherever the user tracks project evolutions. On a Pivot verdict the user has not accepted yet, file the concept and hold the evolution note back: that record is a decision trail, and nothing has been decided.
 
 ## Output
 
