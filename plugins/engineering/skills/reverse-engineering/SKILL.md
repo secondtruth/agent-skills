@@ -107,5 +107,13 @@ off the repository in a scratch directory the document names. A consumer's
 constants live in one header with a comment per address that points back to
 the document.
 
+## Embedded firmware
+
+Stripped, statically linked binaries inside squashfs rootfs images (MIPS/ARM
+cameras, routers, appliances) follow the same evidence discipline with a
+different toolkit: string tables as the primary artifact, qemu-user against
+the extracted rootfs as the live check, partition tables as the addresses.
+`references/embedded-firmware.md` carries that toolkit.
+
 The consumer code follows the `code-craftsmanship` skill when it is among your available skills.
 A tool built around the session follows the `cli-design` skill when it is among your available skills.
