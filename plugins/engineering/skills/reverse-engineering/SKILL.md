@@ -28,12 +28,32 @@ So:
 - Decompile (`pdg` with r2ghidra, `pdd` with r2dec, Ghidra headless export)
   and read C. Open the listing (`pdf`) for the few instructions a decompiler
   mangles: calling conventions, SSE constants, switch tables.
-- Keep one session per binary open (`r2q`, or radare2's `=h` HTTP server, or
-  r2pipe) and save projects (`Ps name`); a command then costs milliseconds.
+- Keep one session per binary open (`scripts/r2q`, or radare2's `=h` HTTP
+  server, or r2pipe) and save projects; a command then costs milliseconds.
 - Write long outputs to files and grep them. A whole-program export of
   decompiled C, grepped for a global's address, beats paging through xrefs.
 - Prefer JSON commands (`aflj`, `axtj`, `pdfj`) when the answer feeds a
   script; `~` filters output in place.
+
+## Scripts in this skill
+
+`scripts/` holds three tools; put the two executables on `PATH` (a symlink
+is enough) or call them by path. They need radare2 with `r2ghidra` and
+`r2dec`, `uv`, Ghidra and a JDK 21.
+
+- `r2q` keeps one radare2 session per binary in a daemon and answers
+  commands in milliseconds: `r2q -f x.exe -P auto -- aaa` opens the session
+  and analyses, `r2q -f x.exe -- 'pdg @ 0x6f1790'` decompiles, `--out f.c`
+  writes the answer to a file, `-` reads one command per line from stdin.
+  The project is remembered per binary, saved after analysis, after a quiet
+  half minute following other changes, and on `--stop`; an idle session
+  stops after four hours. What radare2 says on stderr (a missing function,
+  a failed command) comes back prefixed `r2:`. `r2q --help` has the rest.
+- `ghidra-headless <owner>/<project> -import x.exe` analyses a binary once
+  with Ghidra; `-process x.exe -noanalysis -postScript ExportDecomp.java out.c
+  0x6f1790 …` writes decompiled C of those functions (every function without
+  addresses). Projects live under `$RE_CACHE/<owner>/ghidra`; `GHIDRA_HOME`
+  and `JAVA_HOME` point at the installs.
 
 ## Round zero: the free names
 

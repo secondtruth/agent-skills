@@ -1,0 +1,25 @@
+#!/bin/sh
+# ghidra-headless: Ghidra's analyzeHeadless with the JDK, the project
+# location and the script path set. The first argument is
+# <project-or-device>/<ghidra-project>; the Ghidra project lives under
+# $RE_CACHE/<project-or-device>/ghidra (RE_CACHE defaults to
+# ~/Entwicklung/Caches/ReverseEngineering). Examples:
+#   ghidra-headless sbrw-server/nfsw -import nfsw.exe      # analyse once (minutes)
+#   ghidra-headless sbrw-server/nfsw -process nfsw.exe -noanalysis -postScript ExportDecomp.java out.c 0x6f1790 0x6db9c0
+# ExportDecomp.java next to this script writes decompiled C for the given
+# addresses, or for every function without any.
+# Ghidra: $GHIDRA_HOME, else the newest ~/Entwicklung/Tools/ghidra_*_PUBLIC;
+# JDK: $JAVA_HOME, else Homebrew's openjdk@21.
+set -e
+case "$1" in
+  */*) owner=${1%/*}; name=${1##*/} ;;
+  *) echo "usage: ghidra-headless <project-or-device>/<ghidra-project> [analyzeHeadless args]" >&2; exit 2 ;;
+esac
+shift
+here=$(cd "$(dirname "$(readlink -f "$0")")" && pwd)
+export JAVA_HOME="${JAVA_HOME:-/opt/homebrew/opt/openjdk@21}"
+GHIDRA=${GHIDRA_HOME:-$(ls -d "$HOME"/Entwicklung/Tools/ghidra_*_PUBLIC 2>/dev/null | tail -1)}
+[ -n "$GHIDRA" ] || { echo "ghidra-headless: set GHIDRA_HOME to the Ghidra install" >&2; exit 2; }
+PROJECTS="${RE_CACHE:-$HOME/Entwicklung/Caches/ReverseEngineering}/$owner/ghidra"
+mkdir -p "$PROJECTS"
+exec "$GHIDRA/support/analyzeHeadless" "$PROJECTS" "$name" -scriptPath "$here" "$@"

@@ -1,0 +1,378 @@
+#!/usr/bin/env -S uv run --script --quiet
+# /// script
+# requires-python = ">=3.10"
+# dependencies = ["r2pipe>=1.9"]
+# ///
+"""r2q: radare2 commands against a binary without reloading it every time.
+
+An agent that reverse-engineers with `r2 -c` pays the analysis or project
+load (seconds to a minute) on every call. r2q keeps one r2 session per
+binary in a background daemon and answers commands over a Unix socket in
+milliseconds; the answer is printed as r2 prints it, so `r2q pdf @ addr`
+reads like the r2 prompt. What r2 writes to stderr (a missing function, a
+failed command) comes back prefixed `r2:`.
+
+    r2q -f nfsw.exe -P auto -- aaa            # start a session, analyse; the project is <dir>/proj/nfsw
+    r2q -f nfsw.exe -- 'pdg @ 0x6f1790'       # decompile (r2ghidra) in the same session
+    r2q -f nfsw.exe --out fn.c -- 'pdg @ 0x6f1790'   # write the answer to a file, print its size
+    r2q -f nfsw.exe - < commands.txt          # one command per line, answers separated by '--- r2q:' lines
+    r2q -f nfsw.exe --save                    # save the project now (it is also saved on its own)
+    r2q -f nfsw.exe --stop                    # end the session; r2q --list shows them
+
+Several commands in one call are separated by ';' as in r2 itself. The
+session's file selects the socket (~/.cache/r2q/<hash>.sock); -f may be
+omitted when R2Q_FILE is set. The project of a binary is remembered, so
+-P is needed once. A session with a project saves it after
+analysis commands, after a quiet half minute following other changes, and
+when it stops; a session idle for --idle (default 4h, R2Q_IDLE) stops by
+itself. Output is never colourised.
+"""
+import argparse
+import hashlib
+import json
+import os
+import re
+import socket
+import subprocess
+import sys
+import time
+
+CACHE = os.path.join(os.path.expanduser("~"), ".cache", "r2q")
+ESCAPES = re.compile(r"\x1b\[[0-9;?]*[A-Za-z]")
+# commands that change the session's state, so the project is worth saving;
+# heavy analysis (aa*) saves at once, the rest after a quiet interval
+HEAVY = re.compile(r"^\s*aa")
+CHANGING = re.compile(r"^\s*(aa|af(?:[+nrucFtvbBsSp]|\s|$)|an|C[CdsC]|f[ +\-r]|t[dsu]|o[o+]?|w|e )")
+QUIET_SAVE = 30.0
+
+
+def sock_path(binary):
+    # realpath: the same binary reached through a symlink shares the session
+    key = hashlib.sha1(os.path.realpath(binary).encode()).hexdigest()[:12]
+    return os.path.join(CACHE, key + ".sock")
+
+
+def project_for(binary, project, sock):
+    """The project of this session: -P, or the one the binary's last session used."""
+    memo = sock[:-5] + ".project"
+    if project == "auto":
+        base = os.path.splitext(os.path.basename(binary))[0]
+        project = os.path.join(os.path.dirname(os.path.abspath(binary)), "proj", base)
+    elif not project and os.path.isfile(memo):
+        with open(memo) as f:
+            project = f.read().strip()
+        if project and not alive(sock):
+            print("r2q: using project %s as in the last session (-P to change)" % project, file=sys.stderr)
+    if project:
+        project = os.path.abspath(project)
+        with open(memo, "w") as f:
+            f.write(project + "\n")
+    return project or None
+
+
+def project_exists(project):
+    # an r2 project is a directory holding rc.r2 (older versions: a single script)
+    return os.path.isfile(os.path.join(project, "rc.r2")) or os.path.isfile(project)
+
+
+def parse_duration(text):
+    m = re.fullmatch(r"(\d+(?:\.\d+)?)([smhd]?)", text.strip())
+    if not m:
+        raise argparse.ArgumentTypeError("duration like 30m, 4h, 0 (never): %r" % text)
+    return float(m.group(1)) * {"": 1, "s": 1, "m": 60, "h": 3600, "d": 86400}[m.group(2)]
+
+
+class Session:
+    """The daemon: one r2 session, one command per connection."""
+
+    def __init__(self, binary, project, evals, sock, idle, log):
+        import r2pipe
+
+        flags = ["-e", "scr.color=0", "-e", "asm.bytes=false", "-e", "asm.lines=false", "-e", "scr.interactive=false"]
+        for ev in evals:
+            flags += ["-e", ev]
+        # r2 dies at startup when -p names a project that does not exist, so a
+        # missing project only sets where saves go
+        if project and project_exists(project):
+            flags += ["-e", "dir.projects=" + os.path.dirname(project), "-p", os.path.basename(project)]
+        self.r2 = r2pipe.open(binary, flags=flags)
+        self.binary, self.project, self.sock, self.idle = binary, project, sock, idle
+        self.log = open(log, "rb")  # r2's stderr lands here; each answer carries what arrived meanwhile
+        self.log.seek(0, os.SEEK_END)
+        self.dirty = 0
+        self.changed_at = None
+        self.saves = 0
+        self.last_save = None
+
+    def record(self):
+        with open(self.sock + ".json", "w") as f:
+            json.dump({"file": os.path.abspath(self.binary), "project": self.project, "pid": os.getpid(),
+                       "since": time.time(), "idle": self.idle, "saves": self.saves, "last_save": self.last_save}, f)
+
+    def stderr_since(self):
+        text = self.log.read().decode(errors="replace")
+        lines = [ESCAPES.sub("", l).strip() for l in text.splitlines()]
+        return "\n".join(l for l in lines if l)
+
+    def run(self, cmd):
+        try:
+            out = self.r2.cmd(cmd) or ""
+        except Exception as e:  # r2pipe raises on a dead r2
+            out = ""
+            print("r2q: %s" % e, file=sys.stderr, flush=True)
+        if self.project and CHANGING.match(cmd):
+            self.dirty += 1
+            self.changed_at = time.time()
+            if HEAVY.match(cmd):
+                self.save()
+        return out
+
+    def save(self):
+        if not self.project or not self.dirty:
+            return ""
+        os.makedirs(os.path.dirname(self.project), exist_ok=True)
+        # Ps prints git's chatter; the record and the reply say what matters
+        self.r2.cmd("e dir.projects=%s; Ps %s" % (os.path.dirname(self.project), os.path.basename(self.project)))
+        self.dirty, self.changed_at = 0, None
+        self.saves += 1
+        self.last_save = time.time()
+        self.record()
+        return "saved %s\n" % self.project
+
+    def serve(self):
+        if os.path.exists(self.sock):
+            os.unlink(self.sock)
+        srv = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+        srv.bind(self.sock)
+        srv.listen(4)
+        self.record()
+        last_request = time.time()
+        while True:
+            wait = None
+            if self.idle:
+                wait = max(0.0, self.idle - (time.time() - last_request))
+            if self.changed_at is not None:
+                quiet = max(0.0, QUIET_SAVE - (time.time() - self.changed_at))
+                wait = quiet if wait is None else min(wait, quiet)
+            srv.settimeout(wait)
+            try:
+                conn, _ = srv.accept()
+            except socket.timeout:
+                if self.changed_at is not None and time.time() - self.changed_at >= QUIET_SAVE:
+                    self.save()
+                if self.idle and time.time() - last_request >= self.idle:
+                    print("r2q: idle for %s, stopping" % fmt_duration(self.idle), file=sys.stderr, flush=True)
+                    break
+                continue
+            with conn:
+                cmd = read_request(conn)
+                if cmd != "\x00ping":
+                    last_request = time.time()
+                if cmd == "\x00ping":
+                    reply(conn, "r2q\n", "")
+                    continue
+                if cmd == "\x00stop":
+                    reply(conn, self.save() + "stopped\n", self.stderr_since())
+                    break
+                if cmd == "\x00save":
+                    self.dirty = max(self.dirty, 1)
+                    reply(conn, self.save(), self.stderr_since())
+                    continue
+                out = self.run(cmd)
+                reply(conn, out, self.stderr_since())
+        self.save()
+        self.r2.quit()
+        for p in (self.sock, self.sock + ".json"):
+            if os.path.exists(p):
+                os.unlink(p)
+
+
+def fmt_duration(seconds):
+    return "%gh" % (seconds / 3600) if seconds >= 3600 else "%gm" % (seconds / 60) if seconds >= 60 else "%gs" % seconds
+
+
+def read_request(conn):
+    data = b""
+    while not data.endswith(b"\n"):
+        chunk = conn.recv(65536)
+        if not chunk:
+            break
+        data += chunk
+    return data.decode().strip()
+
+
+def reply(conn, out, err):
+    # header line with both lengths, then the r2 output, then r2's stderr
+    out_b, err_b = out.encode(), err.encode()
+    conn.sendall(b"%d %d\n" % (len(out_b), len(err_b)) + out_b + err_b)
+
+
+def ask(sock, cmd, timeout=600):
+    """Returns (output, stderr lines) of one command; raises OSError without a session."""
+    c = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+    c.settimeout(timeout)
+    c.connect(sock)
+    c.sendall(cmd.encode() + b"\n")
+    c.shutdown(socket.SHUT_WR)
+    data = b""
+    while True:
+        chunk = c.recv(65536)
+        if not chunk:
+            break
+        data += chunk
+    c.close()
+    header, _, body = data.partition(b"\n")
+    try:
+        n_out, n_err = (int(x) for x in header.split())
+    except ValueError:  # a daemon of an older r2q without the header
+        return data.decode(errors="replace"), ""
+    return body[:n_out].decode(errors="replace"), body[n_out:n_out + n_err].decode(errors="replace")
+
+
+def alive(sock):
+    try:
+        return ask(sock, "\x00ping", timeout=30)[0].strip() == "r2q"
+    except OSError:
+        return False
+
+
+def session_info(sock):
+    try:
+        with open(sock + ".json") as f:
+            return json.load(f)
+    except (OSError, ValueError):
+        return None
+
+
+def list_sessions():
+    """Print the live sessions; a dead session's socket and record are removed."""
+    for name in sorted(os.listdir(CACHE)):
+        if not name.endswith(".sock"):
+            continue
+        sock = os.path.join(CACHE, name)
+        info = session_info(sock) or {}
+        if alive(sock):
+            saved = time.strftime("%H:%M", time.localtime(info["last_save"])) if info.get("last_save") else "never"
+            print("%s  pid %s  project %s  saved %s" % (info.get("file", "?"), info.get("pid", "?"), info.get("project") or "-", saved))
+        else:
+            for p in (sock, sock + ".json"):
+                if os.path.exists(p):
+                    os.unlink(p)
+            print("%s  (dead session removed)" % info.get("file", name), file=sys.stderr)
+
+
+def log_errors(log):
+    """The lines of a session log that explain a failed start."""
+    try:
+        with open(log, errors="replace") as f:
+            lines = [ESCAPES.sub("", l).rstrip() for l in f]
+    except OSError:
+        return []
+    return [l for l in lines if l and (l.startswith("ERROR") or "Error" in l or "rror:" in l)][-6:]
+
+
+def start_daemon(a, project, sock):
+    log = sock[:-5] + ".log"
+    args = [sys.executable, os.path.abspath(__file__), "--serve", "-f", a.file, "--idle", str(a.idle)]
+    if project:
+        args += ["-P", project]
+    for ev in a.eval:
+        args += ["-e", ev]
+    with open(log, "w") as logf:
+        subprocess.Popen(args, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=logf, start_new_session=True)
+    for _ in range(600):  # a project load can take a minute
+        time.sleep(0.2)
+        if os.path.exists(sock) and alive(sock):
+            return
+    sys.exit("r2q: the session did not come up (%s):\n  %s" % (log, "\n  ".join(log_errors(log)) or "no error in the log"))
+
+
+def commands_from(a):
+    """The commands of this call: the arguments, or with '-' one per line of stdin."""
+    if a.cmd == ["-"]:  # only on request: an agent harness keeps stdin open without ever closing it
+        return [l.strip() for l in sys.stdin if l.strip() and not l.lstrip().startswith("#")]
+    return [" ".join(a.cmd)] if a.cmd else []
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0], formatter_class=argparse.RawDescriptionHelpFormatter, epilog="\n".join(__doc__.split("\n")[2:]))
+    ap.add_argument("-f", "--file", default=os.environ.get("R2Q_FILE"), help="the binary (or $R2Q_FILE)")
+    ap.add_argument("-P", "--project", help="the r2 project (path, or 'auto' for <dir>/proj/<name>): opened when it exists, else created by the first save")
+    ap.add_argument("-e", "--eval", action="append", default=[], metavar="KEY=VALUE", help="r2 -e setting for the session start (e.g. bin.baddr=0x800000)")
+    ap.add_argument("--idle", type=parse_duration, default=os.environ.get("R2Q_IDLE", "4h"), help="stop the session after this long without a request (30m, 4h; 0 = never; default 4h)")
+    ap.add_argument("--out", metavar="FILE", help="write the answer to FILE and print its size instead")
+    ap.add_argument("-v", "--verbose", action="store_true", help="report size and time of every answer on stderr")
+    ap.add_argument("--save", nargs="?", const="", metavar="PROJECT", help="save the project now (default: the session's project)")
+    ap.add_argument("--stop", action="store_true", help="end the binary's session (saves first)")
+    ap.add_argument("--list", action="store_true", help="list the running sessions and drop dead ones")
+    ap.add_argument("--serve", action="store_true", help=argparse.SUPPRESS)
+    ap.add_argument("cmd", nargs="*", help="the r2 command(s); ';' separates several; '-' reads one per line from stdin")
+    a = ap.parse_args()
+    if isinstance(a.idle, str):
+        a.idle = parse_duration(a.idle)
+
+    os.makedirs(CACHE, exist_ok=True)
+    if a.list:
+        list_sessions()
+        return
+    if not a.file:
+        ap.error("no binary: give -f or set R2Q_FILE")
+    if not os.path.isfile(a.file):
+        sys.exit("r2q: no such file: %s" % a.file)
+    sock = sock_path(a.file)
+    project = project_for(a.file, a.project, sock)
+    if a.serve:
+        Session(a.file, project, a.eval, sock, a.idle, sock[:-5] + ".log").serve()
+        return
+    if a.stop:
+        try:
+            print(ask(sock, "\x00stop")[0].strip())
+        except OSError:
+            print("no session for", a.file)
+        return
+    if not alive(sock):
+        if project and not project_exists(project):
+            print("r2q: project %s does not exist yet; analysing the binary, the first save writes it" % project, file=sys.stderr)
+        start_daemon(a, project, sock)
+    elif project and (session_info(sock) or {}).get("project") != project:
+        print("r2q: session already open with project %s; --stop to reopen with %s" % ((session_info(sock) or {}).get("project") or "-", project), file=sys.stderr)
+    if a.save is not None:
+        if a.save:
+            target = os.path.abspath(a.save)
+            ask(sock, "e dir.projects=%s; Ps %s" % (os.path.dirname(target), os.path.basename(target)))
+            out, err = "saved %s\n" % target, ""
+        elif (session_info(sock) or {}).get("project"):
+            out, err = ask(sock, "\x00save")
+        else:
+            sys.exit("r2q: --save needs a project name or a session started with -P")
+        sys.stdout.write(out)
+        if err:
+            print("\n".join("r2: " + l for l in err.splitlines()), file=sys.stderr)
+
+    commands = commands_from(a)
+    batch = len(commands) > 1 or a.cmd == ["-"]
+    sink = open(a.out, "w") if a.out else sys.stdout
+    total = 0
+    for cmd in commands:
+        started = time.time()
+        out, err = ask(sock, cmd)
+        took = time.time() - started
+        if batch:
+            sink.write("--- r2q: %s\n" % cmd)
+        sink.write(out)
+        if out and not out.endswith("\n"):
+            sink.write("\n")
+        total += out.count("\n")
+        if err:
+            print("\n".join("r2: " + l for l in err.splitlines()), file=sys.stderr)
+        if a.verbose:
+            print("r2q: %s: %d bytes, %.2f s" % (cmd, len(out.encode()), took), file=sys.stderr)
+        elif not out.strip() and not err:
+            print("r2q: empty answer for '%s' (%.2f s)" % (cmd, took), file=sys.stderr)
+    if a.out:
+        sink.close()
+        print("r2q: %d lines in %s" % (total, a.out))
+
+
+if __name__ == "__main__":
+    main()
