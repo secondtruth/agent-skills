@@ -130,6 +130,7 @@ Acceptable USPs:
 - A different topology (self-hosted where competition is SaaS, or vice versa)
 - A radically different UX for the same capability
 - Better integration with a specific ecosystem the user lives in
+- A topology that turns direct competitors into suppliers — embedding or driving them instead of replacing them
 
 Unacceptable USPs:
 

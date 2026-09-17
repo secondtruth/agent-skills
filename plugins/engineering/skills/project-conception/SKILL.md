@@ -33,6 +33,8 @@ Each named skill applies when it is among your available skills; otherwise this 
 
 The transition from `brainstorming` to this skill happens when the user stops asking "what if" and starts asking "should we" or "how would this work". When in doubt, ask which mode the user is in.
 
+The handover also runs the other way. When the request arrives as a list of wishes rather than a question ("integrates X, Y, maybe Z, best effort"), run one divergent/convergent pass with the `brainstorming` skill, when it is among your available skills, before Phase 1 ends — after the landscape is in, so the pass works on facts: which wishes the landscape already fulfils, which nobody does, which combination is new. Record what survived and what was dropped in the concept's origin section.
+
 ## Pick the path first, then read its reference
 
 Conception looks different depending on what is being conceived. Decide which of the two it is, then **read the matching reference before starting Phase 1** – this document holds only what both paths share.
@@ -59,7 +61,7 @@ What Phase 1 actually surveys is path-specific: portfolio check plus external la
 - **Pivot** – the original idea is taken, but the underlying motivation could be served by a different cut
 - **Extend** – this belongs as a feature/module of an existing project
 
-State the recommendation as a verdict the user can override — an opinion, not a non-answer. When the `grilling` skill is among your available skills, it is the interview that gets you to the verdict; when Phase 1 surfaces more open decisions than one session can settle and the `wayfinder` skill is available, chart the map there and return to Phase 2 when the way is clear.
+State the recommendation as a verdict the user can override — an opinion, not a non-answer. On **Pivot**, carry on without waiting: write Phase 2 and 3 for the pivoted cut, list the verdict itself as open question 1 of the handoff, and record nothing as decided until the user accepts it — ADRs stay `proposed`, and the knowledge base gets no project-evolution entry. When the `grilling` skill is among your available skills, it is the interview that gets you to the verdict; when Phase 1 surfaces more open decisions than one session can settle and the `wayfinder` skill is available, chart the map there and return to Phase 2 when the way is clear.
 
 ## Phase 2 essentials: what every concept states
 

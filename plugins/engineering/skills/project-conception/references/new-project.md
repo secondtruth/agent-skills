@@ -24,6 +24,8 @@ The list below is not a source-quality ranking – it's where competitors hide, 
 - Product Hunt / lobste.rs / Show HN for product framing
 - Wikipedia + academic search for "is this a solved problem with a name we don't know yet"
 
+For ideas about tools the user already runs, check the machine too: the `--help` of an installed CLI is a primary source and often newer than the web — flags, subcommands and served schemas (`/openapi.json`) the docs have not caught up with.
+
 ### Step 3: Structured analysis
 
 Read `competitive-analysis.md` for the full methodology – taxonomy, feature matrix template, traction signals, license/business-model check, USP distillation, anti-features, and how to mine dead projects for lessons.
