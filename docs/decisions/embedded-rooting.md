@@ -4,7 +4,7 @@
 
 Build an original skill for gaining and keeping root access on the user's own embedded Linux devices (IP cameras, IoT appliances, routers). The capability is a distinct pipeline that no candidate covers as a whole: identify the platform → analyze the vendor firmware → modify the image → flash via the safest available path → verify offline before and after → harden the result without severing the recovery path.
 
-Placement: the public `engineering` plugin, next to `reverse-engineering` (revised 2026-09-17; the first draft of this record chose agent-skills-private). Rooting workflows are dual-use, so the safeguards live in the skill itself rather than in the repo's visibility: the description and the opening paragraph restrict it to devices the user owns or is explicitly authorized to modify, the pipeline is build-to-survive (offline verification before flashing, recovery path kept open) and contains no exploitation chain, and the cited pentest sources are references for the analysis phase only. That is the same boundary the public `reverse-engineering` skill already draws.
+Placement: the public `engineering` plugin, next to `reverse-engineering` (revised 2026-09-17; the first draft of this record chose the private marketplace). Rooting workflows are dual-use, so the safeguards live in the skill itself rather than in the repo's visibility: the description and the opening paragraph restrict it to devices the user owns or is explicitly authorized to modify, the pipeline is build-to-survive (offline verification before flashing, recovery path kept open) and contains no exploitation chain, and the cited pentest sources are references for the analysis phase only. That is the same boundary the public `reverse-engineering` skill already draws.
 
 ## Scouting, 2026-09-13
 
@@ -17,16 +17,16 @@ Capability named three ways for search: firmware rooting, embedded root shell, j
 - [ctf-skills](https://github.com/ljagiello/ctf-skills) (3260 stars): CTF pwn, different goal and target class.
 - ESP32 firmware-engineer skills and the aix-skills embedded collection generally: development/bring-up, not rooting.
 
-No existing skill covers firmware *modification with brick-risk management* — the differentiating capability. That gap is what the E1 Zoom project demonstrated end to end, and the verdict rests on those learnings rather than on more breadth of search.
+No existing skill covers firmware *modification with brick-risk management* — the differentiating capability. That gap is what the IP-camera rooting project demonstrated end to end, and the verdict rests on those learnings rather than on more breadth of search.
 
-## Build content (from the E1 Zoom root project)
+## Build content (from the IP-camera rooting project)
 
 The skill's spine, each step carrying a survival rule:
 
 1. **Enumerate and identify** — ARP/portscan/banner first; never start by opening the case.
 2. **Analyze vendor firmware** — download the stock image, parse the container format, map flash layout, extract the rootfs. Survival rule: record and verify partition offsets before touching anything.
 3. **Choose the access route** — vendor API (like the Reolink `/cgi-bin/api.cgi` upgrade path), UART, SD autorun hooks, config-injection. Survival rule: prefer the route the vendor's updater already exercises; match its checks rather than bypass them where possible.
-4. **Offline verification before flash** — re-extract the patched image and compare, check CRC and partition sizes, syntax-check init scripts with the target's own busybox, and boot-test added binaries under qemu-user against the real rootfs (the E1 Zoom dropbear login was proven this way before any flash).
+4. **Offline verification before flash** — re-extract the patched image and compare, check CRC and partition sizes, syntax-check init scripts with the target's own busybox, and boot-test added binaries under qemu-user against the real rootfs (the camera's dropbear login was proven this way before any flash).
 5. **Flash and wait patiently** — no power cycle during write (flash can take many minutes); expect the first connection after reboot to fail (host-key generation); find the device by MAC after a config reset, not by its old IP.
 6. **Harden without self-sabotage** — key-only SSH with an authorized_keys fallback, every hardening change additive, a documented recovery path left deliberately open.
 7. **Known pitfalls** — dropbear strict modes reject world-writable `$HOME`; old dropbear needs legacy `ssh-rsa` algorithms forced; "restore config" upgrade flags silently reset device settings; updater binaries write all sections including empty ones.
