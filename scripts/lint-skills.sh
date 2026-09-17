@@ -2,7 +2,8 @@
 # Lint every skill in this marketplace against the writing-for-agents rubric:
 # description budget, hard references to sibling skills, negation density,
 # personal/private markers, licence frontmatter — and the bookkeeping around
-# them: name: equals the directory, the README table matches the tree.
+# them: name: equals the directory, the README table matches the tree, the
+# description says when to use the skill.
 #
 # Usage: scripts/lint-skills.sh [--public] [--strict] [plugins-dir]
 #   --public   the repository is public: personal markers are errors and a
@@ -83,6 +84,11 @@ for skill_md in $(find "$root" -name SKILL.md -path '*/skills/*' | sort); do
   words=$(printf '%s' "$desc" | wc -w | tr -d ' ')
   if [ "$words" -eq 0 ]; then err "description missing"
   elif [ "$words" -gt "$DESCRIPTION_BUDGET" ]; then err "description is $words words (budget $DESCRIPTION_BUDGET)"; fi
+
+  # a description is a trigger, not a summary: it says when to use the skill
+  if [ "$words" -gt 0 ] && ! printf '%s' "$desc" | grep -qiE '\b(use|apply|load|reach for)( it| this)? +(when|whenever|for|if|before|after|on|from|as soon as)\b|\btrigger'; then
+    warn "description names no trigger (no 'Use when…' clause)"
+  fi
 
   if [ "$public" -eq 1 ] && ! frontmatter "$skill_md" | grep -q '^license:'; then err "no license: in frontmatter"; fi
 
