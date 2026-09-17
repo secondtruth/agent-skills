@@ -26,4 +26,4 @@ Desk review of the instructions, without claiming independent behavioral executi
 
 ## Delivery state
 
-Source skill, references, plugin descriptions/keywords and README updated. A release remains a separate minor version bump across all three thinking manifests, merged through a pull request. Installed copies remain generated outputs.
+Source skill, references, plugin descriptions/keywords and README updated; the three thinking manifests were bumped to 0.2.0 in the same pull request (#15). Installed copies remain generated outputs.
