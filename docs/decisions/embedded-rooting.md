@@ -4,7 +4,7 @@
 
 Build an original skill for gaining and keeping root access on the user's own embedded Linux devices (IP cameras, IoT appliances, routers). The capability is a distinct pipeline that no candidate covers as a whole: identify the platform → analyze the vendor firmware → modify the image → flash via the safest available path → verify offline before and after → harden the result without severing the recovery path.
 
-Placement: agent-skills-private. Rooting workflows are dual-use; the public marketplace rules and the private repo's security-sensitive scope both point there. The skill must document the ownership boundary (own devices, authorized targets) and carry the safety-first philosophy from the E1 Zoom project, not a pentest tool chain.
+Placement: the public `engineering` plugin, next to `reverse-engineering` (revised 2026-09-17; the first draft of this record chose agent-skills-private). Rooting workflows are dual-use, so the safeguards live in the skill itself rather than in the repo's visibility: the description and the opening paragraph restrict it to devices the user owns or is explicitly authorized to modify, the pipeline is build-to-survive (offline verification before flashing, recovery path kept open) and contains no exploitation chain, and the cited pentest sources are references for the analysis phase only. That is the same boundary the public `reverse-engineering` skill already draws.
 
 ## Scouting, 2026-09-13
 
@@ -33,4 +33,4 @@ The skill's spine, each step carrying a survival rule:
 
 ## Delivery state
 
-Decision recorded only. The skill itself is not yet written: source, placement in agent-skills-private, references, and the private plugin's manifests/keywords/README still to be done, followed by the private repo's own lint and release flow. The references above stay discovery leads-turned-read-sources, imported as citations, never as copied structure.
+Shipped in PR #15 as `engineering/device-rooting` with `references/pitfalls.md` and `references/verification-playbook.md`; engineering manifests bumped to 0.7.0 with the `device-rooting` and `embedded-firmware` keywords. The references above stay discovery leads-turned-read-sources, imported as citations, never as copied structure.
