@@ -37,9 +37,10 @@ So:
 
 ## Scripts in this skill
 
-`scripts/` holds three tools; put the two executables on `PATH` (a symlink
-is enough) or call them by path. They need radare2 with `r2ghidra` and
-`r2dec`, `uv`, Ghidra and a JDK 21.
+`scripts/` holds three tools, called by path (`<skill-dir>/scripts/r2q`);
+for shells and agents that run without the skill loaded, a symlink from a
+`PATH` directory does. They need radare2 with `r2ghidra` and `r2dec`, `uv`,
+Ghidra and a JDK 21.
 
 - `r2q` keeps one radare2 session per binary in a daemon and answers
   commands in milliseconds: `r2q -f x.exe -P auto -- aaa` opens the session
