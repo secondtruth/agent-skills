@@ -120,10 +120,11 @@ class Session:
         except Exception as e:  # r2pipe raises on a dead r2
             out = ""
             print("r2q: %s" % e, file=sys.stderr, flush=True)
-        if self.project and CHANGING.match(cmd):
+        parts = [c.strip() for c in cmd.split(";")]  # 'pdf; afn x' changes the session in its second half
+        if self.project and any(CHANGING.match(c) for c in parts):
             self.dirty += 1
             self.changed_at = time.time()
-            if HEAVY.match(cmd):
+            if any(HEAVY.match(c) for c in parts):
                 self.save()
         return out
 
