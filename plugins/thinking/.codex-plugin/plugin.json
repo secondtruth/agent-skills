@@ -1,7 +1,7 @@
 {
   "name": "thinking",
-  "version": "0.1.0",
-  "description": "Thinking tools: multi-lens analysis, critical traditions, brainstorming, self-review, roadmap prioritisation.",
+  "version": "0.2.0",
+  "description": "Thinking tools: multi-lens analysis, critical traditions, brainstorming, PC and console game conception, self-review, roadmap prioritisation.",
   "author": {
     "name": "Christian Neff",
     "url": "https://github.com/secondtruth"
@@ -10,13 +10,14 @@
     "analysis",
     "brainstorming",
     "review",
-    "roadmap"
+    "roadmap",
+    "game-design"
   ],
   "license": "MIT",
   "skills": "./skills/",
   "interface": {
     "displayName": "Thinking",
-    "shortDescription": "Thinking tools: multi-lens analysis, critical traditions, brainstorming, self-review, roadmap prioritisation.",
+    "shortDescription": "Thinking tools: multi-lens analysis, critical traditions, brainstorming, PC and console game conception, self-review, roadmap prioritisation.",
     "category": "Productivity"
   }
 }
