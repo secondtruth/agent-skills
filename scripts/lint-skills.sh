@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Lint every skill in this marketplace against the writing-for-agents rubric:
 # description budget, hard references to sibling skills, negation density,
-# personal/private markers, and licence frontmatter.
+# personal/private markers, licence frontmatter — and the bookkeeping around
+# them: name: equals the directory, the README table matches the tree.
 #
 # Usage: scripts/lint-skills.sh [--public] [--strict] [plugins-dir]
 #   --public   the repository is public: personal markers are errors and a
@@ -53,9 +54,30 @@ description() {
     END { gsub(/^[ "]+|[ "]+$/, "", d); print d }'
 }
 
+# The README's plugin table and every skill directory must agree: a skill
+# listed without a directory (or the reverse) is what a half-committed
+# release looks like.
+readme="$(dirname "$root")/README.md"
+if [ -f "$readme" ]; then
+  printf 'README.md\n'
+  for plugin_dir in "$root"/*/; do
+    plugin=$(basename "$plugin_dir")
+    [ -d "$plugin_dir/skills" ] || continue
+    # the skills cell: second column, commas between names, parentheses carry asides
+    listed=$(grep -E "^\| \`$plugin\` \|" "$readme" | sed -E 's/^\| `[^`]+` \|//; s/\|.*$//; s/\([^)]*\)//g' | tr ',' '\n' | tr -d ' ' | grep . | sort -u)
+    present=$(ls "$plugin_dir/skills" | sort -u)
+    if [ -z "$listed" ]; then err "plugin \`$plugin\` has no row in the README table"; continue; fi
+    report err "skills of \`$plugin\` missing from the README row" "$(comm -13 <(printf '%s\n' "$listed") <(printf '%s\n' "$present"))"
+    report err "README lists skills \`$plugin\` does not have" "$(comm -23 <(printf '%s\n' "$listed") <(printf '%s\n' "$present"))"
+  done
+fi
+
 for skill_md in $(find "$root" -name SKILL.md -path '*/skills/*' | sort); do
   dir=$(dirname "$skill_md"); name=$(basename "$dir")
   printf '%s\n' "${skill_md#"$root"/}"
+
+  fm_name=$(frontmatter "$skill_md" | awk '/^name:/ { sub(/^name:[ ]*/, ""); print; exit }')
+  [ "$fm_name" = "$name" ] || err "name: is '$fm_name', directory is '$name'"
 
   desc=$(description "$skill_md")
   words=$(printf '%s' "$desc" | wc -w | tr -d ' ')
