@@ -37,12 +37,13 @@ yt-dlp --skip-download --write-subs --write-auto-subs --sub-langs "<spoken langu
   -o '%(id)s.%(ext)s' "<url>"
 ```
 
-Then flatten the VTT into text — timestamps, tags and the rolling duplicates of
-auto-captions removed:
+Then flatten the VTT into text. Auto-captions roll: every line is repeated in the two
+or three cues that follow it, so adjacent duplicates go and a line spoken again later
+stays:
 
 ```bash
-sed -e '/-->/d' -e 's/<[^>]*>//g' -e '/^WEBVTT/d' -e '/^Kind:/d' -e '/^Language:/d' <id>.<lang>.vtt \
-  | grep -v '^[[:space:]]*$' | awk '!seen[$0]++' > transcript.txt
+sed -e '/-->/d' -e 's/<[^>]*>//g' -e '/^WEBVTT/d' -e '/^Kind:/d' -e '/^Language:/d' \
+  -e 's/&nbsp;//g' -e 's/[[:space:]]*$//' <id>.<lang>.vtt | grep -v '^$' | uniq > transcript.txt
 ```
 
 Verified September 2026 with yt-dlp 2026.08.19:
@@ -53,7 +54,8 @@ Verified September 2026 with yt-dlp 2026.08.19:
 - `--print` switches on simulation, so the subtitle files appear only with
   `--no-simulate`.
 - Auto-captions carry neither punctuation nor speaker labels; timestamps for a quote
-  come from the VTT, before the flattening.
+  come from the VTT, before the flattening. Uploaded captions carry no rolling
+  duplicates, and the same pipeline leaves them intact.
 - A video without captions leaves audio transcription: `yt-dlp -x --audio-format m4a`
   fetches the audio for a local speech-to-text tool (unverified here).
 
