@@ -22,8 +22,7 @@ knows the composer, the model picker and how to read the answer back.
 3. Wait for the answer, read it back with `get_page_text`, and bring it into the
    conversation together with the chat link.
 
-Gemini through oracle covers text and images only, and the Gemini CLI stopped serving
-individual accounts in September 2026: the website is the route.
+Gemini through oracle covers text and images only: for video, the website is the route.
 
 ## Fallback: subtitles through yt-dlp
 
