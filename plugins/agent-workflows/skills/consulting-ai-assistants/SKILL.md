@@ -14,7 +14,7 @@ other skills: `oracle-advisor` and `oracle` for ChatGPT through oracle, and
 | Task | Assistant | Transport |
 | --- | --- | --- |
 | Second opinion, review, design critique on text and files | ChatGPT | oracle |
-| The same, on a directory of code | Codex, Kimi | their CLIs, run in that directory |
+| The same, on a directory of code | Codex, Kimi, Gemini | their CLIs (`codex`, `kimi`, `agy`), run on a disposable worktree of that directory |
 | The same, from a further model | Kimi, Mistral, Gemini | kimi.ai and chat.mistral.ai in the browser; Gemini through oracle for text, its site for the rest and when oracle is absent |
 | A YouTube video, a Google notebook, the newest Gemini model, anything in the user's Google account | Gemini | gemini.google.com |
 | A plugin skill update, anything that should run as Claude with the user's claude.ai context | Claude | claude.ai |
@@ -49,7 +49,7 @@ chatgpt.com by hand, through `driving-ai-chat-websites` when it is among your av
 skills, is for the cases oracle leaves: oracle absent, or the chat itself the deliverable
 — a link the user continues in, a button they press there.
 
-## Gemini: oracle for text, the site for everything else
+## Gemini: oracle for text, agy on a directory, the site for everything else
 
 oracle reaches gemini.google.com through its cookie client and takes long inline bundles
 without complaint (27k tokens in September 2026). Its Gemini support covers text and
@@ -57,9 +57,20 @@ images, and oracle 0.20.x knows Gemini only up to 3.1 Pro and 3.5 Flash (plus De
 Think), falling back to Flash-Lite unless `--no-gemini-fallback` is set. Video, notebooks,
 the newest models and the user's Google account need the website — as does a text
 consultation when oracle is absent or refuses the model: gemini.google.com through
-`driving-ai-chat-websites` when available. The Gemini CLI stopped
-serving individual accounts in September 2026 (`IneligibleTierError`), so nothing goes
-through it. A YouTube video follows the `youtube-video-ingestion` skill when available.
+`driving-ai-chat-websites` when available. A YouTube video follows the
+`youtube-video-ingestion` skill when available.
+
+On a directory, the Antigravity CLI (`agy`) answers headless and reads the files itself;
+`agy models` lists its models with their effort tiers. Verified September 2026 with agy
+1.2.8: headless mode auto-denies every tool without an allow-rule, `read_file` included,
+so run it on a disposable worktree (as for Kimi below) with permissions skipped:
+
+```bash
+cd <scratch>/review && agy --dangerously-skip-permissions --model <model> --print "<prompt>"
+```
+
+An allow-rule for `read_file` under `permissions.allow` in its `settings.json` is the
+standing alternative to the flag.
 
 ## Kimi: the CLI in the directory, kimi.ai otherwise
 
