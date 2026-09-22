@@ -64,19 +64,22 @@ through it. A YouTube video follows the `youtube-video-ingestion` skill when ava
 ## Kimi: the CLI in the directory, kimi.ai otherwise
 
 When the task names a directory — a codebase to review, a repository to critique — run
-the Kimi Code CLI (`kimi`) in that directory. It reads the files itself:
+the Kimi Code CLI (`kimi`) on a disposable copy of it. It reads the files itself:
 
 ```bash
-cd <directory> && kimi -m <model> -p "<prompt>"
+git -C <directory> worktree add --detach <scratch>/review HEAD
+cd <scratch>/review && kimi -m <model> -p "<prompt>"
+git -C <directory> worktree remove --force <scratch>/review
 ```
 
 Verified September 2026 with kimi-code 0.41 (default model `k3-256k`):
 
 - The prompt travels on the command line and shows in the process list; `-p -` reads
   nothing from stdin.
-- `-p` mode edits files without asking, and refuses `--plan`. Run it on a committed tree,
-  say in the prompt that the review is read-only, and check `git status --short`
-  afterwards; anything it wrote is reverted with git.
+- `-p` mode edits files without asking, and refuses `--plan`. The worktree is the
+  isolation: it holds committed files only, so `.env` files and untracked work stay out
+  of Kimi's reach, and whatever it writes vanishes with the worktree. Say in the prompt
+  that the review is read-only all the same.
 - The CLI's plan runs on a five-hour quota. A 403 naming the usage limit means the window
   is spent; the website keeps working on the same account in the meantime.
 
