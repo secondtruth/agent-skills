@@ -1,5 +1,5 @@
 ---
-name: ingesting-youtube-videos
+name: youtube-video-ingestion
 license: MIT
 description: Bring the content of a YouTube video into the conversation — summary, transcript, timestamps, what the speaker claims — through Gemini in the user's browser, with yt-dlp subtitles as the fallback. Use whenever a task names a YouTube URL or asks what a video says.
 ---
