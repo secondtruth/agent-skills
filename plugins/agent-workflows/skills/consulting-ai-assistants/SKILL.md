@@ -15,7 +15,7 @@ other skills: `oracle-advisor` and `oracle` for ChatGPT through oracle, and
 | --- | --- | --- |
 | Second opinion, review, design critique on text and files | ChatGPT | oracle |
 | The same, on a directory of code | Codex, Kimi | their CLIs, run in that directory |
-| The same, from a further model | Kimi, Mistral, Gemini | kimi.ai and chat.mistral.ai in the browser; Gemini through oracle for text, its site for the rest |
+| The same, from a further model | Kimi, Mistral, Gemini | kimi.ai and chat.mistral.ai in the browser; Gemini through oracle for text, its site for the rest and when oracle is absent |
 | A YouTube video, a Google notebook, the newest Gemini model, anything in the user's Google account | Gemini | gemini.google.com |
 | A plugin skill update, anything that should run as Claude with the user's claude.ai context | Claude | claude.ai |
 
@@ -55,7 +55,9 @@ oracle reaches gemini.google.com through its cookie client and takes long inline
 without complaint (27k tokens in September 2026). Its Gemini support covers text and
 images, and oracle 0.20.x knows Gemini only up to 3.1 Pro and 3.5 Flash (plus Deep
 Think), falling back to Flash-Lite unless `--no-gemini-fallback` is set. Video, notebooks,
-the newest models and the user's Google account need the website. The Gemini CLI stopped
+the newest models and the user's Google account need the website — as does a text
+consultation when oracle is absent or refuses the model: gemini.google.com through
+`driving-ai-chat-websites` when available. The Gemini CLI stopped
 serving individual accounts in September 2026 (`IneligibleTierError`), so nothing goes
 through it. A YouTube video follows the `youtube-video-ingestion` skill when available.
 
