@@ -32,7 +32,7 @@ or a retry still ends in "Something went wrong". `yt-dlp` comes from Homebrew
 (`brew install yt-dlp`). Fetch the captions without the video:
 
 ```bash
-yt-dlp --skip-download --write-subs --write-auto-subs --sub-langs "en,de" --sub-format vtt \
+yt-dlp --skip-download --write-subs --write-auto-subs --sub-langs "<spoken language>" --sub-format vtt \
   --no-simulate --print "%(title)s | %(channel)s | %(upload_date)s | %(duration)s s" \
   -o '%(id)s.%(ext)s' "<url>"
 ```
@@ -47,8 +47,9 @@ sed -e '/-->/d' -e 's/<[^>]*>//g' -e '/^WEBVTT/d' -e '/^Kind:/d' -e '/^Language:
 
 Verified September 2026 with yt-dlp 2026.08.19:
 
-- `--sub-langs` names the video's spoken languages. Wildcards such as `en.*` also request
-  YouTube's auto-translated variants (`en-de`), which answer with HTTP 429.
+- `--sub-langs` names the language the video is spoken in (`en`, `de`, or a list such
+  as `en,de` when it is unknown). Wildcards such as `en.*` also request YouTube's
+  auto-translated variants (`en-de`), which answer with HTTP 429.
 - `--print` switches on simulation, so the subtitle files appear only with
   `--no-simulate`.
 - Auto-captions carry neither punctuation nor speaker labels; timestamps for a quote
