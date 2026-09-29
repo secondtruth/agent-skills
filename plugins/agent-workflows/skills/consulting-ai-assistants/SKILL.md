@@ -13,9 +13,9 @@ other skills: `oracle-advisor` and `oracle` for ChatGPT through oracle, and
 
 | Task | Assistant | Transport |
 | --- | --- | --- |
-| Second opinion, review, design critique on text and files | ChatGPT | oracle |
-| The same, on a directory of code | Codex, Kimi, Gemini | their CLIs (`codex`, `kimi`, `agy`), run on a disposable worktree of that directory |
-| The same, from a further model | Kimi, Mistral, Gemini | kimi.ai and chat.mistral.ai in the browser; Gemini through oracle for text, its site for the rest and when oracle is absent |
+| Second opinion, review, design critique on text and files | ChatGPT, Gemini | oracle |
+| The same, on a directory of code | Codex, Kimi, Gemini | their CLIs: `codex` in the directory under its read-only sandbox, `kimi` and `agy` on a disposable worktree of it |
+| The same, without a directory | Kimi, Mistral | kimi.ai and chat.mistral.ai in the browser |
 | A YouTube video, a Google notebook, the newest Gemini model, anything in the user's Google account | Gemini | gemini.google.com |
 | A plugin skill update, anything that should run as Claude with the user's claude.ai context | Claude | claude.ai |
 
@@ -23,6 +23,21 @@ other skills: `oracle-advisor` and `oracle` for ChatGPT through oracle, and
 ChatGPT, Gemini **and Kimi**, at least. Every one of them gets the same brief and the
 same context files, and every answer is stored unabridged beside the others (a
 `docs/reviews/` directory in the project is the usual place), each with its provenance.
+
+## A directory review runs on a disposable worktree
+
+A CLI without a read-only sandbox of its own gets a copy of the tree instead:
+
+```bash
+git -C <directory> worktree add --detach <scratch>/review HEAD
+# the CLI runs in <scratch>/review
+git -C <directory> worktree remove --force <scratch>/review
+```
+
+The worktree protects the repository: it holds committed files only, so `.env` files and
+untracked work stay out of the CLI's reach, and whatever it writes there vanishes with
+the worktree. The rest of the machine is protected by the prompt alone, so state in it
+that the review is read-only.
 
 ## ChatGPT: oracle
 
@@ -49,7 +64,7 @@ chatgpt.com by hand, through `driving-ai-chat-websites` when it is among your av
 skills, is for the cases oracle leaves: oracle absent, or the chat itself the deliverable
 — a link the user continues in, a button they press there.
 
-## Gemini: oracle for text, agy on a directory, the site for everything else
+## Gemini: oracle for text and files, agy on a directory, the site for the rest
 
 oracle reaches gemini.google.com through its cookie client and takes long inline bundles
 without complaint (27k tokens in September 2026). Its Gemini support covers text and
@@ -60,37 +75,41 @@ consultation when oracle is absent or refuses the model: gemini.google.com throu
 `driving-ai-chat-websites` when available. A YouTube video follows the
 `youtube-video-ingestion` skill when available.
 
-On a directory, the Antigravity CLI (`agy`) answers headless and reads the files itself;
-`agy models` lists its models with their effort tiers. Verified September 2026 with agy
-1.2.8: headless mode auto-denies every tool without an allow-rule, `read_file` included,
-so run it on a disposable worktree (as for Kimi below) with permissions skipped:
+On a directory, the Antigravity CLI (`agy`) answers headless and reads the files itself,
+run on the disposable worktree described above; `agy models` lists its models with their
+effort tiers:
 
 ```bash
-cd <scratch>/review && agy --dangerously-skip-permissions --model <model> --print "<prompt>"
+cd <scratch>/review && agy --model <model> --print "<prompt>"
 ```
 
-An allow-rule for `read_file` under `permissions.allow` in its `settings.json` is the
-standing alternative to the flag.
+Verified September 2026 with agy 1.2.8 and 1.2.13:
 
-## Kimi: the CLI in the directory, kimi.ai otherwise
+- Headless mode auto-denies every tool without an allow-rule, `read_file` included, and
+  then prints no answer at all. The rule belongs under `permissions.allow` in
+  `~/.gemini/antigravity-cli/settings.json`, scoped to the worktree:
+  `read_file(<absolute path of the worktree>)`. The rule syntax comes from agy's own
+  help; adding it is a change to the user's configuration, so ask first.
+- `--dangerously-skip-permissions` answers too, on the footing Kimi's `-p` mode always
+  has: the worktree protects the repository, the prompt the rest of the machine.
+  `--sandbox` confines terminal commands only; the file tool still wrote into the home
+  directory with it. Prefer the allow-rule.
+
+## Kimi: the CLI on a directory, kimi.ai otherwise
 
 When the task names a directory — a codebase to review, a repository to critique — run
-the Kimi Code CLI (`kimi`) on a disposable copy of it. It reads the files itself:
+the Kimi Code CLI (`kimi`) on a disposable worktree of it. It reads the files itself:
 
 ```bash
-git -C <directory> worktree add --detach <scratch>/review HEAD
 cd <scratch>/review && kimi -m <model> -p "<prompt>"
-git -C <directory> worktree remove --force <scratch>/review
 ```
 
 Verified September 2026 with kimi-code 0.41 (default model `k3-256k`):
 
 - The prompt travels on the command line and shows in the process list; `-p -` reads
   nothing from stdin.
-- `-p` mode edits files without asking, and refuses `--plan`. The worktree is the
-  isolation: it holds committed files only, so `.env` files and untracked work stay out
-  of Kimi's reach, and whatever it writes vanishes with the worktree. Say in the prompt
-  that the review is read-only all the same.
+- `-p` mode edits files without asking, and refuses `--plan`; the worktree is the
+  isolation.
 - The CLI's plan runs on a five-hour quota. A 403 naming the usage limit means the window
   is spent; the website keeps working on the same account in the meantime.
 
