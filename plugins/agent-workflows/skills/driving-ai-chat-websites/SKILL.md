@@ -1,7 +1,7 @@
 ---
 name: driving-ai-chat-websites
 license: MIT
-description: Drive an AI chat assistant's website through the user's browser — find the composer, put a prompt in without sending it, pick the model, wait for the answer and read it back — on claude.ai, chatgpt.com, gemini.google.com, chat.mistral.ai and kimi.ai. Use whenever a task runs in a logged-in web chat session, once the site is chosen.
+description: Drive an AI chat assistant's website through the user's browser — pick the model, put a prompt into the composer without sending it, wait for the answer and read it back — on claude.ai, chatgpt.com, gemini.google.com, chat.mistral.ai and kimi.ai. Use whenever a task runs in a logged-in web chat session, once the site is chosen.
 ---
 
 Type into a chat composer and you are one keystroke away from posting a half-written
@@ -21,6 +21,41 @@ whether it just updated. **A browser update disconnects the extension** — the 
 common cause when the tools worked earlier in the same session. The fix is the user's:
 restart the browser, open the Claude side panel once. Retry once or twice first; the
 disconnect is often transient.
+
+## Models, modes and uploads come first
+
+Set the model, the mode and a temporary chat before the prompt goes in: choosing a model
+reloads the page on Kimi, and a mode switch on Gemini can empty the composer.
+
+On every site, take the strongest tier the user's plan includes. Tiers that cost extra
+credits, such as Kimi's Max effort, stay unused unless the task names them. A picker
+proves only the UI selection; which model served the answer stays unverified — record
+model and effort as the picker showed them.
+
+Gemini opens at `gemini.google.com/app`. Its default mode is Flash (the mode picker sits
+next to the composer); switch to a stronger mode for long or dense material. A
+"Temporary chat" toggle keeps a one-off task out of the user's Gemini history. Its picker
+lists models plus a separate "Thinking (extended)" toggle. The "Pro" label marks a tier,
+not the newest model: in September 2026 the picker still offered 3.1 Pro while 3.8 Flash,
+released on 2 September, was rolling out. Take the newest model the account's picker
+actually lists, using announcements only to tell versions and tiers apart, then switch on
+extended thinking. To hand Gemini files, open "Uploads & Tools" (the + button): that adds
+hidden `input[type=file]` elements, and `file_upload` fills one directly while the native
+file dialog stays closed.
+
+Gemini notebooks (Notebooks, then New notebook, a name and Enter) keep sources for
+recurring reviews. Their "Add sources" dialog creates the file input only on click and
+opens the native dialog with it. Override `HTMLInputElement.prototype.click` for
+`type=file` inputs first, so the click hands the input back instead: append it to the
+page, give it an `aria-label`, locate it with `find` and fill it with `file_upload`. In
+September 2026 a six-part review failed three times in a notebook on 3.8 Flash
+("Something went wrong"); the same questions in two halves went through, so split long
+asks there. The retry button opens a menu (longer, shorter, retry); retry is its last
+item.
+
+Kimi opens in its fast mode; the model picker sits beside the send button and carries a
+thinking-effort submenu. Choosing a model reloads the page under `/agent`, so find the
+composer again afterwards.
 
 ## Put the prompt in with a synthetic paste
 
@@ -73,37 +108,10 @@ with `read_page {filter:"interactive"}` for clicks and by selector for the paste
 `chat.mistral.ai/chat` may redirect to `/work` (seen August 2026). If the task belongs in plain chat, switch
 tabs after loading rather than trusting the URL.
 
-## Models, modes and uploads
+## Check before sending
 
-On every site, take the strongest tier the user's plan includes. Tiers that cost extra
-credits, such as Kimi's Max effort, stay unused unless the task names them. A picker
-proves only the UI selection; which model served the answer stays unverified — record
-model and effort as the picker showed them.
-
-Gemini opens at `gemini.google.com/app`. Its default mode is Flash (the mode picker sits
-next to the composer); switch to a stronger mode for long or dense material. A
-"Temporary chat" toggle keeps a one-off task out of the user's Gemini history. Its picker
-lists models plus a separate "Thinking (extended)" toggle. The "Pro" label marks a tier,
-not the newest model: in September 2026 the picker still offered 3.1 Pro while 3.8 Flash,
-released on 2 September, was rolling out. Take the newest model the account's picker
-actually lists, using announcements only to tell versions and tiers apart, then switch on
-extended thinking. To hand Gemini files, open "Uploads & Tools" (the + button): that adds
-hidden `input[type=file]` elements, and `file_upload` fills one directly while the native
-file dialog stays closed.
-
-Gemini notebooks (Notebooks, then New notebook, a name and Enter) keep sources for
-recurring reviews. Their "Add sources" dialog creates the file input only on click and
-opens the native dialog with it. Override `HTMLInputElement.prototype.click` for
-`type=file` inputs first, so the click hands the input back instead: append it to the
-page, give it an `aria-label`, locate it with `find` and fill it with `file_upload`. In
-September 2026 a six-part review failed three times in a notebook on 3.8 Flash
-("Something went wrong"); the same questions in two halves went through, so split long
-asks there. The retry button opens a menu (longer, shorter, retry); retry is its last
-item.
-
-Kimi opens in its fast mode; the model picker sits beside the send button and carries a
-thinking-effort submenu. Choosing a model reloads the page under `/agent`, so find the
-composer again afterwards.
+Before sending, a screenshot shows the complete prompt in the composer, every attachment
+finished uploading, and nothing else in it. Then send once.
 
 ## Wait, then hand the result back
 
@@ -121,8 +129,7 @@ with the model and effort as the picker showed them and the plugins the assistan
 
 ## Boundaries
 
-Do not log in, create accounts, or enter API keys and passwords — if a site shows a
-login wall, stop and hand it back to the user.
-
-A task handed to an assistant carries what the task needs: the brief, and the files and
-pages it names. Credentials, API keys and tokens stay out of every prompt.
+A login wall, an account picker, a sign-up prompt or a credential field ends the run:
+stop and hand the session back to the user. Logging in, creating accounts and entering
+keys or passwords are the user's. Credentials, API keys and tokens stay out of every
+prompt.
