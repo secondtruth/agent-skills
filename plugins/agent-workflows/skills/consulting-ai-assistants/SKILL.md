@@ -76,24 +76,27 @@ consultation when oracle is absent or refuses the model: gemini.google.com throu
 `youtube-video-ingestion` skill when available.
 
 On a directory, the Antigravity CLI (`agy`) answers headless and reads the files itself,
-run on the disposable worktree described above; `agy models` lists its models with their
-effort tiers:
+run on the disposable worktree described above, placed below a review directory that
+agy may read; `agy models` lists its models with their effort tiers:
 
 ```bash
-cd <scratch>/review && agy --model <model> --print "<prompt>"
+cd <review directory>/review && agy --model <model> --print "<prompt>"
 ```
 
 Verified September 2026 with agy 1.2.8 and 1.2.13:
 
-- Headless mode auto-denies every tool without an allow-rule, `read_file` included, and
-  then prints no answer at all. The rule belongs under `permissions.allow` in
-  `~/.gemini/antigravity-cli/settings.json`, scoped to the worktree:
-  `read_file(<absolute path of the worktree>)`. The rule syntax comes from agy's own
-  help; adding it is a change to the user's configuration, so ask first.
-- `--dangerously-skip-permissions` answers too, on the footing Kimi's `-p` mode always
-  has: the worktree protects the repository, the prompt the rest of the machine.
-  `--sandbox` confines terminal commands only; the file tool still wrote into the home
-  directory with it. Prefer the allow-rule.
+- Headless mode auto-denies every tool without an allow-rule, `read_file` included. A
+  denied turn prints no answer and still exits 0, so an empty answer means a missing
+  rule.
+- One rule under `permissions.allow` in `~/.gemini/antigravity-cli/settings.json` opens
+  the review directory for reading, subdirectories included:
+  `read_file(<absolute path of the review directory>)`. Writes stay denied, which makes
+  the review read-only by enforcement. Adding the rule changes the user's
+  configuration: ask once, then reuse the same directory for every review.
+- `--dangerously-skip-permissions` answers without a rule, on the footing Kimi's `-p`
+  mode always has: the worktree protects the repository, the prompt the rest of the
+  machine. `--sandbox` confines terminal commands only; the file tool still wrote into
+  the home directory with it. Prefer the allow-rule.
 
 ## Kimi: the CLI on a directory, kimi.ai otherwise
 
