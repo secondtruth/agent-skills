@@ -1,17 +1,32 @@
 ---
 name: youtube-video-ingestion
 license: MIT
-description: Bring the content of a YouTube video into the conversation — summary, transcript, timestamps, what the speaker claims — through Gemini in the user's browser, with yt-dlp subtitles as the fallback. Use whenever a task names a YouTube URL or asks what a video says.
+description: Bring the content of a YouTube video into the conversation — summary, transcript, timestamps, what the speaker claims — through Gemini, by oracle or in the user's browser, with yt-dlp subtitles as the fallback. Use whenever a task names a YouTube URL or asks what a video says.
 ---
 
 Gemini reads a public YouTube video straight from its URL, so the URL plus the question
 is the whole prompt. The content is the deliverable; the video link and the chat link are
 its citations.
 
-## Gemini first
+## Gemini first: oracle
 
-Drive gemini.google.com through the `driving-ai-chat-websites` skill when available; it
-knows the composer, the model picker and how to read the answer back.
+When the `oracle` CLI is installed, it hands Gemini the video without a browser to drive:
+
+```bash
+oracle --engine browser --model gemini-3-pro --youtube "<url>" -p "<question>" \
+  --write-output <scratch>/answer.md
+```
+
+Verified September 2026 with oracle 0.21.3: a 40-second video came back summarised in 14
+seconds. The first attempt ended in "This operation was aborted"; the repeat with
+`--force` went through. oracle reports the model selection as unverified, so record the
+model as requested.
+
+## Gemini second: the site
+
+For a long or dense video, the newest model, or a machine without oracle, drive
+gemini.google.com through the `driving-ai-chat-websites` skill when available; it knows
+the composer, the model picker and how to read the answer back.
 
 1. Open a **Temporary chat** for a video worth one look, so the ingestion stays out of the
    user's Gemini history. Switch to a stronger mode than the default Flash for long
@@ -22,21 +37,22 @@ knows the composer, the model picker and how to read the answer back.
 3. Wait for the answer, read it back with `get_page_text`, and bring it into the
    conversation together with the chat link.
 
-Gemini through oracle covers text and images only: for video, the website is the route.
-
 ## Fallback: subtitles through yt-dlp
 
-Take this route when the browser extension is unavailable, Gemini shows a login wall,
-or a retry still ends in "Something went wrong". `yt-dlp` comes from Homebrew
-(`brew install yt-dlp`). Fetch the captions without the video:
+Take this route when both Gemini routes are closed: oracle missing or failing twice, the
+browser extension unavailable, a login wall, or a retry that still ends in "Something
+went wrong". `yt-dlp` comes from Homebrew (`brew install yt-dlp`). Work in a scratch
+directory, outside the user's project, and fetch the captions without the video:
 
 ```bash
-yt-dlp --skip-download --write-subs --write-auto-subs --sub-langs "<spoken language>" --sub-format vtt \
-  --no-simulate --print "%(title)s | %(channel)s | %(upload_date)s | %(duration)s s" \
+cd <scratch> && yt-dlp --skip-download --write-subs --write-auto-subs \
+  --sub-langs "<spoken language>" --sub-format vtt --no-simulate \
+  --print "%(id)s | %(title)s | %(channel)s | %(upload_date)s | %(duration)s s" \
   -o '%(id)s.%(ext)s' "<url>"
 ```
 
-Then flatten the VTT into text. Auto-captions roll: every line is repeated in the two
+Then flatten a copy of the VTT into text; the VTT itself stays, for timestamps.
+Auto-captions roll: every line is repeated in the two
 or three cues that follow it, so adjacent duplicates go and a line spoken again later
 stays:
 
