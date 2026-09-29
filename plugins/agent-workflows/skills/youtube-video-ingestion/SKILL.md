@@ -10,7 +10,9 @@ its citations.
 
 ## Gemini first: oracle
 
-When the `oracle` CLI is installed, it hands Gemini the video without a browser to drive:
+When the `oracle` CLI is installed, it hands Gemini the video without a browser to drive.
+Update it first, through the package manager that installed it (`brew upgrade
+steipete/tap/oracle`, `scoop update oracle`):
 
 ```bash
 oracle --engine browser --model gemini-3-pro --youtube "<url>" -p "<question>" \
@@ -41,7 +43,9 @@ the composer, the model picker and how to read the answer back.
 
 Take this route when both Gemini routes are closed: oracle missing or failing twice, the
 browser extension unavailable, a login wall, or a retry that still ends in "Something
-went wrong". `yt-dlp` comes from Homebrew (`brew install yt-dlp`). Work in a scratch
+went wrong". `yt-dlp` comes from the package manager (`brew install yt-dlp`, `scoop
+install yt-dlp`) and is updated there before the run, since YouTube breaks old
+versions. Work in a scratch
 directory, outside the user's project, and fetch the captions without the video:
 
 ```bash
