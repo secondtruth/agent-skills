@@ -31,6 +31,21 @@ usual place), and outside the repository when it keeps none.
 An assistant that cannot be reached — a login wall, a transport that fails twice —
 is reported as missing from the round, with the error; the round goes on without it.
 
+## Update the transport first
+
+Before a round of runs, update oracle and every CLI the round uses, through the package
+manager that installed it:
+
+```bash
+brew upgrade steipete/tap/oracle    # Homebrew; likewise codex, kimi-code, antigravity-cli
+scoop update oracle                 # Scoop, on Windows
+```
+
+The sites change their pickers and the vendors their models faster than an installed
+version ages well; oracle failing to find a model picker is the usual symptom. The
+package manager goes before a tool's own updater (`kimi upgrade`, `agy update`), which
+leaves the manager's record behind. Note the version that ran as part of the provenance.
+
 ## A directory review runs on a disposable worktree
 
 A CLI without a read-only sandbox of its own gets a copy of the tree instead:
@@ -56,10 +71,7 @@ ChatGPT itself, selects and verifies the model and thinking time, and stores eve
 a session that survives a timeout. Follow the `oracle` and `oracle-advisor` skills for
 flags, model choice and the evidence to report when they are among your available skills.
 
-Update oracle before a round of runs, through the package manager that installed it
-(`brew upgrade steipete/tap/oracle`; Scoop on Windows): the sites change their pickers
-faster than an installed version ages well. Verified September 2026 with oracle 0.20
-and 0.21:
+Verified September 2026 with oracle 0.20 and 0.21:
 
 - Pass `files` as absolute paths — the MCP server resolves relative ones against its own
   working directory.
@@ -120,7 +132,7 @@ the Kimi Code CLI (`kimi`) on a disposable worktree of it. It reads the files it
 cd <review root>/review && kimi -m <model> -p "<prompt>"
 ```
 
-Verified September 2026 with kimi-code 0.41 (default model `k3-256k`):
+Verified September 2026 with kimi-code 0.41 and 2.1.1 (default model `k3-256k`):
 
 - `-p -` reads nothing from stdin; the prompt has to be the argument.
 - `-p` mode edits files without asking, and refuses `--plan`; the worktree is the
@@ -169,7 +181,8 @@ unused unless the task names them.
 
 ## Provenance
 
-Store every answer with: the chat URL or session id, the model and effort as requested
+Store every answer with: the chat URL or session id, the version of the transport, the
+model and effort as requested
 and as observed (a picker label or an oracle selection log proves the UI selection, never
 which model served the answer), the transport, and the plugins or tools the assistant
 used. A consultation that returned text under an unverified model constraint is reported
