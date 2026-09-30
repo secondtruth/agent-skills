@@ -1,8 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "agent-workflows",
-  "version": "0.2.5",
-  "description": "Workflows whose subject is AI agents: handoff debriefs, Project seeding, space consolidation, AI entity design, research source rules, driving chat assistants in the browser, scouting existing skills.",
+  "version": "0.3.0",
+  "description": "Workflows whose subject is AI agents: handoff debriefs, Project seeding, space consolidation, AI entity design, research source rules, routing tasks to other AI assistants, driving chat assistants in the browser, YouTube ingestion via Gemini, scouting existing skills.",
   "author": {
     "name": "Christian Neff",
     "url": "https://github.com/secondtruth"
@@ -12,7 +12,9 @@
     "handoff",
     "research",
     "cowork",
-    "skills"
+    "skills",
+    "second-opinion",
+    "youtube"
   ],
   "license": "MIT"
 }

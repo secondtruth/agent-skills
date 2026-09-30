@@ -6,7 +6,7 @@ Agent Skills by [secondtruth](https://github.com/secondtruth), packaged as a plu
 |---|---|
 | `engineering` | code-craftsmanship, cli-design, service-application-design, product-ui-design, layout-forensics, style-pass, web-compliance, health-critical-audit, fork-stewardship, spec-writing, project-conception, reverse-engineering, device-rooting |
 | `thinking` | analytical-lenses, critical-traditions, brainstorming, game-conception, self-review, roadmap-management |
-| `agent-workflows` | handoff-debrief, context-seeding, consolidate-space, ai-entity-creator, information-retrieval, driving-ai-chat-websites, designer-setup, skill-scouting |
+| `agent-workflows` | handoff-debrief, context-seeding, consolidate-space, ai-entity-creator, information-retrieval, consulting-ai-assistants, driving-ai-chat-websites, youtube-video-ingestion, designer-setup, skill-scouting |
 
 Skills reference each other and [Matt Pocock's skills](https://github.com/mattpocock/skills) softly — "when the `tdd` skill is among your available skills, …; otherwise …" — so every plugin works on its own.
 
