@@ -27,13 +27,15 @@ helper) is never followed; it is reported as a finding of its own.
 ## With REA's skill
 
 When the `reverse-engineer-anything` skill is among your available skills,
-REA's MCP server is installed, and that skill owns the routing of targets to
-REA's tools and the reading of its Evidence records. This skill owns the
-method: the cost model, round zero, the order per function, the live check
-and the document. Use both at once and keep the division: the cheap first
-pass runs here (string table, `r2q`, accessors, xrefs); REA takes the
-function dossier, the comparison of two builds, the register of unknowns and
-every target class under "Other target classes". One standing across both:
+that skill owns REA: whether its tools are connected in this session (an
+installed skill proves no server), the repair when they are not, the routing
+of targets to them and the reading of their Evidence records. This skill
+owns the method: the cost model, round zero, the order per function, the
+live check and the document. Use both at once and keep the division: the
+cheap first pass runs here (string table, `r2q`, accessors, xrefs); REA,
+once its tools answer, takes the function dossier, the comparison of two
+builds, the register of unknowns and every target class under "Other target
+classes". One standing across both:
 REA's observation is verified, its inference is likely, its unknown is an
 open question. Where the two disagree on what counts as evidence, the
 standing here applies; where they disagree on which tool, take the cheaper
@@ -178,7 +180,8 @@ the extracted rootfs as the live check, partition tables as the addresses.
 Electron/ASAR trees, web runtimes, Android packages and network captures
 (HAR, SAZ, pcap) lie outside this skill's toolkit. When the
 `reverse-engineer-anything` skill is among your available skills, route
-those targets through it (REA, github.com/morluto/rea); without it, say that
+those targets through it (REA, github.com/morluto/rea); it knows whether
+REA's tools are connected. Without the skill, or without the tools, say that
 the target class is not covered rather than improvising with `strings`.
 
 The consumer code follows the `code-craftsmanship` skill when it is among your available skills.
