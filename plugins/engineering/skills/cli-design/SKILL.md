@@ -74,7 +74,7 @@ The app object is the small value passed into command constructors so commands r
 **Not every CLI needs one — scale it to the program:**
 
 - **A single command, or a flat tool with a handful of flags:** pass what each function needs as plain parameters. Introducing an `App` here is machinery without a payload.
-- **Several commands sharing output policy, services, or clients:** introduce the app object and pass it into constructors. The rule of three applies — when the third command re-plumbs the same dependencies, that is the signal; not before.
+- **Several commands sharing output policy, services, or clients:** introduce the app object and pass it into constructors. When a second command re-plumbs the same dependencies, that is the signal; not before.
 - Once it exists: **it is a passed-in value, never a global**, and **not a bag of everything**. Project config, domain clients, and business services belong in the consuming application's own app or core layer, not in reusable console infrastructure. Reusable infrastructure keeps its context thin and generic; an application-specific `App`/`Core` may exist, but never as a wrapper whose sole job is holding the generic one.
 
 ### Errors and exit
