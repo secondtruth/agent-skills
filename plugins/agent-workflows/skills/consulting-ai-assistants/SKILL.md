@@ -98,8 +98,14 @@ itself, so it takes text consultations as well as directories. `agy models` list
 models the account offers with their effort tiers; take the strongest the plan includes.
 In November 2026 that was the Gemini 4 family: Carbon (Google's model for the hardest,
 long-horizon work, the default for a review), Neon (adapted from Carbon, faster and
-cheaper, up to `xhigh`), Argon (the first Gemini 4 frontier model) and Hydrogen (fast,
-everyday).
+cheaper, up to `xhigh`, agy's default) and Hydrogen (fast, everyday); Argon, the first
+Gemini 4 model, left agy on 30 November.
+
+Google's Antigravity FAQ counts headless `agy -p` as meant for direct scripting and CI and
+says that wrapping it inside third-party coding agents is not supported under consumer
+plans; for those it recommends a Google AI Studio or Gemini Enterprise API key, which agy
+accepts as `GEMINI_API_KEY`. Reusing the Antigravity login in other software is a
+violation of its terms. Which footing a consultation runs on is the user's call.
 
 Run it in plan mode, which reads and writes nothing. On a directory, run it on the
 disposable worktree described above; for a text consultation with files, copy the files
