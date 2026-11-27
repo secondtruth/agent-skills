@@ -1,7 +1,7 @@
 ---
 name: youtube-video-ingestion
 license: MIT
-description: Bring the content of a YouTube video into the conversation — summary, transcript, timestamps, what the speaker claims — through Gemini, by oracle or in the user's browser, with yt-dlp subtitles as the fallback. Use whenever a task names a YouTube URL or asks what a video says.
+description: Bring the content of a YouTube video into the conversation — summary, transcript, timestamps, what the speaker claims — through Gemini, by its API, by oracle or in the user's browser, with yt-dlp subtitles as the fallback. Use whenever a task names a YouTube URL or asks what a video says.
 ---
 
 Gemini reads a public YouTube video straight from its URL, so the URL plus the question
@@ -27,9 +27,62 @@ under the yt-dlp fallback below applies to the search as well. Verified November
 yt-dlp 2026.11.23: titles can arrive auto-translated into the machine's locale, so the
 upload date and channel identify a video better than its title.
 
-## Gemini first: oracle
+## Gemini first: the API
 
-When the `oracle` CLI is installed, it hands Gemini the video without a browser to drive.
+When the user has a Gemini API key, the API takes the URL itself. It is the route Google's
+terms provide for automated use; oracle and the site below drive the consumer web app.
+The key sits where the user's Gemini tools look for it, `GEMINI_API_KEY` in
+`~/.gemini/.env` (the Gemini CLI's file), and goes from there into a curl header file, so
+it shows in neither the process list nor an environment:
+
+```bash
+jq -n --arg u "<url>" --rawfile p <scratch>/prompt.txt \
+  '{model: "gemini-4-hydrogen", input: [{type: "video", uri: $u}, {type: "text", text: $p}]}' \
+  > <scratch>/request.json
+curl -s -o <scratch>/answer.json -X POST \
+  https://generativelanguage.googleapis.com/v1beta/interactions \
+  -H @<(sed -n 's/^GEMINI_API_KEY=/x-goog-api-key: /p' ~/.gemini/.env) \
+  -H 'Content-Type: application/json' --data-binary @<scratch>/request.json
+jq -r '.steps[] | select(.type == "model_output") | .content[] | select(.type == "text") | .text' \
+  <scratch>/answer.json
+```
+
+Without a key, tell the user what it takes (a key from Google AI Studio, stored in that
+file) and continue with oracle; creating the key is the user's step. `GET
+/v1beta/models` with the same header lists the models the key reaches. The answer names
+the model that served it in `model` and the token count in `usage`; record both.
+
+The video part takes a `processing` object that cuts the cost of a long video. Static
+processing, the default, samples one frame per second with the audio, about 100 tokens
+a second. `{"type": "static", "fps": 0.2, "content_layers": ["frames"], "start_offset":
+"7200s", "end_offset": "10800s"}` takes one frame every five seconds of the third hour,
+without audio: enough to find scenes for the frame check below, too coarse to read text.
+Within a clip, ask for times from the start of the footage Gemini receives and add the
+offset yourself. `"processing": "agentic"` lets Gemini 4 and 3.8 Flash load only the
+parts of a long video they need.
+
+Verified November 2026 with the interactions endpoint:
+
+- Only public videos. The free tier allows 8 hours of YouTube video a day, and the
+  YouTube feature was a free preview. On the free tier Google uses prompts and answers
+  to improve its products, with human review, so the prompt carries nothing private.
+- A 12½-minute video took 135 seconds on Gemini 3.8 Flash and 69,000 video tokens, with
+  no refusal. Its on-screen quotes came closer to the frames than oracle's 3.1 Pro, but
+  it still misread a version number and made up a model name; on-screen text quoted as
+  verbatim still needs the frame check below.
+- A scene search at one frame every five seconds, frames only, took 39,000 to 54,000
+  tokens for 49 to 67 minutes of video, and all 36 scenes it named in three gameplay
+  videos were on screen at the second it gave.
+- Asked for times from the start of the full video while it saw only the third hour,
+  Gemini put all twelve scenes about 20 minutes late; asked for clip time, it hit all
+  twelve.
+- Hydrogen and 3.8 Flash answered HTTP 503 "high demand" for stretches of a day. Fall
+  back to an older Flash model (3.7 Flash answered), or retry a minute later.
+
+## Gemini second: oracle
+
+When no key is set up and the `oracle` CLI is installed, it hands Gemini the video
+without a browser to drive.
 Update it first, through the package manager that installed it (`brew upgrade
 steipete/tap/oracle`, `scoop update oracle`):
 
@@ -67,9 +120,10 @@ Verified September 2026 with oracle 0.21.3: a 40-second video came back summaris
 seconds. The first attempt ended in "This operation was aborted"; the repeat with
 `--force` went through.
 
-## Gemini second: the site
+## Gemini third: the site
 
-For the newest model, a long or dense video, or a machine without oracle, drive
+Without an API key, for the newest model, a long or dense video, or a machine without
+oracle, drive
 gemini.google.com through the `driving-ai-chat-websites` skill when available; it knows
 the composer, the model picker and how to read the answer back. The Antigravity CLI
 (`agy`) is no substitute: it reaches the newest Gemini models but not the video — given
@@ -87,9 +141,9 @@ a YouTube URL it gets a web-search summary at most, or hands the URL to oracle i
 
 ## Fallback: subtitles through yt-dlp
 
-Take this route when both Gemini routes are closed: oracle missing or failing twice, the
-browser extension unavailable, a login wall, or a retry that still ends in "Something
-went wrong". YouTube's terms forbid downloading content and accessing the service by
+Take this route when every Gemini route is closed: no API key, oracle missing or failing
+twice, the browser extension unavailable, a login wall, or a retry that still ends in
+"Something went wrong". YouTube's terms forbid downloading content and accessing the service by
 automated means unless the service, YouTube's written permission or applicable law allows
 it, so whether this route runs is the user's call. `yt-dlp` comes from the package
 manager (`brew install yt-dlp`, `scoop install yt-dlp`) and is updated there before the
@@ -152,7 +206,7 @@ out. Verified November 2026 with yt-dlp 2026.11.23 and ffmpeg 9.0.2 on eleven vi
   frame itself.
 
 Summarise or quote from the transcript yourself, and record which route produced the
-text: Gemini (model and mode as the picker showed them or as oracle requested them, chat
-link or session), yt-dlp (caption language, auto-generated or uploaded) or a frame
+text: Gemini (the API's `model` and interaction `id`, or model and mode as the picker
+showed them or as oracle requested them, with the chat link or session), yt-dlp (caption language, auto-generated or uploaded) or a frame
 (timestamp, OCR or read by eye), with the title, channel, date and duration from the
 `--print` line.
