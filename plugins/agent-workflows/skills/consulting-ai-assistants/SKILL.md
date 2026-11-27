@@ -6,7 +6,8 @@ description: Decide which AI assistant gets a task and by which transport — or
 
 A consultation hands another model a brief and brings its answer back with provenance.
 This skill decides who gets the brief and through which door; the doors themselves are
-other skills: `oracle-advisor` and `oracle` for ChatGPT through oracle, and
+other skills: `oracle-advisor` and `oracle` for ChatGPT and older Gemini models through
+oracle, and
 `driving-ai-chat-websites` for the sites, each when it is among your available skills.
 
 ## Routing
@@ -14,7 +15,7 @@ other skills: `oracle-advisor` and `oracle` for ChatGPT through oracle, and
 | Assistant | The task names a directory | Otherwise: text, files, a bare question |
 | --- | --- | --- |
 | ChatGPT | oracle, with the files that matter selected from the directory | oracle |
-| Gemini | `agy` on a disposable worktree | oracle; gemini.google.com for a Google notebook, the newest model or anything in the user's Google account |
+| Gemini | `agy --mode plan` on a disposable worktree | `agy --mode plan` in a scratch directory holding the files; gemini.google.com for a Google notebook or anything in the user's Google account |
 | Kimi | `kimi` on a disposable worktree | kimi.ai |
 | Codex | `codex` in the directory, under its read-only sandbox | — |
 | Mistral | — | chat.mistral.ai |
@@ -90,38 +91,62 @@ chatgpt.com by hand, through `driving-ai-chat-websites` when it is among your av
 skills, is for the cases oracle leaves: oracle absent, or the chat itself the deliverable
 — a link the user continues in, a button they press there.
 
-## Gemini: oracle for text and files, agy on a directory, the site for the rest
+## Gemini: agy for the newest models, the site for the rest
 
-oracle reaches gemini.google.com through its cookie client and takes long inline bundles
-without complaint (27k tokens in September 2026). Its Gemini support covers text, images
-and YouTube URLs. oracle 0.21.3 resolves `gemini-3-pro` to Gemini 3.1 Pro and reports the
-selection as unverified; it falls back to Flash-Lite unless `--no-gemini-fallback` is
-set. Notebooks, the newest models and the user's Google account need the website — as
-does a text consultation when oracle is absent or refuses the model: gemini.google.com
-through `driving-ai-chat-websites` when available.
+The Antigravity CLI (`agy`) reaches the newest Gemini models headless and reads files
+itself, so it takes text consultations as well as directories. `agy models` lists the
+models the account offers with their effort tiers; take the strongest the plan includes.
+In November 2026 that was the Gemini 4 family: Carbon (Google's model for the hardest,
+long-horizon work, the default for a review), Neon (adapted from Carbon, faster and
+cheaper, up to `xhigh`, agy's default) and Hydrogen (fast, everyday); Argon, the first
+Gemini 4 model, left agy on 30 November.
 
-On a directory, the Antigravity CLI (`agy`) answers headless and reads the files itself,
-run on the disposable worktree described above; `agy models` lists its models with
-their effort tiers:
+Google's Antigravity FAQ counts headless `agy -p` as meant for direct scripting and CI and
+says that wrapping it inside third-party coding agents is not supported under consumer
+plans; for those it recommends a Google AI Studio or Gemini Enterprise API key, which agy
+accepts as `GEMINI_API_KEY`. Reusing the Antigravity login in other software is a
+violation of its terms. Which footing a consultation runs on is the user's call. agy
+1.5.18 reads the key only from the environment and uses it only with `modelProvider:
+"gemini"` in its `settings.json`; the user's key, when there is one, sits in
+`~/.gemini/.env`, where the Gemini CLI looks for it.
+
+Run it in plan mode, which reads and writes nothing. On a directory, run it on the
+disposable worktree described above; for a text consultation with files, copy the files
+into a fresh scratch directory and run it there:
 
 ```bash
-cd <review root>/review && agy --model <model> --print "<prompt>"
+cd <review root>/review && agy --mode plan --model gemini-4-carbon-high --print "<prompt>"
 ```
 
-Verified September 2026 with agy 1.2.8 and 1.2.13:
+Verified November 2026 with agy 1.5.18 (Homebrew cask `antigravity-cli`):
 
-- Headless mode auto-denies every tool without an allow-rule, `read_file` included. A
-  denied turn prints no answer and still exits 0, so an empty answer means a missing
-  rule.
-- One rule under `permissions.allow` in `~/.gemini/antigravity-cli/settings.json` opens
-  the review root for reading, subdirectories included:
-  `read_file(<absolute path of the review root>)`. Writes stay denied, which makes the
-  review read-only by enforcement. Adding the rule changes the user's configuration:
-  ask once.
-- `--dangerously-skip-permissions` answers without a rule, on the footing Kimi's `-p`
-  mode always has: the worktree protects the repository, the prompt the rest of the
-  machine. `--sandbox` confines terminal commands only; the file tool still wrote into
-  the home directory with it. Prefer the allow-rule.
+- Without `--mode`, print mode runs in Auto mode: it reads files outside the workspace
+  without asking and runs shell commands after its own review. Asked about a YouTube
+  video, it started oracle by itself, following a skill it found in the user's skill
+  directory. In plan mode a prompt that asks for a write ends in a plan awaiting
+  approval, nothing written, exit 0.
+- `--disable-slash-commands` switches plan mode off (agy warns about it), so the two
+  never go together.
+- Reading no longer needs an allow-rule under `permissions.allow`. `--sandbox` confines
+  terminal commands only; in September 2026 the file tool still wrote into the home
+  directory with it.
+- `--output-format json` returns the answer with a `conversation_id` but not the model;
+  record the model as requested.
+- agy cannot watch a video: given a YouTube URL it gets a web-search summary at most.
+  Videos follow the `youtube-video-ingestion` skill when available.
+
+oracle's Gemini route lags behind the models. Its cookie client carries a fixed table of
+Gemini 3.x models: in 0.23.1 `gemini-3-pro` resolves to 3.1 Pro, beside `gemini-3.5-flash`
+and `gemini-3-pro-deep-think`. Any other name, a Gemini 4 model included, is served by
+3.1 Pro with nothing but a log line, and an unavailable model falls back to Flash-Lite
+unless `--no-gemini-fallback` is set; the selection is reported as unverified either way.
+Gemini 4 support was an open upstream pull request in November 2026 (steipete/oracle#610);
+check oracle's changelog after an update. Until it lands, oracle is Gemini's door for
+image generation, for YouTube URLs when the user has no Gemini API key, and the fallback
+when agy is absent.
+
+Notebooks and anything in the user's Google account need gemini.google.com, through
+`driving-ai-chat-websites` when available; so does a Gemini 4 answer when agy is absent.
 
 ## Kimi: the CLI on a directory, kimi.ai otherwise
 

@@ -22,6 +22,11 @@ common cause when the tools worked earlier in the same session. The fix is the u
 restart the browser, open the Claude side panel once. Retry once or twice first; the
 disconnect is often transient.
 
+A second failure looks different: `tabs_context_mcp` creates a tab group, and the very
+next call on its tab answers that the tab is not in the session's group (November 2026,
+three attempts in a row). The extension is then unusable for the session. Say so and
+continue on a transport that needs no browser, instead of creating groups in a loop.
+
 ## Models, modes and uploads come first
 
 Set the model, the mode and a temporary chat before the prompt goes in: choosing a model
@@ -37,8 +42,9 @@ next to the composer); switch to a stronger mode for long or dense material. A
 "Temporary chat" toggle keeps a one-off task out of the user's Gemini history. Its picker
 lists models plus a separate "Thinking (extended)" toggle. The "Pro" label marks a tier,
 not the newest model: in September 2026 the picker still offered 3.1 Pro while 3.8 Flash,
-released on 2 September, was rolling out. Take the newest model the account's picker
-actually lists, using announcements only to tell versions and tiers apart, then switch on
+released on 2 September, was rolling out; on 13 October Gemini 4 Argon began rolling out
+to AI Pro and Ultra subscribers. Take the newest model the account's picker actually
+lists, using announcements only to tell versions and tiers apart, then switch on
 extended thinking. To hand Gemini files, open "Uploads & Tools" (the + button): that adds
 hidden `input[type=file]` elements, and `file_upload` fills one directly while the native
 file dialog stays closed.
