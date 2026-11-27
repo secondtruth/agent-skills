@@ -105,7 +105,10 @@ Google's Antigravity FAQ counts headless `agy -p` as meant for direct scripting 
 says that wrapping it inside third-party coding agents is not supported under consumer
 plans; for those it recommends a Google AI Studio or Gemini Enterprise API key, which agy
 accepts as `GEMINI_API_KEY`. Reusing the Antigravity login in other software is a
-violation of its terms. Which footing a consultation runs on is the user's call.
+violation of its terms. Which footing a consultation runs on is the user's call. agy
+1.5.18 reads the key only from the environment and uses it only with `modelProvider:
+"gemini"` in its `settings.json`; the user's key, when there is one, sits in
+`~/.gemini/.env`, where the Gemini CLI looks for it.
 
 Run it in plan mode, which reads and writes nothing. On a directory, run it on the
 disposable worktree described above; for a text consultation with files, copy the files
@@ -139,7 +142,8 @@ and `gemini-3-pro-deep-think`. Any other name, a Gemini 4 model included, is ser
 unless `--no-gemini-fallback` is set; the selection is reported as unverified either way.
 Gemini 4 support was an open upstream pull request in November 2026 (steipete/oracle#610);
 check oracle's changelog after an update. Until it lands, oracle is Gemini's door for
-YouTube URLs and image generation, and the fallback when agy is absent.
+image generation, for YouTube URLs when the user has no Gemini API key, and the fallback
+when agy is absent.
 
 Notebooks and anything in the user's Google account need gemini.google.com, through
 `driving-ai-chat-websites` when available; so does a Gemini 4 answer when agy is absent.
